@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+<title>Day 1 notes</title>
+<meta charset = "utf-8">
+</head>
+<body>
+<h2>Statements, Output, and Comments to the Reader</h2>
+<p><span style="font-size: 12pt;">You can print messages&nbsp;by using <code>console.log</code>. &nbsp;You can separate (print) statements with semicolons.</span></p>
+<pre>console.log("Hello World!");
+console.log("The meaning of life is 42.");</pre>
+<p><span style="font-size: 12pt;">A message to be printed as is&nbsp;needs to be placed in between a pair of double quotes so that it's&nbsp;not interpreted as a&nbsp;variable name (as described in the following section):</span></p>
+<pre>// The following would be an error if // is removed on the next line: ReferenceError: bar is not defined:
+// console.log(bar);</pre>
+<p><span style="font-size: 12pt;">Removing the <code>//</code> means that the computer will try to print the value of the variable <code>bar</code> instead of the word, bar. The <code>//</code> tells the computer to ignore what follows on the line as it is for human use only.</span></p>
+<p><span style="font-size: 12pt;">Lines starting with <code>//</code> are known as single line comments. They can be used as notes which can provide context for your code. Comments are optional but useful; removing them will have no effect on how your program runs.</span></p>
+<pre>const a = 9.8; // a is approximate acceleration due to gravity in meters per second
+</pre>
+<p><span style="font-size: 12pt;"><strong>Quick Exercise 1.1</strong>: Write a statement to print a message to the console. It could be anything you want. Also, include a comment:&nbsp;<a href="https://repl.it/I9Xc/0">https://repl.it/I9Xc/0</a>&nbsp;</span></p>
+<h2>Variables</h2>
+<p><span style="font-size: 12pt;">Use a variable to name something stored in memory so that you can refer to it later.</span></p>
+<ul>
+<li><span style="font-size: 12pt;">Use descriptive variable names in camel case: e.g., <code>firstName</code>, <code>bestGameScore</code></span></li>
+<li><span style="font-size: 12pt;">Assign variables with <code>let</code> statements:</span>
+<pre>let x = 7;              // x gets assigned 7
+let y = x + 5;          // y gets assigned 5 more than x (12)
+let name = "Jane Doe";  // variables can be assigned words</pre>
+</li>
+<li><span style="font-size: 12pt;">Assign with <code>const</code> for constants. Constants are sometimes expressed in all CAPS:</span>
+<pre>const PI = 3.141592653589793;</pre>
+</li>
+<li><span style="font-size: 12pt;">You can print the values of variables just as you do functions using <code>console.log</code>, but they need to be outside the quotes so that they're not interpreted literally:</span>
+<pre>console.log("x =", x, "and y =", y);
+console.log("Hi,", name, ".");
+console.log("PI =", PI);
+</pre>
+</li>
+</ul>
+<p><span style="font-size: 12pt;"><strong>Quick Exercise 1.2</strong>: Define a variable meaningOfLife and set it to 42. Then write a statement to print the message, "The meaning of life is: 42." Do this in such a way so that when you change the value of the variable to 4 without changing anything else and run the program again, the message changes to "The meaning of life is: 4.":&nbsp;<a href="https://repl.it/I9Yh/0">https://repl.it/I9Yh/0</a>&nbsp;</span></p>
+<h2>Math Operators</h2>
+<p><span style="font-size: 12pt;">You can use math operators with specific numbers or variables that refer to numbers:</span></p>
+<ul>
+<li><span style="font-size: 12pt;"><code>+</code> : Addition</span></li>
+<li><span style="font-size: 12pt;"><code>-</code> : Subtraction</span></li>
+<li><span style="font-size: 12pt;"><code>*</code> : Multiplication</span></li>
+<li><span style="font-size: 12pt;"><code>/</code> : Division</span></li>
+<li><span style="font-size: 12pt;"><code>Math.trunc(# / #)</code> : Integer Division (do the division and remove the decimal point and all digits that come after it; truncate it) - See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc">Math.trunc()</a></span></li>
+<li><span style="font-size: 12pt;"><code>%</code> : Remainder</span></li>
+<li><span style="font-size: 12pt;"><code>**</code>: Exponentiation (NOT <code>^</code>, which is bitwise XOR): Note ** has not been standardized yet and will therefore not work across all browsers.</span></li>
+<li><span style="font-size: 12pt;">Operations performed in PEMDAS order: (): Parentheses first; then exponentiation (**), then multiplication/division (*, /, and % for remainder), then addition/subtraction (+/-).</span></li>
+</ul>
+<pre>//                                               _<strong><span style="color: #008000;">2</span></strong>_R<span style="color: #0000ff;"><strong>4</strong></span>
+console.log(Math.trunc(14 / 5)); // prints <strong><span style="color: #008000;">2</span></strong> : 5|14<br />console.log(14 % 5);             // prints remainder of <strong><span style="color: #0000ff;">4</span></strong></pre>
+<p><span style="font-size: 12pt;"><strong>Quick Exercise 1.3</strong>: Define a variable n and set it to 54. Then define a variable d, and set it to <code>n - 44</code>. Have the program compute the quotient of n divided by d (integer division) and output the result. Then have it computer the remainder when you divide n by d and output the result. Before running the program, determine what you think the output will be. &nbsp;C<span>hange </span>d<span> to be </span>n<span>&nbsp;+ 44 instead. &nbsp;How do you think this will affect the output? Run it to find out if you were correct. &nbsp;</span>Finally, change d to be n - 54 instead. How do you think this will affect the output? Run it to find out if you were correct:&nbsp;<a href="https://repl.it/I944/0">https://repl.it/I944/0</a>&nbsp;</span></p>
+<h2>Defining/Calling Functions</h2>
+<p><span style="font-size: 12pt;">You can use variables to refer to functions as well:</span></p>
+<ul>
+<li><span style="font-size: 12pt;">Define functions using arrow notation:</span>
+<pre>let double = <span style="color: #ff0000;"><strong>x =&gt; 2*x</strong></span>;
+</pre>
+</li>
+<li><span style="font-size: 12pt;">The variable x in the above expression is called a <strong>parameter variable</strong>. It is a placeholder for the input.</span></li>
+<li><span style="font-size: 12pt;"><code>2*x</code> is the return value or output of the function.</span></li>
+<li><span style="font-size: 12pt;">Note the x can be replaced with other variable names such as <code>t</code> or even <code>foo</code>. In those cases, you would use <code>t =&gt; 2*t</code> and <code>foo =&gt; 2*foo</code>, respectively.</span></li>
+<li><span style="font-size: 12pt;">Evaluate functions at specific inputs&nbsp;by writing them as you would in your PreCalculus class. Use <code>console.log</code> to display the result:</span>
+<pre>console.log(double(0)); // outputs 0 : 0 =&gt; 2*0
+console.log(double(5)); // outputs 5 : 5 =&gt; 2*5
+console.log(double(-1.57)); // outputs -3.14 : -1.57 =&gt; 2*-1.57
+</pre>
+</li>
+<li>T<span style="font-size: 12pt;">he inputs 0, 5, and -1.57 are called <strong>arguments</strong> and are said to be <em>passed</em> to the double function. &nbsp;To get the output, we <em>substitute</em>&nbsp;the argument for the parameter variable x and calculate what's to the right of the arrow. (E.g., for 5, we substitute 5 for x and calculate 2*5, which is 10.)</span></li>
+<li><span style="font-size: 12pt;">Functions that perform a computation such as double without changing anything are known as pure functions. <code>console.log</code> is a function but <em>not</em> a pure one. It does change something, mainly the console where you will see output displayed. When a function changes the <em>state</em> of something, it is said to have <em>side effects</em>. A pure function by definition has no side effects. If we wrote <code>double(5);</code> without using <code>console.log</code>, we would not notice that any computation was done.</span></li>
+<li><span style="font-size: 12pt;">Functions can have more than one input. In these cases, you must use parentheses to group the parameter variables together and a comma in between them to separate them.</span>
+<pre>let rectangleArea = (length, width) =&gt; length * width;
+console.log(rectangleArea(5, 2)); // logs 10 (5 * 2)
+</pre>
+</li>
+<li><span style="font-size: 12pt;"><span style="color: #ff0000;"><strong>IMPORTANT NOTE</strong></span>: The * is required so you couldn't for example write <code>lengthwidth</code> or the computer would get confused. Did you mean one long variable <code>lengthwidth</code>? More generally, there is no implicit multiplication; to calculate 2x, you must explicitly include the * symbol so that would be <code>2*x</code>.</span></li>
+</ul>
+<p><span style="font-size: 12pt;">Exercises 1.4:&nbsp;<a href="https://repl.it/teacher/assignments/177236">https://repl.it/teacher/assignments/177236</a>&nbsp;</span></p>
+<ol>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>square</code> as the squaring function (REMEMBER, ^ is used for bitwise XOR, not for raising a number to a power). Do NOT use <code>**</code>; use multiplication instead:</span>
+<pre>let square = x =&gt; ________;
+// Test it with the inputs 4, -5, 7, and 3.14; the ouputs
+// should be 16, 25, 49, and 9.8596, respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>distance</code> as the function that takes an input t representing the time in seconds and outputs the distance in meters that an object starting from rest would fall in t seconds. The formula is d = 1/2 at<sup>2</sup> where a = 9.8 is the acceleration due to gravity.</span>
+<pre>const a = 9.8;
+let distance = t =&gt; __________;
+// Test it with the inputs 1, 2.4, and 0; the outputs
+// should be 4.9, 28.224, and 0, respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>rectanglePerimeter</code> as the function that takes that takes the length and width of a rectangle as inputs and returns its perimeter</span>
+<pre>let rectanglePerimeter = (length, width) =&gt; __________________;
+// Test it with the pairs of numbers 5,2  3.14,7 and 
+// 2.5,6.5; the outputs should be 14, 20.28, and 18, respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>hoursAfterMidnight</code> as a function that takes a number of hours after midnight and returns the hour (expressed using 24-hour clock)</span>
+<pre>let hoursAfterMidnight = hours =&gt; ____________;
+// Test it with the inputs 16, 24, 36, and 100; the outputs
+// should be 16, 0, 12, and 4 respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>centsInNickels</code> as a function that takes the number of nickels as an input and returns its value in cents</span>
+<pre>let centsInNickels = nickels =&gt; _______________;
+// Test it with the inputs 0, 5, and 20; the outputs should
+// be 0, 25, and 100, respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>centsInQuarters</code> as a function that takes the number of quarters as an input and returns its value in cents</span>
+<pre>let centsInQuarters = quarters =&gt; _______________;
+// Test it with the inputs 0, 5, and 20; the outputs should
+// be 0, 125, and 500, respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Fill in the blank to define <code>totalCents</code> as a function that takes the number of pennies, nickels, and quarters as inputs and returns the total value in cents</span>
+<pre>let totalCents = (pennies, nickels, quarters) =&gt; _______________;
+// Test it with the input triples 1,2,3  4,0,10 and 0,7,0; 
+// the outputs should be 86, 254, and 35, respectively.
+</pre>
+</li>
+<li><span style="font-size: 12pt;">*Given a number of cents, you want to make the amount using the fewest number of coins possible using only quarters, nickels, and pennies. For example, for 89 cents, you'd use 3 quarters, 2 nickels, and 4 pennies.</span><br /><br /><span style="font-size: 12pt;"> Define three functions, each taking a number of cents as an input. <code>numOfQuarters</code> returns the number of quarters you'd use, <code>remainingNumOfNickels</code> returns the number of nickels you'd use, and <code>remainingNumOfPennies</code> returns the number of pennies you'd use so</span><br /><span style="font-size: 12pt;"> <code>numOfQuarters(89)</code> would be 3;</span><br /><span style="font-size: 12pt;"> <code>remainingNumOfNickels(89)</code> would be 2;</span><br /><span style="font-size: 12pt;"> <code>remainingNumOfPennies(89)</code> would be 4</span>
+<pre>let numOfQuarters = cents =&gt; _________________;
+let remainingNumOfNickels = cents =&gt; __________________;
+let remainingNumOfPennies = cents =&gt; __________________;
+// Test your functions
+</pre>
+</li>
+</ol>
+</body>
+</html>
