@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+}
+
+table {
+  border-spacing: 1px;
+}
+
+th {
+  background-color: #ccc;
+  border: 1px solid black;
+}
+
+.input-cell {
+  border: 1px solid grey;
+  height: 20px;
+}
+
+.input-cell:hover {
+  border-color: orange;
+}
