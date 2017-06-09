@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<title>Day 2 Notes: Compositions of functions</title>
+<meta charset = "utf-8">
+</head>
+<body>
+<h2>Compositions of Functions</h2>
+<p><span style="font-size: 12pt;">When multiple operations are performed in succession, you can express them as a composition of functions.</span></p>
+<ol>
+<ol>
+<li><span style="font-size: 12pt;">Functions are performed from the most inner one outward (right to left).</span></li>
+<li><span style="font-size: 12pt;">The output of the inner function becomes the input to the next closest outer one.</span></li>
+</ol>
+</ol>
+<pre>let n = 5;
+// First double the input (n = 5) and then add 27:
+let <strong><span style="color: #0000ff;">double</span></strong> = x =&gt; <strong><span style="color: #ff6600;">2*x</span></strong>;
+let <strong><span style="color: #003300;">add27</span></strong> = x =&gt; 27 + x;
+console.log(<span style="color: #003300;"><strong>add27</strong></span>(<strong><span style="color: #0000ff;">double</span></strong>(<strong><span style="color: #000000;">n</span></strong>)));
+//print <strong><span style="color: #ff0000;">37</span></strong> &lt;-- <strong><span style="color: #003300;">27+</span><span style="color: #ff6600;">10</span></strong>&lt;--<strong><span style="color: #0000ff;">2*</span></strong><span style="color: #000000;"><strong>5 
+</strong></span></pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.1 (Magic Trick)</strong>: Using the code from above as a starting point, set a variable to a number. &nbsp;(You can change the 5 to&nbsp;any number you want.) &nbsp;Then define functions for each of the 5 steps listed below. &nbsp;(The functions for the first two steps are already defined.) &nbsp;Print the&nbsp;composition of the 5 functions to reflect the order of the steps. &nbsp;What number do you get? &nbsp;Change the value of n to some other number. &nbsp;What number do you get now?:</span></p>
+<ol>
+<li><span style="font-size: 12pt;">Double the number.</span></li>
+<li><span style="font-size: 12pt;">Add 27 to the result of Step 1.</span></li>
+<li><span style="font-size: 12pt;">Subtract 9 from the result of Step 2.</span></li>
+<li><span style="font-size: 12pt;">Divide the result of step 3 by 2.</span></li>
+<li><span style="font-size: 12pt;">Subtract the number you started with (n) from the result of step 4.</span></li>
+</ol>
+<p><span style="font-size: 12pt;">As a special case, a function can be composed with itself multiple times. These are often referred to as functional powers:</span></p>
+<p><span style="font-size: 12pt;">(E.g., <code><em>f</em><sup>5</sup>(20) = f(f(f(f(f(20)))))</code>). </span></p>
+<p><span style="font-size: 12pt;">You could use a functional power when you want to perform the same operation multiple times in succession.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.2</strong>: Suppose the population in a given country doubles every year. Define a function that takes the current population as an input and outputs the population of the country three years from now. Define your function as a functional power of the <code>double</code> function we defined before.</span></p>
+<p><span style="font-size: 12pt;"><strong>Challenge Exercise 2.3 (Grow Big!) </strong>-<strong>&nbsp;</strong>Problem inspired by <a href="http://www.cs.duke.edu/courses/cps006/fall01/ola/assign/printalot.html">http://www.cs.duke.edu/courses/cps006/fall01/ola/assign/printalot.html</a> :&nbsp;Define a function <code>growBig(n)</code> so that <code>growBig(0)</code> evaluates to 2<sup>10</sup> = 1024 subject to the following constraints:</span></p>
+<ol>
+<li><span style="font-size: 12pt;"><code>growBig</code> is a composition of a combination of one or more functions that you define and/or the successor function defined below:</span>
+<pre>let add1 = n =&gt; n+1;</pre>
+</li>
+<li><span style="font-size: 12pt;">Any function you define must be a composition of one or more of your previously defined functions and/or <code>add1</code>.</span></li>
+<li><span style="font-size: 12pt;">In total, the number of function calls that you use cannot exceed 20.</span></li>
+</ol>
+<pre>// <strong><span style="color: #003300;">Allowed</span></strong>:
+let add1 = n =&gt; n+1;
+let add5 = n =&gt; add1(add1(add1(add1(add1(n)))));
+let add12 = n =&gt; add5(add1(add5(add1(n))));
+let growBig = n =&gt; add12(add12(add12(n)));
+
+console.log(growBig(0)); // prints 36; total of 5 + 4 + 3 = 12 function calls used; can use up to 8 more
+</pre>
+<pre>//<span style="color: #ff0000;"> <strong>NOT</strong> <strong>Allowed</strong></span>:
+let add5 = n =&gt; add1(n) + 4;
+squareOneMoreThan = n =&gt; (add1(n))**2;
+</pre>
+<p><span style="font-size: 12pt;"><span style="color: #0000ff;"><strong>BONUS</strong></span>: Can you make <code>growBig(0)</code> exceed 1200 when subject to the constraints from before? How big can <code>growBig(0)</code> become if 40 function compositions were allowed instead? What about 60?</span></p>
+<p><span style="font-size: 12pt;"><strong>Substitution</strong>: For pure functions, you can replace&nbsp;a function call with its return value. &nbsp;You can <em>replace</em>&nbsp;all input variables with the expression that is passed for it:</span></p>
+<pre>let double = x =&gt; <strong><span style="color: #ff6600;">2*x</span></strong>;
+let add27 = x =&gt; 27 + x;
+</pre>
+<p><span style="font-size: 12pt;">Example: add27(double(x)) = add27(<strong><span style="color: #ff6600;">2*x</span></strong>) = 27 + <strong><span style="color: #ff6600;">2*x</span></strong></span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.4 (Discovering the secret behind the magic)</strong>: Repeatedly substitute as above for the function composition from Exercise 2.1. What do you get?</span></p>
+<p><span style="font-size: 12pt;"><strong>Explicit&nbsp;inputs/progression of steps</strong>: By expressing computations as a composition of pure functions, you can clearly see the progression of steps and the inputs that are used. </span></p>
+<p><span style="font-size: 12pt;">Example: For&nbsp;<span>add27(double(5)), you can see that&nbsp;the output of the computation only depends on the number that is passed, which is 5 in this case, and not on say the time at which it's performed; the answer will be 37 whether it's computed at midnight or noon. &nbsp;However,&nbsp;if the 5 were changed to a 10, the output would be 47 instead. &nbsp;The order of the steps is clear: 5 should be doubled before adding 27.</span></span></p>
+<p><span style="font-size: 12pt;"><strong>Compositions with functions of multiple inputs</strong>: You can also have a composition of functions with multiple inputs:</span></p>
+<pre>let difference = (x,y) =&gt; x - y;
+let distance = (x,y) =&gt; Math.abs(difference(x,y));</pre>
+<p><span style="font-size: 12pt;"><code>Math.abs</code> is the built-in absolute value function, which returns the number's distance from 0 on the number line (e.g., <code>Math.abs(-5)</code> = 5; <code>Math.abs(5)</code> = 5 as both are a distance of 5 away from 0 on the number line.)</span></p>
+<p><span style="font-size: 12pt;">You can have what appears to be a composition of functions as well, though is technically not. Consider the distance formula:</span></p>
+</body>
+</html>
