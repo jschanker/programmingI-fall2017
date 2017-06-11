@@ -7,6 +7,7 @@
   </head>
   <body>
 <h1>Spreadsheet Application</h1>
+<h1>Spreadsheet Application</h1>
 <form>
   <table>
     <tr>
@@ -90,6 +91,19 @@
       <td><input type = "text" id = "g7" class = "input-cell"></td>
     </tr>
   </table>
+  <div id = "context-menu" class = "hidden">
+    <ul>
+      <li>Format >
+        <ul>
+          <li data-type = "number" class = "format">Number</li>
+          <li data-type = "currency" class = "format">Currency</li>
+          <li data-type = "time" class = "format">Time</li>
+        </ul>
+      </li>
+      <li>Placeholder</li>
+    </ul>
+  </div>
 </form>
+<script src = "app-start.js"></script>
   </body>
 </html>
