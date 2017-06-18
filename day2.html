@@ -28,11 +28,19 @@ console.log(<span style="color: #003300;"><strong>add27</strong></span>(<strong>
 <li><span style="font-size: 12pt;">Divide the result of step 3 by 2.</span></li>
 <li><span style="font-size: 12pt;">Subtract the number you started with (n) from the result of step 4.</span></li>
 </ol>
-<p><span style="font-size: 12pt;">As a special case, a function can be composed with itself multiple times. These are often referred to as functional powers:</span></p>
+<p><span style="font-size: 12pt;"><strong>Order of operations/Function Decomposition</strong>: In the reverse direction, we can be given a&nbsp;mathematical&nbsp;expression, and&nbsp;decompose it into a&nbsp;composition&nbsp;of functions that correspond to the steps.</span></p>
+<p><span style="font-size: 12pt;"><strong>Example</strong>: Define a function <code>f(x) =&nbsp;27 + 2(x-9)</code> as a composition of functions.</span></p>
+<p><span style="font-size: 12pt;"><strong>Solution</strong>: Recall that the operations are performed in "PEMDAS" order; parentheses first (subtract 9); then multiplication (double); then addition (add 27).</span><span style="font-size: 12pt;">&nbsp;</span></p>
+<pre>//         <span style="color: #003300;"><strong>27 +</strong></span> <strong><span style="color: #0000ff;">2</span></strong>(<strong>x</strong><span style="color: #ff6600;"><strong>-9</strong></span>) &lt;-- <strong><span style="color: #0000ff;">2</span></strong>(<strong>x<span style="color: #ff6600;">-9</span></strong>) &lt;-- <strong>x</strong><span style="color: #ff6600;"><strong>-9</strong></span> &lt;-- <strong>x</strong><br />let f = x =&gt; <strong><span style="color: #003300;">add27</span></strong>(<strong><span style="color: #0000ff;">double</span></strong>(<strong><span style="color: #ff6600;">subtract9</span></strong>(<strong>x</strong>)));</pre>
+<p><span style="font-size: 12pt;">Note that&nbsp;we can reuse the&nbsp;functions from before in a different order to form different expressions:</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.2</strong>: Define a function g(x) =&nbsp;2(27 + x) - 9 as a composition of functions.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.3</strong>: Define a function h(x) =&nbsp;(x-9)<sup>2</sup>/2 as a composition of functions. &nbsp;(For this one, you'll also want to define/use a square function.)</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.4</strong>: Define a function j(x) =&nbsp;27 + (27 + x) as a composition of your previously defined functions.</span></p>
+<p><span style="font-size: 12pt;"><strong>Functional powers</strong>: As a special case of function composition, a function can be composed with itself multiple times. These are often referred to as functional powers:</span></p>
 <p><span style="font-size: 12pt;">(E.g., <code><em>f</em><sup>5</sup>(20) = f(f(f(f(f(20)))))</code>). </span></p>
-<p><span style="font-size: 12pt;">You could use a functional power when you want to perform the same operation multiple times in succession.</span></p>
-<p><span style="font-size: 12pt;"><strong>Exercise 2.2</strong>: Suppose the population in a given country doubles every year. Define a function that takes the current population as an input and outputs the population of the country three years from now. Define your function as a functional power of the <code>double</code> function we defined before.</span></p>
-<p><span style="font-size: 12pt;"><strong>Challenge Exercise 2.3 (Grow Big!) </strong>-<strong>&nbsp;</strong>Problem inspired by <a href="http://www.cs.duke.edu/courses/cps006/fall01/ola/assign/printalot.html">http://www.cs.duke.edu/courses/cps006/fall01/ola/assign/printalot.html</a> :&nbsp;Define a function <code>growBig(n)</code> so that <code>growBig(0)</code> evaluates to 2<sup>10</sup> = 1024 subject to the following constraints:</span></p>
+<p><span style="font-size: 12pt;">You could use a functional power when you want to perform the same operation multiple times in succession. &nbsp;Exercise 2.4 is an example of a functional power. (f is the add27 function; the power is 2 since it's performed twice.)</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.5</strong>: Suppose the population in a given country doubles every year. Define a function that takes the current population as an input and outputs the population of the country three years from now. Define your function as a functional power of the <code>double</code> function we defined before.</span></p>
+<p><span style="font-size: 12pt;"><strong>Challenge Exercise 2.6 (Grow Big!) </strong>-<strong>&nbsp;</strong>Problem inspired by <a href="http://www.cs.duke.edu/courses/cps006/fall01/ola/assign/printalot.html">http://www.cs.duke.edu/courses/cps006/fall01/ola/assign/printalot.html</a> :&nbsp;Define a function <code>growBig(n)</code> so that <code>growBig(0)</code> evaluates to 2<sup>10</sup> = 1024 subject to the following constraints:</span></p>
 <ol>
 <li><span style="font-size: 12pt;"><code>growBig</code> is a composition of a combination of one or more functions that you define and/or the successor function defined below:</span>
 <pre>let add1 = n =&gt; n+1;</pre>
@@ -58,13 +66,61 @@ squareOneMoreThan = n =&gt; (add1(n))**2;
 let add27 = x =&gt; 27 + x;
 </pre>
 <p><span style="font-size: 12pt;">Example: add27(double(x)) = add27(<strong><span style="color: #ff6600;">2*x</span></strong>) = 27 + <strong><span style="color: #ff6600;">2*x</span></strong></span></p>
-<p><span style="font-size: 12pt;"><strong>Exercise 2.4 (Discovering the secret behind the magic)</strong>: Repeatedly substitute as above for the function composition from Exercise 2.1. What do you get?</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.7 (Discovering the secret behind the magic)</strong>: Repeatedly substitute as above for the function composition from Exercise 2.1. What do you get?</span></p>
 <p><span style="font-size: 12pt;"><strong>Explicit&nbsp;inputs/progression of steps</strong>: By expressing computations as a composition of pure functions, you can clearly see the progression of steps and the inputs that are used. </span></p>
 <p><span style="font-size: 12pt;">Example: For&nbsp;<span>add27(double(5)), you can see that&nbsp;the output of the computation only depends on the number that is passed, which is 5 in this case, and not on say the time at which it's performed; the answer will be 37 whether it's computed at midnight or noon. &nbsp;However,&nbsp;if the 5 were changed to a 10, the output would be 47 instead. &nbsp;The order of the steps is clear: 5 should be doubled before adding 27.</span></span></p>
 <p><span style="font-size: 12pt;"><strong>Compositions with functions of multiple inputs</strong>: You can also have a composition of functions with multiple inputs:</span></p>
 <pre>let difference = (x,y) =&gt; x - y;
-let distance = (x,y) =&gt; Math.abs(difference(x,y));</pre>
-<p><span style="font-size: 12pt;"><code>Math.abs</code> is the built-in absolute value function, which returns the number's distance from 0 on the number line (e.g., <code>Math.abs(-5)</code> = 5; <code>Math.abs(5)</code> = 5 as both are a distance of 5 away from 0 on the number line.)</span></p>
-<p><span style="font-size: 12pt;">You can have what appears to be a composition of functions as well, though is technically not. Consider the distance formula:</span></p>
+let distance1D = (x,y) =&gt; Math.abs(difference(x,y));</pre>
+<p><span style="font-size: 12pt;"><code>Math.abs</code> is the built-in absolute value function, which returns the number's distance from 0 on the number line (e.g., <code>Math.abs(-5)</code> = 5; <code>Math.abs(5)</code> = 5 as both are a distance of 5 away from 0 on the number line.) &nbsp;<code>distance1D</code> returns the distance between the two numbers on the number line. &nbsp;(1D stands for 1 dimension.)</span></p>
+<p><span style="font-size: 12pt;">You can have what appears to be a composition of functions as well, though is technically not quite the same thing. Consider the sum of the squares of two numbers:</span></p>
+<pre>let square = x =&gt; x**2;
+let sum = (x, y) =&gt; x + y;
+let sumOfSquares = (x, y) =&gt; sum(square(x), square(y));
+</pre>
+<p><span style="font-size: 12pt;">Unlike previous examples, you don't have a clear progression from inputs to outputs. In this example, you can square x first and y second, or you can square y first and then x second. In each case, taking the sum is the final step.</span></p>
+<p><span style="font-size: 12pt;"><strong>Parallelization</strong>: Writing pure functions like this can be useful for showing which operations can be computed in parallel or simultaneously. Here, we can see that one processor can compute the square of x while the other one computes the square of y since their answers don't depend on each other. When they're both finished, their results can be added together.</span></p>
+<pre><span style="font-size: 12pt;">           x         y      ||
+           |         |      ||
+          x**2      y**2   _||_
+           \         /     \  / 
+            x**2+y**2       \/                  
+</span></pre>
+<p><span style="font-size: 12pt;">Often programs are written in such a way as to be performed sequentially, i.e., one operation performed after the next as in previous examples. As written, only one processor will be doing the work: square x first; then square y; then add the two numbers together. For more time consuming operations, this is quite wasteful. It would be like having two intelligent people work on a group project with one sitting idly by, doing nothing while the other one does all the work, one step at a time. Given that almost all modern computers today have more than one processor, thinking about how to parallelize operations is becoming increasingly important. You want to think about how to keep multiple processors busy!</span></p>
+<p>&nbsp;</p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.8</strong>: Express the function f(x, y) =&nbsp;(x+1)<sup>2</sup>/(y<sup>2</sup>+10) using&nbsp;the following functions without explicitly using any math operators (+, **, or /):</span></p>
+<pre>let square = x =&gt; x**2;
+let divide = (x, y) =&gt; x / y;
+let add1 = x =&gt; x + 1;
+let add10 = x =&gt; x + 10;
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.9</strong>:&nbsp;Express the function sum3(x, y, z) which adds the three numbers x, y, and z using only sum2(x, y) which adds the two numbers x and y (without using +). &nbsp;Then define sum4(w, x, y, z) and sum5(v, w, x, y, z), which return&nbsp;the sum of the 4 and 5 inputs, respectively (again without the use of +):</span></p>
+<pre>let sum2 = (x, y) =&gt; x + y;
+let sum3 = (x, y, z) =&gt; __________________________;<br />let sum4 = (w, x, y, z) =&gt; ________________________;<br />let sum5 = (v, w, x, y, z) =&gt; _______________________;</pre>
+<p><span style="font-size: 12pt;"><strong><span>Exercise 2.10 (2D Distance formula):&nbsp;</span></strong>The distance between two points (x<sub>1</sub>, y<sub>1</sub>) and (x<sub>2</sub>, y<sub>2</sub>) is given by d =&nbsp;<span>&radic;</span><span style="border-top: 1px solid black;">(x<sub>2</sub>-<span>x</span><sub>1</sub>)<sup>2</sup>+(y<sub>2</sub>-<span>y</span><sub>1</sub>)<sup>2 </sup></span></span><span style="font-size: 12pt;">. &nbsp;<span>Using the built-in square root function, </span><code>Math.sqrt&nbsp;</code><span>and the functions below, define the 2D distance&nbsp;function of four&nbsp;variables </span><code>x1,</code><span>&nbsp;</span><code>x2, y1, y2</code><span>.</span></span></p>
+<pre>let difference = (x, y) =&gt; x - y;
+let square = x =&gt; x**2;
+let distance2d = (x, y) =&gt; _____________________________;</pre>
+<p><span style="font-size: 12pt;"><strong>Functional Abstraction</strong>: When functions involve many steps, it can help to define functions that encompass multiple steps. &nbsp;This can make your code easier to understand, make it easier to find and correct errors, make it easier to focus on the larger task, and make it easier to change parts of it without affecting the whole. &nbsp;</span></p>
+<p><span style="font-size: 12pt;">For example, by using the built-in square root function: </span></p>
+<ol>
+<li><span style="font-size: 12pt;">The formula for 2-dimensional distance is not cluttered with distracting details about how we might calculate the square root and the user can clearly see the formula. &nbsp;</span></li>
+<li><span style="font-size: 12pt;">If we can count on the built-in square root function working and our 2d distance formula is incorrect, we know the error must be somewhere else; e.g., with the order that we perform the operations, the squaring, the subtraction, etc. &nbsp;</span></li>
+<li><span style="font-size: 12pt;">There are multiple ways to approximate the square root of a number (as we will see later). &nbsp;W</span><span style="font-size: 12pt;">e don't need to be aware of it; if in a later version of JavaScript, a different way is used, we won't know or care&nbsp;so long as it produces the same answers for the same inputs.&nbsp; </span></li>
+<li><span style="font-size: 12pt;">If the square root function works, our 2d distance function will continue to do so as well.</span></li>
+</ol>
+<p><span style="font-size: 12pt;">Hiding the details in a function in this way so that you know <em>what</em> it accomplishes but not <em>how</em> it does its work is known as functional abstraction.</span></p>
+<p><span style="font-size: 12pt;"><strong>Layers of abstraction/Managing complexity</strong>: Today's software is very complex and requires many <em>layers</em> of abstraction to manage all this complexity with each layer depending on the ones below it. &nbsp;However, the functions from a&nbsp;given layer are generally not&nbsp;accessible to&nbsp;ones that are not directly above it.</span></p>
+<p><span style="font-size: 12pt;"><strong>Example (Circle&nbsp;Collision)</strong>: When coding&nbsp;a video game, you often have to determine whether a collision between two objects has occurred. &nbsp;To do this, you want to tell if the objects share one or more points in common. &nbsp;If you were writing a function to determine whether two circles of given radii and center positions&nbsp;touched each other, you could use the distance2d function to determine if the distances between their centers were less than or equal to the sum of their radii. &nbsp;&nbsp;</span></p>
+<pre><span style="font-size: 12pt; border-bottom: 1px solid black;">     circleCollision </span>
+<span style="font-size: 12pt; border-bottom: 1px solid black;">       distance2d    </span>
+<span style="font-size: 12pt;">&nbsp; &nbsp; &nbsp; &nbsp; Math.sqrt</span>
+</pre>
+<p><span style="font-size: 12pt;">The above&nbsp;would be an illustration of the layers of abstraction; <code>circleCollision</code> would call&nbsp;<code>distance2d</code> directly and indirectly depends on <code>Math.sqrt</code> because <code>distance2d</code> does. &nbsp;However, it need&nbsp;not be aware of <code>Math.sqrt</code> and if some formula for&nbsp;<code>distance2d</code>&nbsp;were used that did not use&nbsp;<code>Math.sqrt</code>, it would no longer depend on it even indirectly. &nbsp;</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 2.11 (Standard Deviation)</strong>: The (population) standard deviation &sigma; of two numbers x<sub>1</sub> and x<sub>2</sub> is given by &sigma; = &radic;<span style="border-top: 1px solid black;">((x<sub>1</sub>-&mu;)<sup>2</sup>+(x<sub>2</sub>-&mu;)<sup>2</sup>)/2</span> where &mu; is the average of the two numbers x<sub>1</sub> and x<sub>2</sub>. &nbsp;Using the built-in square root function, <code>Math.sqrt</code>, define the standard deviation function of two variables <code>x1</code> and <code>x2</code>. Be sure to decompose the operations into different functions as above, which may involve using the previously defined functions or defining additional ones yourself, perhaps for the purposes of functional absraction. &nbsp;(Note: &sigma; is the lowercase Greek letter sigma and &mu; is the lowercase Greek letter mu; <code>x1</code> and <code>x2</code> are both valid variable names in JavaScript.)</span></p>
+<pre>let sigma = (x1, x2) =&gt; ___________________;  
+</pre>
+<p><span style="font-size: 12pt;"><strong>Challenge Exercise 2.12 (Sum of Digits)</strong>: Define a function sumOfLastFourDigits that takes an integer greater than or equal to 1000 and returns the sum of the digits in the thousands, hundreds, tens, and ones place. &nbsp;For example, for an input of 275820, it would return 15 (5 + 8 + 2 + 0). &nbsp;Make your function clearer by using sum4 from before and defining functions onesDigit, tensDigit, hundredsDigit, and thousandsDigit. &nbsp;<strong>Hint</strong>: Consider the problem of extracting the number of pennies, dimes, dollars, ten-dollar, and hundred-dollar bills&nbsp;required to&nbsp;form a number of cents given by the input so that the total number of coins/bills is smallest.</span></p>
+<pre>// Assume n &gt; 1000;<br />// sumOfLastFourDigits(275820) = 5 + 8 + 2 + 0 = 15<br />let sumOfLastFourDigits = n =&gt; ___________________; </pre>
 </body>
 </html>
