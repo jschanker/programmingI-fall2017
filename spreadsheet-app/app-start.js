@@ -53,13 +53,60 @@ function mouseButtonPressed(event, index) {
   return buttonClickedIndex === index;
 }
 
+/** 
+* FOR ASSIGNMENT 1, REPLACE THE BELOW FUNCTIONS WITH YOUR OWN
+* ALSO, ADD YOUR OWN AS DIRECTED IN THE ASSIGNMENT
+**/
+
+function getSecondFromMs(num) {
+  return 0;
+}
+
+function getMinuteFromMs(num) {
+  return 0;
+}
+
+function getHourFromMs(num) {
+  return 0;
+}
+
+function getSecondFromDays(num) {
+  return 0;
+}
+
+function getMinuteFromDays(num) {
+  return 0;
+}
+
+function getHourFromDays(num) {
+  return 0;
+}
+
+/** END REPLACEMENT FOR ASSIGNMENT 1 **/
+
+
+
+function getTimeStrFromMs(num) {
+  return getHourFromMs(num) + ":" + getMinuteFromMs(num) + ":" + getSecondFromMs(num);
+}
+
+function getTimeStrFromDays(num) {
+  return getHourFromDays(num) + ":" + getMinuteFromDays(num) + ":" + getSecondFromDays(num);
+}
+
 function evalCell(cell) {
   if(cell.getAttribute("data-format") === "currency") {
     return "$" + cell.getAttribute("data-value");
   } 
-  else if(cell.getAttribute("data-format") === "time") {
+  else if(cell.getAttribute("data-format") === "time-ms") {
+    return getTimeStrFromDays(cell.getAttribute("data-value") || 0);
+  }
+  else if(cell.getAttribute("data-format") === "time-days") {
+    return getTimeStrFromMs(cell.getAttribute("data-value") || 0);
+  }
+  else if(cell.getAttribute("data-format") === "date") {
     //alert(cell.getAttribute("data-value"));
-    return new Date(parseInt(cell.getAttribute("data-value") || 0))
+    return new Date(parseInt(cell.getAttribute("data-value") || 0));
   }
   else {
     return cell.getAttribute("data-value");
