@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+  <title>Introduction to Loops and Recursion</title>
+</head>
+<body>
+<h2>Introduction to Loops and Recursion</h2>
+<p><span style="font-size: 12pt;">Sometimes the number of times you want to perform an operation will depend on the input. &nbsp;For example, suppose&nbsp;you wanted to define a function that takes a positive integer n as an input and outputs the sum of the integers from 1 to n. &nbsp;Forgetting that there's a general formula, and doing this directly, you would have trouble:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;
+  :
+  :
+};
+</pre>
+<p><span style="font-size: 12pt;">You can't handle every integer that's entered and the number of additions you would need would depend on n; for 3, you would perform 2 additions and for 5, you would use 4 additions. In general, for n, you would use n-1 additions.</span></p>
+<p><span style="font-size: 12pt;">Here is a step-by-step description of a fairly general method you could use that will be added to later for more complex problems:</span></p>
+<ol>
+<li><span style="font-size: 12pt;">Draw a table with a column for each of your inputs and one for the output&nbsp;output. Here, we have one input n so we'd have two columns: one for the input (n) and one for the output (sum of the integers from 1 to n).</span>
+<table style="border: 1px solid black;">
+<tbody>
+<tr>
+<th>n (input)</th>
+<th>sum from 1 to n (output)</th>
+</tr>
+</tbody>
+</table>
+</li>
+<li><span style="font-size: 12pt;">In the first row, include the starting input (base case) in which no calculations are required and the corresponding output. In this case, you would have 1 for the input and 1 for the output since the sum of the integers from 1 to 1 is just 1, no additions required.</span>
+<table style="border: 1px solid black;">
+<tbody>
+<tr>
+<th><span style="color: #0000ff;">n</span> <span style="color: #0000ff;">(input)</span></th>
+<th>sum from 1 to n (output)</th>
+</tr>
+<tr>
+<td style="text-align: center;"><strong><span style="color: #ff6600;">1</span></strong></td>
+<td style="text-align: center;"><strong><span style="color: #003300;">1</span></strong></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><span style="font-size: 12pt;">Fill in each subsequent row with the "next" input and corresponding output&nbsp;until you discover&nbsp;the pattern for how you update the input and output accordingly.</span>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n (input)</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">sum from 1 to n (output)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>1</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">6</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">10</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">15</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p><span style="font-size: 12pt;"><strong><span>Backward Recursion: </span></strong></span></p>
+<p><span style="font-size: 12pt;"><span>Using step 2, introduce an if statement of the form:&nbsp;</span></span></p>
+<p><span style="font-size: 12pt;"><span><code>if(<span style="color: #0000ff;"><strong><em>input variable</em></strong></span> === <span style="color: #ff6600;"><strong><em>row 1 input</em></strong></span>) return <span style="color: #003300;"><strong><em>output in row 1</em></strong></span>;</code></span></span></p>
+<pre><span style="font-size: 12pt;">let sumOfPositiveIntegersFrom1To = <span style="color: #0000ff;"><strong>n</strong></span> =&gt; {
+  if(<strong><span style="color: #0000ff;">n</span></strong> === <strong><span style="color: #ff6600;">1</span></strong>) return <span style="color: #003300;"><strong>1</strong></span>;
+  ...
+};
+</span></pre>
+<p><span style="font-size: 12pt;">Using&nbsp;step 3,&nbsp;determine how to go "backwards" through the table from row to row for the inputs (call this <strong><span style="color: #0000ff;"><code>backwardsInput</code></span></strong>) and how to go "forward" for the output (call this <strong><span style="color: #333333;"><code>forwardOutput</code></span></strong>). &nbsp;Use this for your else statement:</span></p>
+<p><span style="font-size: 12pt;"><span>else return <strong><span style="color: #333333;">downOutput</span></strong>( &nbsp; f(<em style="color: #0000ff; font-weight: bold;">upInput(input variables)</em></span><span>) &nbsp;, &nbsp;<strong>input variables</strong> );</span></span></p>
+<p><span style="font-size: 12pt;">For this example, we'd have:</span></p>
+<pre><span style="font-size: 12pt;">let backwardsInput = n =&gt; n - 1; // inputs decrease by 1 going backward
+let downOutput = (outputFromf, n) =&gt; outputFromF + n; // outputs increase by n going forward
+</span></pre>
+</body>
+</html>
