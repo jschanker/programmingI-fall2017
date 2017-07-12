@@ -29,7 +29,7 @@ let name = "Jane Doe";  // variables can be assigned words</pre>
 <li><span style="font-size: 12pt;">Assign with <code>const</code> for constants. Constants are sometimes expressed in all CAPS:</span>
 <pre>const PI = 3.141592653589793;</pre>
 </li>
-<li><span style="font-size: 12pt;">You can print the values of variables just as you do functions using <code>console.log</code>, but they need to be outside the quotes so that they're not interpreted literally:</span>
+<li><span style="font-size: 12pt;">You can print the values of variables just as you do text&nbsp;using <code>console.log</code>, but they need to be placed outside of the quotes so that they're not interpreted literally:</span>
 <pre>console.log("x =", x, "and y =", y);
 console.log("Hi,", name, ".");
 console.log("PI =", PI);
@@ -47,11 +47,11 @@ console.log("PI =", PI);
 <li><span style="font-size: 12pt;"><code>Math.trunc(# / #)</code> : Integer Division (do the division and remove the decimal point and all digits that come after it; truncate it) - See <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc">Math.trunc()</a></span></li>
 <li><span style="font-size: 12pt;"><code>%</code> : Remainder</span></li>
 <li><span style="font-size: 12pt;"><code>**</code>: Exponentiation (NOT <code>^</code>, which is bitwise XOR): Note ** has not been standardized yet and will therefore not work across all browsers.</span></li>
-<li><span style="font-size: 12pt;">Operations performed in PEMDAS order: (): Parentheses first; then exponentiation (**), then multiplication/division (*, /, and % for remainder), then addition/subtraction (+/-).</span></li>
+<li><span style="font-size: 12pt;">Operations performed in <strong>PEMDAS</strong> order: (): <strong>P</strong>arentheses first; then <strong>E</strong>xponentiation (**), then <strong>M</strong>ultiplication/<strong>D</strong>ivision (*, /, and % for remainder), then <strong>A</strong>ddition/<strong>S</strong>ubtraction (+/-).</span></li>
 </ul>
 <pre>//                                               _<strong><span style="color: #008000;">2</span></strong>_R<span style="color: #0000ff;"><strong>4</strong></span>
 console.log(Math.trunc(14 / 5)); // prints <strong><span style="color: #008000;">2</span></strong> : 5|14<br />console.log(14 % 5);             // prints remainder of <strong><span style="color: #0000ff;">4</span></strong></pre>
-<p><span style="font-size: 12pt;"><strong>Quick Exercise 1.3</strong>: Define a variable n and set it to 54. Then define a variable d, and set it to <code>n - 44</code>. Have the program compute the quotient of n divided by d (integer division) and output the result. Then have it computer the remainder when you divide n by d and output the result. Before running the program, determine what you think the output will be. &nbsp;C<span>hange </span>d<span> to be </span>n<span>&nbsp;+ 44 instead. &nbsp;How do you think this will affect the output? Run it to find out if you were correct. &nbsp;</span>Finally, change d to be n - 54 instead. How do you think this will affect the output? Run it to find out if you were correct:&nbsp;<a href="https://repl.it/I944/0">https://repl.it/I944/0</a>&nbsp;</span></p>
+<p><span style="font-size: 12pt;"><strong>Quick Exercise 1.3</strong>: Define a variable n and set it to 54. Then define a variable d, and set it to <code>n - 44</code>. Have the program compute the quotient of n divided by d (integer division) and output the result. Then have it compute the remainder when you divide n by d and output the result. Before running the program, determine what you think the output will be. &nbsp;C<span>hange </span>d<span> to be </span>n<span>&nbsp;+ 44 instead. &nbsp;How do you think this will affect the output? Run it to find out if you were correct. &nbsp;</span>Finally, change d to be n - 54 instead. How do you think this will affect the output? Run it to find out if you were correct:&nbsp;<a href="https://repl.it/I944/0">https://repl.it/I944/0</a>&nbsp;</span></p>
 <h2>Defining/Calling Functions</h2>
 <p><span style="font-size: 12pt;">You can use variables to refer to functions as well:</span></p>
 <ul>
@@ -64,13 +64,13 @@ console.log(Math.trunc(14 / 5)); // prints <strong><span style="color: #008000;"
 <li><span style="font-size: 12pt;"><code>2*x</code> is the return value or output of the function.</span></li>
 <li><span style="font-size: 12pt;">Note the x can be replaced with other variable names such as <code>t</code> or even <code>foo</code>. In those cases, you would use <code>t =&gt; 2*t</code> and <code>foo =&gt; 2*foo</code>, respectively.</span></li>
 <li><span style="font-size: 12pt;">Evaluate functions at specific inputs&nbsp;by writing them as you would in your PreCalculus class. Use <code>console.log</code> to display the result:</span>
-<pre>console.log(double(0)); // outputs 0 : 0 =&gt; 2*0
-console.log(double(5)); // outputs 10 : 5 =&gt; 2*5
+<pre>console.log(double(0));     // outputs 0 : 0 =&gt; 2*0
+console.log(double(5));     // outputs 10 : 5 =&gt; 2*5
 console.log(double(-1.57)); // outputs -3.14 : -1.57 =&gt; 2*-1.57
 </pre>
 </li>
-<li>T<span style="font-size: 12pt;">he inputs 0, 5, and -1.57 are called <strong>arguments</strong> and are said to be <em>passed</em> to the double function. &nbsp;To get the output, we <em>substitute</em>&nbsp;the argument for the parameter variable x and calculate what's to the right of the arrow. (E.g., for 5, we substitute 5 for x and calculate 2*5, which is 10.)</span></li>
-<li><span style="font-size: 12pt;">Functions that perform a computation such as double without changing anything are known as pure functions. <code>console.log</code> is a function but <em>not</em> a pure one. It does change something, mainly the console where you will see output displayed. When a function changes the <em>state</em> of something, it is said to have <em>side effects</em>. A pure function by definition has no side effects. If we wrote <code>double(5);</code> without using <code>console.log</code>, we would not notice that any computation was done.</span></li>
+<li>T<span style="font-size: 12pt;">he inputs 0, 5, and -1.57 are called <strong>arguments</strong> and are said to be <em>passed</em> to the <code>double</code> function. &nbsp;To get the output, we <em>substitute</em>&nbsp;the argument for the parameter variable x and calculate what's to the right of the arrow. (E.g., for 5, we substitute 5 for x and calculate 2*5, which is 10.)</span></li>
+<li><span style="font-size: 12pt;">Functions that perform a computation such as <code>double</code> without changing anything are known as pure functions. <code>console.log</code> is a function but <em>not</em> a pure one. It does change something, mainly the console where you will see output displayed. When a function changes the <em>state</em> of something, it is said to have <em>side effects</em>. A pure function by definition has no side effects. If we wrote <code>double(5);</code> without using <code>console.log</code>, we would not notice that any computation was done.</span></li>
 <li><span style="font-size: 12pt;">Functions can have more than one input. In these cases, you must use parentheses to group the parameter variables together and a comma in between them to separate them.</span>
 <pre>let rectangleArea = (length, width) =&gt; length * width;
 console.log(rectangleArea(5, 2)); // logs 10 (5 * 2)
@@ -78,7 +78,7 @@ console.log(rectangleArea(5, 2)); // logs 10 (5 * 2)
 </li>
 <li><span style="font-size: 12pt;"><span style="color: #ff0000;"><strong>IMPORTANT NOTE</strong></span>: The * is required so you couldn't for example write <code>lengthwidth</code> or the computer would get confused. Did you mean one long variable <code>lengthwidth</code>? More generally, there is no implicit multiplication; to calculate 2x, you must explicitly include the * symbol so that would be <code>2*x</code>.</span></li>
 </ul>
-<p><span style="font-size: 12pt;">Exercises 1.4:&nbsp;<a href="https://repl.it/teacher/assignments/177236">https://repl.it/teacher/assignments/177236</a>&nbsp;</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercises 1.4</strong>:&nbsp;Enroll in the Programming I (Fall 2017) Classroom, if you haven't already done so by using the following link:&nbsp;<a href="https://repl.it/classroom/invite/FzlDnSL">https://repl.it/classroom/invite/FzlDnSL</a>&nbsp;. &nbsp;If you've signed up for GitHub, you should be able to sign in with your GitHub username/password. &nbsp;Once you're signed up for the classroom, click on the Assignment link, "Exercises 1.4 and 1.5". &nbsp;Using the repl.it classroom will allow you to test/submit your solutions.</span></p>
 <ol>
 <li><span style="font-size: 12pt;">Fill in the blank to define <code>square</code> as the squaring function (REMEMBER, ^ is used for bitwise XOR, not for raising a number to a power). Do NOT use <code>**</code>; use multiplication instead:</span>
 <pre>let square = x =&gt; ________;
@@ -86,7 +86,7 @@ console.log(rectangleArea(5, 2)); // logs 10 (5 * 2)
 // should be 16, 25, 49, and 9.8596, respectively.
 </pre>
 </li>
-<li><span style="font-size: 12pt;">Fill in the blank to define <code>distance</code> as the function that takes an input t representing the time in seconds and outputs the distance in meters that an object starting from rest would fall in t seconds. The formula is d = 1/2 at<sup>2</sup> where a = 9.8 is the acceleration due to gravity.</span>
+<li id="distance-exercise"><span style="font-size: 12pt;">Fill in the blank to define <code>distance</code> as the function that takes an input t representing the time in seconds and outputs the distance in meters that an object starting from rest would fall in t seconds. The formula is d = 1/2 at<sup>2</sup> where a = 9.8 is the acceleration due to gravity.</span>
 <pre>const a = 9.8;
 let distance = t =&gt; __________;
 // Test it with the inputs 1, 2.4, and 0; the outputs
@@ -99,6 +99,89 @@ let distance = t =&gt; __________;
 // 2.5,6.5; the outputs should be 14, 20.28, and 18, respectively.
 </pre>
 </li>
+</ol>
+<h3>Defining functions without formulas</h3>
+<p><span style="font-size: 12pt;">Pure functions like the distance function you defined for&nbsp;the above&nbsp;<a href="#distance-exercise">exercise</a>&nbsp;can represent formulas. &nbsp;You plug in or substitute the values for the input variable(s), which is the time t in this case, to determine the output, which is the distance d in this case. &nbsp;The formula or function should work for <em>all</em>&nbsp;allowed inputs, not just some of them. &nbsp;</span></p>
+<p><span style="font-size: 12pt;">For some functions you want to define, the formula is <em>not</em> given so you need to determine what the formula is. &nbsp;And again, it needs to work for <em>all</em> allowed inputs.&nbsp; To do this, it is often immensely useful&nbsp;to calculate the desired outputs&nbsp;for some inputs to determine what operations you need to perform. &nbsp;When selecting your inputs, you need to be careful to select a sample of different types of inputs to make sure your calculations aren't specific&nbsp;to certain cases. &nbsp;Let's consider an example to illustrate:</span></p>
+<p><span style="font-size: 12pt;"><strong>Example (Pairs of socks)</strong>: Define a function <code>numOfPairs</code> that takes a number of socks as an input and returns the number of whole pairs. &nbsp;(It's okay to pair&nbsp;socks that don't match; we'll make a new style that way!)</span></p>
+<p><span style="font-size: 12pt;"><strong>Solution</strong>: Let's form a table showing some inputs and the corresponding desired outputs.</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">socks (input)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">Output from numOfPairs</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">0</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">0</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">18</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">9</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">50</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">25</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">From the table, we might conclude that the formula is given by&nbsp;the following:</span></p>
+<pre>pairs = socks / 2;
+</pre>
+<p><span style="font-size: 12pt;">Specifically, we seem to divide the number of socks by 2 to get the number of pairs. But is this correct for every possible number of socks we might have? &nbsp;It seems we may have overlooked the case&nbsp;in which we had an odd number of socks. &nbsp;For example, if we plug in 5 for socks, we'll get that we have 2.5 pairs, but we should get 2 since we wanted the number of <em>whole</em> pairs. &nbsp;Adding some odd numbered inputs to our table, we'd have the following:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">socks (input)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">Output from numOfPairs</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">0</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">0</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>0 (old formula: 0.5)</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>5</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>2 (old formula: 2.5)</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">18</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">9</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>31</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>15 (old formula: 7.5)</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">50</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">25</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">From the table, it still seems that we can use the same formula as before, dividing the number of socks by 2, so long as we remove the .5&nbsp;to the right&nbsp;of&nbsp;the decimal place after the division should it be present. &nbsp;The desired function definition, reflecting the new formula,&nbsp;would seem to be as follows:</span></p>
+<pre>let numOfPairs = socks =&gt; Math.trunc(socks / 2);</pre>
+<p><span style="font-size: 12pt;">We need to now make sure that this new function definition works for the original even numbered of socks. &nbsp;It does since truncating the result of the division by 2 has no effect on whole numbers such as 4 (e.g., &nbsp;<code>Math.trunc(8/2) = Math.trunc(4) = 4</code>). &nbsp;So we now have our desired function definition. &nbsp;<strong>NOTE</strong>: A&nbsp;more natural interpretation of this function definition is integer division by 2,&nbsp;where we ignore the remainder.&nbsp;</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercises 1.5:&nbsp;</strong>Enroll in the Programming I (Fall 2017) Classroom, if you haven't already done so by using the following link:&nbsp;<a href="https://repl.it/classroom/invite/FzlDnSL">https://repl.it/classroom/invite/FzlDnSL</a>&nbsp;. &nbsp;If you've signed up for GitHub, you should be able to sign in with your GitHub username/password. &nbsp;Once you're signed up for the classroom, click on the Assignment link, "Exercises 1.4 and 1.5". &nbsp;Using the repl.it classroom will allow you to test/submit your solutions.</span></p>
+<ol start="1">
 <li><span style="font-size: 12pt;">Fill in the blank to define <code>hoursAfterMidnight</code> as a function that takes a number of hours after midnight and returns the hour (expressed using 24-hour clock)</span>
 <pre>let hoursAfterMidnight = hours =&gt; ____________;
 // Test it with the inputs 16, 24, 36, and 100; the outputs
