@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset = "utf-8">
+    <title>Introduction to Recursive Definitions and Backward Recursion</title>
+  </head>
+  <body>
+<h1>Introduction to Recursive Definitions and Backward Recursion</h1>
+<p><span style="font-size: 12pt;">Sometimes the number of times you want to perform an operation will depend on the input. &nbsp;For example, suppose&nbsp;you wanted to define a function <code>sumOfPositiveIntegersFrom1To</code> that takes a positive integer n as an input and outputs the sum of the integers from 1 to n. &nbsp;Forgetting that there's a general formula, and doing this directly, you would have trouble:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;
+  :
+  :
+};
+</pre>
+<p><span style="font-size: 12pt;">You can't handle every integer that's entered, and the number of additions you would need would depend on n; for 3, you would perform 2 additions and for 5, you would use 4 additions. In general, for n, you would use n-1 additions.</span></p>
+<p><span style="font-size: 12pt;">Since we're not able to list every case, we instead describe&nbsp;the pattern that allows us to proceed from one else if statement to the next. &nbsp;We do this by providing a <em>recursive</em> definition, which describes how we can compute the output for a given input&nbsp;by using the outputs from other inputs for this same function.&nbsp;&nbsp;We'll start with a&nbsp;<em>backward</em> recursive definition that can be thought of as looking at a given else if. &nbsp;It's backward in the sense that we look <em>back</em>&nbsp;to the outputs for smaller inputs when determining&nbsp;the output for the current input. &nbsp;To see this process in action, let's continue to define our <code>sumOfPositiveIntegersFrom1To</code> function for the inputs 6, 7, and 8 in that order. &nbsp;We start by looking <em>back</em> at the output from this function for the smaller input 5 and see if we can describe the output for 6 in terms of it.</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return <span style="color: #ff0000;"><strong>1 + 2 + 3 + 4 + 5</strong></span>;<br />  else if(<span style="color: #ff0000;"><strong>n === 6</strong></span>) return _________________;
+  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">The output we want for 6 is <code>1 + 2 + 3 + 4 + 5 + 6</code>. &nbsp;This is 6 more than the output for the previous input of 5 so we can write the function up to this point as follows:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return <span style="color: #ff0000;"><strong>1 + 2 + 3 + 4 + 5</strong></span>;<br />  else if(<span style="color: #ff0000;"><strong>n === 6</strong></span>) return <span style="text-decoration: underline; color: #0000ff;"><strong>sumOfPositiveIntegersFrom1To(5) + 6</strong></span>;
+  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">Now we want to define the function for an n of 7 so we can use the output from this function for an input of&nbsp;6:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(5) + 6</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(<span style="color: #ff0000;"><strong>n === 7</strong></span>) return ___________________________________;<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">This time, we want&nbsp;<code>1 + 2 + 3 + 4 + 5 + 6 + 7</code>, which is 7 more than&nbsp;<span>the previous output for the previous input of 6 so we can write the function up to this point as follows:</span></span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(5) + 6</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(<span style="color: #ff0000;"><strong>n === 7</strong></span>) return <span style="text-decoration: underline;"><span style="color: #0000ff;"><strong>sumOfPositiveIntegersFrom1To(6) + 7</strong></span></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">Now we want to define the function for an n of 8 so we can use the output from this function for an input of 7.</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return sumOfPositiveIntegersFrom1To(5) + 6; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(n === 7) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(6) + 7</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7<br />  else if(<span style="color: #ff0000;"><strong>n === 8</strong></span>) return ___________________________________;<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;"><span>This time, we want&nbsp;</span><code>1 + 2 + 3 + 4 + 5 + 6 + 7 + 8</code><span>, which is 8 more than&nbsp;</span><span>the previous output for the previous input of 7 so we can write the function up to this point as follows:</span></span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return sumOfPositiveIntegersFrom1To(5) + 6; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(n === 7) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(6) + 7</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7<br />  else if(<span style="color: #ff0000;"><strong>n === 8</strong></span>) return <span style="text-decoration: underline;"><span style="color: #0000ff;"><strong>sumOfPositiveIntegersFrom1To(7) + 8</strong></span></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">Now that we've computed the outputs from this function in terms of outputs for smaller inputs for a few values of n, we can hopefully see the pattern that in this case, allows us to use a single else statement for all else if statements. &nbsp;Here, we compute&nbsp;the output for an input <em>n</em>&nbsp;&gt; 1 by adding the input <em>n</em> to the output from this function for an input that's one less (<em>n</em>-1). &nbsp;Therefore, we can give a&nbsp;recursive&nbsp;definition for this function as follows:</span></p>
+<pre><span style="font-size: 12pt;">let sumOfPositiveIntegersFrom1To = n =&gt; {<br />  if(n === 1) return 1;<br />  else        return </span><span style="font-size: 12pt;"><strong><span style="color: #003300;">sumOfPositiveIntegersFrom1To</span></strong>(n - 1) <span style="color: #333333;"><strong>+ n</strong></span>;<br />}</span></pre>
+<p><span style="font-size: 12pt;">We can also give a <em>forward</em> recursive definition in which we&nbsp;describe a method for sequentially generating the <em>next</em>&nbsp;input and corresponding output. (E.g., instead of looking at how to determine the output for an input n of 6 by looking at&nbsp;the output for an input of 5, we say given n = 5 and the output 1 + 2 + 3 + 4 + 5, the next input should be n + 1 or 6 and the next&nbsp;output should be 6 more or n+1 more. &nbsp;We'll discuss this in more detail in a later section.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 5.1 (Factorial)</strong>: For positive integers n, we say that n! (pronounced n factorial) is the product of the integers from 1&nbsp;to n. &nbsp;For example, 4! = 1 * 2 * 3 * 4 = 24. &nbsp;Define a function <code>factorial(n)</code> that takes a positive integer n as an input and returns n! using backward recursion. &nbsp;Be sure to draw the table first as in the previous example.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 5.2 (!*n)</strong>: Define a function <code>exclamationPointTimes</code> that takes a positive integer n as an input and outputs that many exclamation points by backward recursion. &nbsp;For example, for an n of 3, the output should be the string "!!!".&nbsp;</span></p>
+</body>
+</html>
