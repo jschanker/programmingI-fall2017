@@ -1,0 +1,372 @@
+<h2>Defining piecewise defined functions with <code>if</code></h2>
+<p>Sometimes, you want to define functions that don't return Booleans but use Booleans to determine which expression to return. In this case, you wouldn't return Boolean expressions with <code>&amp;&amp;</code>, <code>||</code>, and <code>!</code> on Booleans since you don't want to return true or false. Although, JavaScript is somewhat unique in that can use these logic operators with other types such as numbers and strings and get numbers and strings as outputs!</p>
+<p>In JavaScript, you can define functions whose outputs are split into cases based on the inputs using <code>if</code> as follows:</p>
+<pre>let abs = x =&gt; {
+  // absolute value of x: distance from 0 on # line
+  if(x &lt; 0) return -x;
+  if(x &gt;= 0) return x;
+};
+</pre>
+<p>Note: We could have also defined <code>abs(x)</code> as follows:</p>
+<pre>let abs = x =&gt; {
+  // absolute value of x: distance from 0 on # line
+  if(x &lt; 0) return -x;
+  if(!(x &lt; 0)) return x;
+};
+</pre>
+<p>In such common cases in which we split the domain into 2 parts, in this case negative or not (otherwise case), we can use <code>else</code>:</p>
+<pre>let abs = x =&gt; {
+  // equivalent definition of absolute value of x
+  if(x &lt; 0) return -x;
+  else return x;
+};
+</pre>
+<p>Note: when functions definitions span more than 1 line, brackets are required. Also, note that <code>return</code> is required as well. When a return is reached in a function, the computer leaves that function and returns to the place it was called. All instructions appearing later will <strong>NOT</strong> be run.</p>
+<pre>let absWithPrint = x =&gt; {
+  console.log("Yay, I'm famous, you'll always reach me so I can be seen!");
+  // absolute value of x: distance from 0 on # line
+  if(x &lt; 0) return -x;
+  if(x &gt;= 0) return x;
+  console.log("I can say anything, but I'll be ignored because you'll never reach me. :(");
+};
+console.log(absWithPrint(-25.2));
+</pre>
+<p>The output from the code above would be as follows:</p>
+<pre>Yay, I'm famous, you'll always reach me so I can be seen!
+25.2
+</pre>
+<p><strong>Exercise 5.1 (Skip 13 from Java Concepts)</strong>: In some tall buildings having more than 13 floors, there is &ldquo;no 13th floor&rdquo; in the sense that there is no number 13 to push in an elevator. But obviously the elevator still needs to take you to the correct place! Define a function that takes the pressed number as an input and returns the number of the floor that the elevator will actually take him/her.</p>
+<pre>let actualFloor = pressedNumber =&gt; {
+
+};
+console.log(actualFloor(10)); // 10
+console.log(actualFloor(20)); // 19
+</pre>
+<p><strong>Exercise 5.2 (PASS OR FAIL)</strong>: You can also have piecewise defined functions that have strings as outputs. Implement the function <code>passOrFail</code> that accepts a floating-point number (average) as an input and outputs the string "PASS" if the average is passing (at least 60) and "FAIL" otherwise.</p>
+<pre>let passOrFail = average =&gt; {
+
+};
+console.log(passOrFail(42));        // FAIL
+console.log(passOrFail(72.36));     // PASS
+</pre>
+<p>In practice, the above function would be more versatile if it returned a Boolean (e.g., <code>true</code> for pass, <code>false</code> for fail). E.g., wouldn't need to change if output needed to be in different language (e.g., Spanish).</p>
+<h2>More than two pieces: Income Tax Example</h2>
+<p>Some functions can be defined differently on more than just two pieces. The Federal Income tax in the US is a good example of this; it&rsquo;s defined on 7 intervals.</p>
+<p>According to Wikipedia, the 2016 brackets are as follows for single individuals making under $91,150:</p>
+<table>
+<tbody>
+<tr>
+<td>.1*income</td>
+<td>If income &le; $9275</td>
+</tr>
+<tr>
+<td>.15*(income-9275) + 927.5</td>
+<td>If $9275 &lt; income &le; $37,650</td>
+</tr>
+<tr>
+<td>.25*(income-37650) + 5183.75</td>
+<td>If income &gt; $37650</td>
+</tr>
+</tbody>
+</table>
+<p>With JavaScript, you could define it as follows:</p>
+<pre>let getIncomeTax = income =&gt; {
+  if(income &lt;= 9275)                              return .1*income;
+  if(not(income &lt;= 9275) &amp;&amp; income &lt;= 37650)      return .15*(income-9275) + 927.5;
+  if not(income &lt;= 9275) and not(income &lt;= 37650) return .25*(income-37650) + 5183.75;
+};
+</pre>
+<p>In such cases in which each condition &ldquo;says&rdquo; the previous ones are False in addition to some other condition, you can express the definition more succinctly with <code>else if/else</code> (ORDER CAN MATTER!):</p>
+<pre>let getIncomeTax = income =&gt; {
+  if(income &lt;= 9275)       return .1*income;
+  else if(income &lt;= 37650) return .15*(income-9275) + 927.5;
+  else                     return .25*(income-37650) + 5183.75;
+};
+</pre>
+<p>A few important notes:</p>
+<ul>
+<li>An <code>else (if)</code> must come immediately after an if (or another else if) (otherwise it doesn't make sense).</li>
+<li>The <code>else</code> must be the last one in the sequence and there can only be one; if all else is false, return this.</li>
+<li>An else should <strong>NOT</strong> have the condition appearing after it (e.g., in the absolute value example, you wouldn't write <code>else x &gt;= 0</code> as this defeats the purpose of using the else in the first place! Remember that else means the conditions before it, starting with the one in the closest if above it, were all false so writing the condition for reaching it is redundant.</li>
+</ul>
+<p><strong>Exercise 5.3 (Grading Scheme)</strong>: Consider the following function used to determine the letter grade for a given average:</p>
+<pre>let getLetterGrade = average =&gt; {
+  if(average &lt; 60)      return "F";
+  else if(average &lt; 70) return "D";
+  else if(average &lt; 80) return "C";
+  else if(average &lt; 90) return "B";
+  else                  return "A";
+}; 
+</pre>
+<ul>
+<li>Grade if average = 50?</li>
+<li>Grade if average = 60?</li>
+<li>Grade if average = 62?</li>
+<li>Grade if average = 70?</li>
+<li>Grade if average = 78?</li>
+<li>Grade if average = 80?</li>
+<li>Grade if average = 85?</li>
+<li>Grade if average = 90?</li>
+<li>Grade if average = 91?</li>
+<li>Grade if average = -1?</li>
+</ul>
+<p>First, modify the function from before to check if the average is negative. If so, return &ldquo;Invalid&rdquo;. Does it matter where the statement goes?</p>
+<p>Then rewrite (and possibly rearrange) the conditions so that each of them use &ge; instead of &lt; in such a way that the <code>getLetterGrade</code> function will return the same outputs given the same inputs as the original.</p>
+<p>Finally, rewrite the conditions using *ONLY* <code>if (no else if/else)</code>.</p>
+<p><strong>Exercise 5.4 (Richter Scale: Example from Java Concepts book)</strong>: Define a function <code>earthquakeDamage</code> that takes a Richter scale magnitude as the input and outputs the damage description.</p>
+<table>
+<tbody>
+<tr>
+<th>Magnitude</th>
+<th>Description</th>
+</tr>
+<tr>
+<td>&lt; 4.5</td>
+<td>No destruction of buildings</td>
+</tr>
+<tr>
+<td>4.5 - &lt; 6</td>
+<td>Damage to poorly constructed buildings</td>
+</tr>
+<tr>
+<td>6 - &lt; 7</td>
+<td>Many buildings considerably damaged, some collapse</td>
+</tr>
+<tr>
+<td>7 - &lt; 8</td>
+<td>Many buildings destroyed</td>
+</tr>
+<tr>
+<td>&ge; 8</td>
+<td>Most structures fall</td>
+</tr>
+</tbody>
+</table>
+<p>Interesting Note: +1 on Richter scale means shaking amplitude is 10 times greater!</p>
+<p><strong>Example</strong>: Richter scale for earthquakes (Increase by 1 means increase of shaking amplitude by factor of 10); Earthquake we experienced a few years ago with little to no damage was 5.8 on the Richter scale; earthquake San Francisco experienced before game 3 of the World Series was 7.1</p>
+<p>Picture edited from Wikipedia: <img src="wikipedia-ws-earthquake.png" alt="Picture edited from Wikipedia: wikipedia-ws-earthquake.png" width="612" height="376" data-api-endpoint="wikipedia-ws-earthquake.png" data-api-returntype="File" /></p>
+<h2>Rewriting piecewise defined Boolean-valued function</h2>
+<p>By determining the case(s) under which the function evaluates to <code>true</code>, you can rewrite a Boolean-valued function defined with if/else if/else statements using a single return statement. &nbsp;Do this for each of the following exercises. &nbsp;Specifically, for each exercise, do the following. (Note: steps 2 - 4 are as in the previous week's notes):</p>
+<ol>
+<li>Fill in the last column with the outputs of the given function (<code>true</code> or <code>false</code>) by tracing the code.</li>
+<li><span style="font-size: 12pt;">Identify all of the rows with <code>true</code> outputs, starting with the first.</span></li>
+<li><span style="font-size: 12pt;">For each such row, proceed from left to right through the letters. If it's T, write the letter whereas if it's false, write <code>!</code> and then the letter. Use <code>&amp;&amp;</code> between each letter or its negation as you proceed through the columns.</span></li>
+<li><span style="font-size: 12pt;">When you've finished the previous step for a given row, add an <code>||</code> at the end and repeat the previous step for the next row with a true output (provided you're not already at the last such row).</span></li>
+</ol>
+<p><strong>Exercise 5.5</strong>:&nbsp;</p>
+<pre>let isSpecialA = n =&gt; {
+  if     (n % 2 === 0) return true;
+  else if(n % 3 === 0) return false;
+  else                 return true;
+};
+</pre>
+<table style="width: 633px;">
+<tbody>
+<tr>
+<th>n % 2 === 0</th>
+<th>n % 3 === 0</th>
+<th>isSpecialA Output</th>
+</tr>
+<tr>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="text-align: center;">
+<td>true</td>
+<td>false</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>false</td>
+<td>true</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exercise 5.6</strong>:&nbsp;</p>
+<pre>let isSpecialB = n =&gt; {
+  if     (n % 2 === 0) return false;
+  else if(n % 3 === 0) return false;
+  else                 return true;
+};
+</pre>
+<table style="width: 633px;">
+<tbody>
+<tr>
+<th>n % 2 === 0</th>
+<th>n % 3 === 0</th>
+<th>isSpecialB Output</th>
+</tr>
+<tr>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="text-align: center;">
+<td>true</td>
+<td>false</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>false</td>
+<td>true</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exercise 5.7</strong>:&nbsp;</p>
+<pre>let isSpecialC = n =&gt; {
+  if     (n % 2 === 0) return true;
+  else if(n % 3 === 0) return true;
+  else                 return false;
+};
+</pre>
+<table style="width: 633px;">
+<tbody>
+<tr>
+<th>n % 2 === 0</th>
+<th>n % 3 === 0</th>
+<th>isSpecialC Output</th>
+</tr>
+<tr>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="text-align: center;">
+<td>true</td>
+<td>false</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>false</td>
+<td>true</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exercise 5.8</strong>:&nbsp;</p>
+<pre>let isSpecialD = n =&gt; {<br />  if     (n &gt; 1000)    return false;
+  if     (n % 5 === 0) return true;
+  else if(n % 3 === 0) return false;
+  else                 return true;
+};
+</pre>
+<table style="width: 633px;">
+<tbody>
+<tr>
+<th>n % 5 === 0</th>
+<th>n % 3 === 0</th>
+<th>n &gt; 1000</th>
+<th>isSpecialD Output</th>
+</tr>
+<tr>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="text-align: center;">
+<td>true</td>
+<td style="text-align: center;">true</td>
+<td>false</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>true</td>
+<td style="text-align: center;">false</td>
+<td>true</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;">true</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr style="text-align: center;">
+<td>false</td>
+<td style="text-align: center;">true</td>
+<td>false</td>
+<td>&nbsp;</td>
+</tr>
+<tr style="text-align: center;">
+<td>false</td>
+<td style="text-align: center;">false</td>
+<td>true</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">false</td>
+<td style="text-align: center;">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>Note that there is a faster way of translating the <code>if/else if/else</code> statements with Boolean return values to a single Boolean expression as follows. First, rewrite the conditions in the <code>if/else if/else</code> statements as <code>if</code> statements with Boolean expressions where the condition is a conjunction (and) of negations (nots) of the conditions that came before and the positive of the current condition. The else would simply be a conjunction of the nots of all previous conditions. For example, consider the following:</p>
+<pre>let isSpecialE = n =&gt; {
+  if     (<strong><span style="color: #ff0000;">n % 2 === 0</span></strong>) return true;
+  else if(<strong><span style="color: #0000ff;">n % 3 === 0</span></strong>) return false;
+  else if(<strong><span style="color: #003300;">n % 5 === 0</span></strong>) return false;
+  else if(<span style="color: #800080;"><strong>n % 7 === 0</strong></span>) return true;
+  else                 return true;
+};
+</pre>
+<p>This would be rewritten as:</p>
+<pre>let isSpecialE = n =&gt; {
+  if(  <strong><span style="color: #ff0000;">n % 2 === 0</span></strong>)                                                        return true;
+  if(!(<span style="color: #ff0000;"><strong>n % 2 === 0</strong></span>) &amp;&amp;   <strong><span style="color: #0000ff;">n % 3 === 0</span></strong>)                                      return false;
+  if(!(<span style="color: #ff0000;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff;"><strong>n % 3 === 0</strong></span>) &amp;&amp;   <strong><span style="color: #003300;">n % 5 === 0</span></strong>)                    return false;
+  if(!(<span style="color: #ff0000;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #003300;">n % 5 === 0</span></strong>) &amp;&amp;   <strong><span style="color: #800080;">n % 7 === 0</span></strong>)  return true;
+  if(!(<span style="color: #ff0000;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<span style="color: #003300;"><strong>n % 5 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #800080;">n % 7 === 0</span></strong>)) return true;
+};
+</pre>
+<p>Next form a disjunction (ors) of all of the conditions in which you return <code>true</code> to get your resulting return value (as you did with the true rows in the truth table).</p>
+<pre>let isSpecialE = n =&gt; {
+  if(  <span style="text-decoration: underline;"><strong><span style="color: #ff0000; text-decoration: underline;">n % 2 === 0</span></strong></span>)                                                        <span style="text-decoration: underline;">return true</span>;
+  if(!(<span style="color: #ff0000;"><strong>n % 2 === 0</strong></span>) &amp;&amp;   <strong><span style="color: #0000ff;">n % 3 === 0</span></strong>)                                      return false;
+  if(!(<span style="color: #ff0000;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff;"><strong>n % 3 === 0</strong></span>) &amp;&amp;   <strong><span style="color: #003300;">n % 5 === 0</span></strong>)                    return false;
+  if(<span style="text-decoration: underline;">!(<span style="color: #ff0000; text-decoration: underline;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff; text-decoration: underline;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #003300; text-decoration: underline;">n % 5 === 0</span></strong>) &amp;&amp;  <strong><span style="color: #800080; text-decoration: underline;">n % 7 === 0</span></strong></span>)   <span style="text-decoration: underline;">return true</span>;
+  if(<span style="text-decoration: underline;">!(<span style="color: #ff0000; text-decoration: underline;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff; text-decoration: underline;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<span style="color: #003300; text-decoration: underline;"><strong>n % 5 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #800080; text-decoration: underline;">n % 7 === 0</span></strong>)</span>) <span style="text-decoration: underline;">return true</span>;
+};
+</pre>
+<pre>let isSpecialE = n =&gt;  <strong><span style="color: #ff0000; text-decoration: underline;">n % 2 === 0</span></strong> ||
+                     <span style="text-decoration: underline;">!(<span style="color: #ff0000; text-decoration: underline;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff; text-decoration: underline;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #003300; text-decoration: underline;">n % 5 === 0</span></strong>) &amp;&amp; <strong><span style="color: #800080; text-decoration: underline;">n % 7 === 0</span></strong></span> ||
+                     <span style="text-decoration: underline;">!(<span style="color: #ff0000; text-decoration: underline;"><strong>n % 2 === 0</strong></span>) &amp;&amp; !(<span style="color: #0000ff; text-decoration: underline;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<span style="color: #003300; text-decoration: underline;"><strong>n % 5 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #800080; text-decoration: underline;">n % 7 === 0</span></strong>)</span>;
+</pre>
+<p>By making substitutions for logically equivalent expressions, it is possible to shorten the above answer to:</p>
+<pre>let isSpecialE = n =&gt;  <strong><span style="color: #ff0000; text-decoration: underline;">n % 2 === 0</span></strong> || <span style="text-decoration: underline;">!(<span style="color: #0000ff; text-decoration: underline;"><strong>n % 3 === 0</strong></span>) &amp;&amp; !(<strong><span style="color: #003300; text-decoration: underline;">n % 5 === 0</span></strong>)</span>;
+</pre>
+<p>This substitution is the result of (a) noting that&nbsp;the last condition (n divisible by 7) must either be true or false so the last two conditions can be shortened by removing mention of it completely and (b) in the case that the first condition&nbsp;(n divisible by 2) is true, the entire disjunction will automatically be true, so its negation need not be included.&nbsp;</p>
+<p><strong>Challenge Exercise</strong>: Rewrite the following function definition using if/elseif/else statements so that the same output is produced in every case:</p>
+<pre>let heyYoSo = n =&gt; {  <br />  if                               (n%5 === 0) return "So!";  <br />  if     (n%2 === 0 &amp;&amp; n%3 !== 0 &amp;&amp; n%5 !== 0) return "Hey!";  <br />  if     (n%2 !== 0 &amp;&amp; n%3 === 0 &amp;&amp; n%5 !== 0) return "Yo!";<br />  if     (n%2 === 0 &amp;&amp; n%3 === 0 &amp;&amp; n%5 !== 0) return "Hey!Yo!";  <br />  if     (n%2 !== 0 &amp;&amp; n%3 !== 0 &amp;&amp; n%5 !== 0) return n.toString();<br />}</pre>
+<p>IN SUCH A WAY that each line is in one of the following forms (in particular, no ands (&amp;&amp;) /ors (||) /nots (!) allowed, can use each possibility below 0, 1, or more times):</p>
+<pre>if  (n % <em><span style="text-decoration: underline;">integer</span></em> === 0) return <em><span style="text-decoration: underline;">string</span></em>
+else if (n % <span style="text-decoration: underline;"><em>integer</em></span> === 0) return <span style="text-decoration: underline;"><em>string</em></span>;
+else return <span style="text-decoration: underline;"><em>string
+</em></span></pre>
+<p>Here, integer can be any integer; string must be one of the possible return values (<code>n.toString(), "So!", "Hey!", "Yo!", "Hey!Yo!"</code>).</p>
+<p>For example, if n is 12, heyYoSo returns "Hey!Yo!" (divisible by 2 and 3 but not 5) while if n is 10, 20, or 30, it would return "So!". For 7, it would return <code>n.toString();</code> (converts number n to string). For 28, it would return "Hey"; for 9, "Yo!"</p>
