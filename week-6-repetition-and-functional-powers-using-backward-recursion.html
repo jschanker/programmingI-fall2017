@@ -1,0 +1,286 @@
+<h3>Repetition and Functional Powers</h3>
+<p><span style="font-size: 12pt;">Consider the population doubling example in which we were asked to define a function that returned the population 3 years from now given an initial population of startPop under the assumption that the population doubled every year.</span></p>
+<pre>let double = x =&gt; 2*x;
+let popIn3Years =&nbsp;startPop =&gt; double(double(double(startPop)));</pre>
+<p><span style="font-size: 12pt;">We can define functions for&nbsp;the population 0, 1, 2, 4, and 5 years similarly. Below we show the code for <code>popAfter0Years</code>, <code>popAfter1Year</code>, <code>popAfter2Years</code>, <code>popAfter3Years</code>, <code>popAfter4Years</code>, and <code>popAfter5Years</code>, representing the populations after 0, 1, 2, 3, 4, 5 years, respectively :</span></p>
+<pre>let double = x =&gt; 2*x;
+let popAfter0Years = startPop =&gt; startPop; // population is as it starts after 0 years
+let popAfter1Year  = startPop =&gt; double(startPop);                                 // after 1 year
+let popAfter2Years = startPop =&gt; double(double(startPop));                         // after 2 years
+let popAfter3Years = startPop =&gt; double(double(double(startPop)));                 // after 3 years
+let popAfter4Years = startPop =&gt; double(double(double(double(startPop))));         // after 4 years
+let popAfter5Years = startPop =&gt; double(double(double(double(double(startPop))))); // after 5 years
+</pre>
+<p><span style="font-size: 12pt;">We can shorten these function definitions by using previously defined functions as follows:</span></p>
+<pre>let double = x =&gt; 2*x;
+let popAfter0Years = startPop =&gt; startPop; // population is as it starts after 0 years
+let popAfter1Year  = startPop =&gt; double(startPop);                    // after 1 year
+let popAfter2Years = startPop =&gt; double(popAfter1Year(startPop));     // after 2 years
+let popAfter3Years = startPop =&gt; double(popAfter2Years(startPop)));   // after 3 years
+let popAfter4Years = startPop =&gt; double(popAfter3Years(startPop))));  // after 4 years
+let popAfter5Years = startPop =&gt; double(popAfter4Years(startPop))))); // after 5 years
+</pre>
+<p><span style="font-size: 12pt;">In addition to shortening the code, writing the function definitions in this way clarifies the nature of the population growth, mainly that each year's population beyond the 0<sup>th</sup> year is double what it was in the previous year. While the first list of definitions explicitly listed all of the steps for determining the population from the starting&nbsp;population, the second list abstracted these details away and succinctly described how we can get from one year's population to the next. However, both lists gave us enough information so that we can determine the population, say 5 years from now, given the starting population now assuming it doubles every year.</span></p>
+<p><span style="font-size: 12pt;">In general, we can express the population after&nbsp;any positive integer n years in terms of the the population from the previous year (n-1):</span></p>
+<pre>popAfter<strong><span style="color: #ff0000;"><em>N</em></span></strong>Years = startPop =&gt; double(popAfter<span style="color: #ff0000;"><strong><em>N-1</em></strong></span>Years(startPop));
+</pre>
+<p><span style="font-size: 12pt;">Because we can't put N in the name of the function itself (it would literally be interpreted as the letter N), we add an additional parameter variable n. &nbsp;We also need to consider the case when n = 0 whereby the population will simply be whatever it started as. &nbsp;In code, we can then write our new general function&nbsp;as follows:</span></p>
+<pre id="pop-back-example">// POPULATION EXAMPLE USING BACKWARD RECURSION
+let popAfterYears = (n, startPop) =&gt; {
+  if(n === 0) return startPop;
+  else        return double(popAfterYears(n-1, startPop));
+};
+</pre>
+<p><span style="font-size: 12pt;">Often, people will be confused by this definition; how can you assume that <code>popAfterYears(n-1, startPop)</code> gives you the population after n-1 years when you haven't defined the function yet??!! The answer is the same way you would know what to do if a person asked you for the population after 5 years and told you that in year 0, the population is 100 and that in each subsequent year, the population is twice as much as the previous year. You could work backwards until you get to year 0 and then <em>substitute</em> your answers forward as follows:</span></p>
+<pre>Year 5: 2*Year 4
+Year 4: 2*Year 3
+Year 3: 2*Year 2
+Year 2: 2*Year 1
+Year 1: 2*Year 0
+Year 0: 100
+So Now I know Year 1: 2*100 = 200 (substituting 100 for Year 0)
+So Now I know Year 2: 2*200 = 400 (substituting 200 for Year 1)
+So Now I know Year 3: 2*400 = 800 (substituting 400 for Year 2)
+So Now I know Year 4: 2*800 = 1600 (substituting 800 for Year 3)
+So Now I know Year 5: 2*1600 = 3200 (substituting 1600 for Year 4)
+</pre>
+<p><span style="font-size: 12pt;">The point is that in your function definition, you just need to describe the population in terms of the previous year, and the population of the starting year to provide a way for figuring out the population after any given number of years.</span></p>
+<p><span style="font-size: 12pt;">This illustrates how the above recursively defined function would be computed as well. &nbsp;The computer would form a <strong>stack</strong>&nbsp;of function calls (<span style="color: #ff0000;">red</span> represents the stack that is formed):</span></p>
+<pre>Step 6: <span style="color: #ff0000;"><strong>popAfterYears(0, startPop)</strong></span> returns startPop
+Step 5: <span style="color: #ff0000;"><strong>popAfterYears(1, startPop)</strong></span> =&gt; calls popAfterYears(0, startPop)
+Step 4: <span style="color: #ff0000;"><strong>popAfterYears(2, startPop)</strong></span> =&gt; calls popAfterYears(1, startPop)
+Step 3: <span style="color: #ff0000;"><strong>popAfterYears(3, startPop)</strong></span> =&gt; calls popAfterYears(2, startPop)
+Step 2: <span style="color: #ff0000;"><strong>popAfterYears(4, startPop)</strong></span> =&gt; calls popAfterYears(3, startPop)
+Step 1: <span style="color: #ff0000;"><strong>popAfterYears(5, startPop)</strong></span> =&gt; calls popAfterYears(4, startPop)</pre>
+<p><span style="font-size: 12pt;">The functions are then cleared one by one from the stack when they are done, with the computation returning to the function that called them. &nbsp;This process continues&nbsp;until no&nbsp;functions&nbsp;remain on the stack. &nbsp;</span></p>
+<pre>Step 6: <span style="color: #ff0000;"><strong>popAfterYears(0, startPop)</strong></span> returns <strong><span style="color: #0000ff;">startPop</span></strong>
+Step 7: <span style="color: #ff0000;"><strong>popAfterYears(1, startPop)</strong></span> =&gt; returns <strong>double</strong>(<strong><span style="color: #0000ff;">startPop</span></strong>) // double return value from step 6
+Step 8: <span style="color: #ff0000;"><strong>popAfterYears(2, startPop)</strong></span> =&gt; returns <strong>double</strong>(<strong><span style="color: #0000ff;">double(startPop)</span></strong>) // double return value from step 7
+Step 9: <span style="color: #ff0000;"><strong>popAfterYears(3, startPop)</strong></span> =&gt; returns <strong>double</strong>(<strong><span style="color: #0000ff;">double(double(startPop))</span></strong>) // double return value from step 8
+Step 10: <span style="color: #ff0000;"><strong>popAfterYears(4, startPop)</strong></span> =&gt; returns <strong>double</strong>(<strong><span style="color: #0000ff;">double(double(double(startPop)))</span></strong>) // double return value from step 9
+Step 11: <span style="color: #ff0000;"><strong>popAfterYears(5, startPop)</strong></span> =&gt; returns returns <strong>double</strong>(<span style="color: #0000ff;"><strong>double(double(double(double(startPop))))</strong></span>) // double return value from step 10</pre>
+<p><span style="font-size: 12pt;">Note that&nbsp;the last function that's called that remains on the top of the stack is the first one to resume its computation. &nbsp;This is why it's called a stack; when you form a stack of papers, you remove them starting from the top (most recently added), proceeding to the bottom (least recently added). &nbsp;We showed this process by substituting the&nbsp;return value (in blue) that was computed for the earlier year.</span></p>
+<p><span style="font-size: 12pt;">Note that the setup is exactly the same as in the <a title="Week 5-2. Introduction to Recursive Definitions of Functions" href="week-5-2-introduction-to-recursive-definitions-of-functions.html" data-api-endpoint="week-5-2-introduction-to-recursive-definitions-of-functions.html" data-api-returntype="Page">previous week's notes</a>&nbsp;in which we tried to identify the pattern by drawing the table of inputs/outputs.</span></p>
+<table>
+<tbody>
+<tr>
+<th>n&nbsp;(input: number of years)</th>
+<th>popAfterYears(n, 100)</th>
+</tr>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">100</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2*100 = 200</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2*200 = 400</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">2*400 = 800</td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">2*800 = 1600</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">2*1600 = 3200</td>
+</tr>
+</tbody>
+</table>
+<p>For each of the following exercises, you will be identifying the function <code>f</code> that you want to take&nbsp;a functional power of (<code>double</code> in this case) and defining each function by recursion as a functional power of <code>f</code>.</p>
+<p><span style="font-size: 12pt;"><strong>Exercise 6.1 (Bank Balance After n years)</strong>:&nbsp;Draw a table as above in which you calculate (by using a calculator) the amount that a person will have in his/her bank account after each year from 0 to 5 if he/she were to put it $500 and earn 3% interest, compounded annually. &nbsp;This means that at the end of each&nbsp;year, the individual&nbsp;will have 3% more in the account than he/she did in the previous year. &nbsp;After you create&nbsp;the table, define a function <code>nextYearBalance(currentBalance)</code> that returns the next year's amount given the current year's balance assuming an annual interest rate of 3%, compounded annually.</span></p>
+<p>Then define <code>balanceAfterYears(n, startBalance)</code>&nbsp;as a functional power of <code>nextYearBalance(currentBalance)</code> so that it returns the bank balance the person will have after n years given that he/she has an initial balance of <code>startBalance</code>, in which the interest rate of 3% is compounded annually by&nbsp;<a href="#pop-back-example">backward recursion as in the first example</a>.</p>
+<pre>let nextYearBalance = currentBalance =&gt; _________________________________;
+let balanceAfterYears = (n, startBalance) =&gt; {
+
+};
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 6.2 (Tetration)</strong>:&nbsp;</span><span style="font-size: 14pt;">Define a function <code>exponentiationTower(n, b)</code>&nbsp;by recursion that returns an "exponentiation tower" of n b's:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="border: 1px solid black; padding: 5px;"><span style="font-size: 18pt;">Input (n)</span></th>
+<th style="border: 1px solid black; padding: 5px;"><span style="font-size: 18pt;">Output (exponentiationTower<code>(n,2)</code>)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">0</span></td>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">1</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">1</span></td>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">2</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">2</span></td>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">2<sup>2</sup> = 4</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">3</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="font-size: 18pt;">2<sup>2<sup>2</sup></sup> = 2<sup>4</sup> = 16</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">4</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="font-size: 18pt;">2<sup>2<sup>2<sup>2</sup></sup></sup> = 2<sup>16</sup> = 65536</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black;"><span style="font-size: 18pt;">5</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">
+<p><span style="font-size: 18pt;">2<sup>2<sup>2<sup>2<sup>2</sup></sup></sup></sup> = 2<sup>65536</sup> = a very large number</span></p>
+<p><span style="font-size: 18pt;">that JavaScript says is <code>Infinity</code></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><span>As before, you should first&nbsp;define a function </span><code>exp(currentValue)</code><span> like </span><code>double</code><span> that returns the value of&nbsp;<code>exponentiationTower(p, b)</code>&nbsp;given that <code>currentValue =&nbsp;exponentiationTower(p-1, b)</code></span></p>
+<pre>let exponentiationTower = (n, b) =&gt; {
+  let exp = currentValue =&gt; ___________________________;
+};
+</pre>
+<p><span style="font-size: 14pt;">Using <a href="https://en.wikipedia.org/wiki/Knuth%27s_up-arrow_notation">Knuth's up-arrow notation</a>, you'd&nbsp;denote this by b&nbsp;&uarr;&uarr; n (b = 2 in the table).</span> &nbsp;</p>
+<p><span style="font-size: 12pt;"><strong>IMPORTANT NOTE: Note that here, you are defining the function exp inside exponentiationTower, which has two important implications:</strong></span></p>
+<ol>
+<li><code>exp</code>&nbsp;won't be accessible outside of the <code>exponentiationTower</code> definition since this variable is only defined inside the <code>exponentiationTower</code> function. &nbsp;So if you enter&nbsp;<code>console.log(exp(5)),</code>&nbsp;you'll get an error. &nbsp;This is useful when you want to provide a "helper" function that's only used for the&nbsp;calculations of another function.</li>
+<li>Since b is not one of the parameters of <code>exp</code>,&nbsp;you can refer to the variable b inside of <code>exp</code> for the return value.</li>
+</ol>
+<p><span style="font-size: 12pt;"><strong>Exercise 6.3 (Excel's FV (Future Value) Function)</strong>: Excel has a future value function that's used to determine the future value of an investment or loan. &nbsp;The syntax is&nbsp;<span>Syntax: </span><code>=FV(<i>rate</i>, <i>nper</i>, <i>pmt</i> [, <i>pv</i>=0][,<i>type</i>=0])</code><span> where <em>rate</em> is the interest rate per pay period,</span><span>&nbsp;<em>nper</em> is the number of pay periods,&nbsp;<i>pmt</i> is the payment made (or collected) during each pay period, <em>pv</em> is the present value (or initial investment or loan amount), and <em>type</em> is 0 if the payment is made at the&nbsp;end&nbsp;of the period&nbsp;(after the interest&nbsp;is applied) or 1 if the payment is made at the beginning of the period. &nbsp;The arguments in brackets (pv and type) are optional and default to 0 if they're not supplied. &nbsp;Payments and present value are negative when you put money in and positive when you receive money. &nbsp;Similarly, the result should be negative if you still owe that amount and positive if you are owed that amount.</span></span></p>
+<p><span style="font-size: 12pt;"><span>As an example, suppose you take out a loan for $1000 with an annual interest rate of 3%, compounded monthly (so 3%/12 = 0.25% = 0.0025 per month) and that you make payments of $100 per month, which you pay at the end of the period. &nbsp;Then you would enter <strong>=FV(0.0025, 2, -100, 1000, 0)</strong>&nbsp;and the result would be calculated as follows:</span></span></p>
+<p><span style="font-size: 12pt;"><span>After you make the payment at the end of month&nbsp;1, you still owe: </span></span></p>
+<p><span style="font-size: 12pt;"><span>(1000 + .0025*1000) - 100 = 1002.5 - 100 = 902.5</span></span></p>
+<p><span style="font-size: 12pt;"><span>After you make the payment at the end of month 2, you still owe:</span></span></p>
+<p><span style="font-size: 12pt;"><span>(902.5 + .0025*902.5) - 100 =&nbsp;804.75625</span></span></p>
+<p><span style="font-size: 12pt;"><span>so since you owe this money the result would be -804.75625.</span></span></p>
+<p><span style="font-size: 12pt; color: #ff0000;">Define a function <code>remainingOnLoan(nper, pv)</code> by backward recursion that takes a number of periods (nper) and the initial loan amount&nbsp;(pv) and returns the amount you still owe (as a positive number) after nper periods has gone by assuming a period interest rate of 0.25% (0.0025) and that you pay $100 at the end of each period. &nbsp;For this example,&nbsp;you should first<span>&nbsp;define a function </span><code>nextMonthOwed(currentAmountOwed)</code><span> like </span><code>nextYearBalance(currentBalance)</code><span>&nbsp;that returns the amount owed next month&nbsp;given the amount you still owe this month (<code>currentAmountOwed</code>) and then express <code>remainingOnLoan</code> as a functional power.</span></span></p>
+<pre>let nextMonthOwed = currentAmountOwed =&gt; ___________________________________;
+let remainingOnLoan = (nper, pv) =&gt; {
+
+};
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 6.4 (Babylonian Method for Approximating Square Root)</strong>: For any nonnegative number x, we can approximate &radic;<span style="text-decoration: overline;"> x&nbsp;</span> by making a guess &gt; 0. &nbsp;If guess &lt;&nbsp;<span>&radic;</span><span style="text-decoration: overline;"> x&nbsp;</span><span>, then by taking the reciprocal of both sides, we see that 1/guess &gt; 1/&radic;<span style="text-decoration: overline;"> x&nbsp;</span>&nbsp;so by multiplying both sides by x, we get that x/guess &gt;&nbsp;x/&radic;<span style="text-decoration: overline;"> x</span>&nbsp;=&radic;<span style="text-decoration: overline;"> x</span>&nbsp;. &nbsp;Similarly, if guess &gt;&nbsp;&radic;<span style="text-decoration: overline;"> x&nbsp;</span>, then&nbsp;x/guess &lt;&nbsp;x/&radic;<span style="text-decoration: overline;"> x</span>&nbsp;=&radic;<span style="text-decoration: overline;"> x</span>&nbsp;. &nbsp;So if our guess is incorrect, the square root of x will be strictly between guess&nbsp;and x/guess.</span></span></p>
+<p><span style="font-size: 12pt;"><span>If we repeatedly take the average of guess and x/guess, with each new guess being the&nbsp;previous average, we will get increasingly better approximations to the square root of x. &nbsp;</span></span></p>
+<p><span style="font-size: 12pt;"><span>First define a function <code>avg(currentGuess)</code> that is the average of currentGuess&nbsp;and x/currentGuess. This gives us the next guess. Then &nbsp;define a function <code>sqrt(n, x)</code> that's the nth functional power of the <code>avg</code> function with an initial value (guess) of (n+1)/2.</span></span></p>
+<div class="textLayer--absolute">Square root of 2 is approximately (calculator):<span style="color: #008000;"><strong> 1.41421356</strong></span>23730950488016887242097</div>
+<div class="textLayer--absolute"></div>
+<table>
+<tbody>
+<tr>
+<th>n&nbsp;(input: number of new guesses)</th>
+<th>sqrt(n, 2)</th>
+</tr>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">(2+1)/2 = 3/2 = 1.5</td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">(3/2+2/(3/2))/2=17/12 &asymp; 1.4167</td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">((17/12 + 2/(17/12))/2 = 577/144 &asymp; 1.414216</td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">((577/408 + 2/(577/408))/2 = 665857/470832 &asymp; <span style="color: #008000;"><strong>1.41421356</strong></span>2375</td>
+</tr>
+</tbody>
+</table>
+<pre>let sqrt = (n, x) =&gt; {
+  let avg = currentGuess =&gt; ____________________________________;
+  
+};
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 6.5 (shiftRight and nth digit)</strong>:Define a function <code>shiftRight(n, num)</code> that takes an integer num and a nonnegative integer&nbsp;<code>n</code>, <span>which moves the decimal point n places to the left and returns the integer portion, thereby shifting the&nbsp;columns of the number</span>&nbsp;right&nbsp;<code>n</code>&nbsp;places, dropping any digits that move to the right of the&nbsp;decimal point. For example,<span> </span><code>shiftRight(3,12345)</code><span> </span>evaluates to 12&nbsp;as follows:&nbsp;</span></p>
+<pre><span style="font-size: 12pt;">1|2|3|4|5
+ ↘ ↘ ↘ ↘ ↘
+  1|2|3|4
+   ↘ ↘ ↘ ↘
+    1|2|3
+     ↘ ↘ ↘
+      1|2</span></pre>
+<p><span style="font-size: 12pt;">The function should be a functional power of<span>&nbsp;<code>shiftRight1(currentNum)</code> which takes an integer and moves the decimal place one to the left and then returns the integer portion. &nbsp;For example, <code>shiftRight1(345)</code> should be 34 whereas <code>shiftRight1(180)</code> should be 18. &nbsp;<code>shiftRight1(0)</code> is simply 0.</span></span></p>
+<table>
+<tbody>
+<tr>
+<th>num&nbsp;(input)</th>
+<th><span>shiftRight(n,12345)</span></th>
+</tr>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"><span>12345</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><span>1234</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><span>123</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;"><span>12</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<pre>let shiftRight1 = currentNum =&gt; _______________________________;<br />let shiftRight = (n, num) =&gt; {
+
+};
+</pre>
+<p>Then define a function <code>getOnesDigit(num)</code>&nbsp;that returns&nbsp;the ones digit of an integer. &nbsp;Finally, define <code>getLeastSignificantDigitNumber(n, num)</code> that gets the nth digit, counting&nbsp;from the right, in <code>num</code> containing at least n digits using&nbsp;<code>shiftRight</code>&nbsp;and <code>getOnesDigit</code>.</p>
+<pre>let getOnesDigit = num =&gt; ___________________________;
+let getLeastSignificantDigitNumber = (n, num) =&gt; ______________________________________;
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 6.6 (removeFirstItems and nth item)</strong>: Define a function <code>removeFirstItems(num, s)</code> that takes a nonnegative&nbsp;integer num and a string <code>s</code> of at least <code>num</code> items, separated by commas, and removes the first <code>num</code> items. For example, <code>removeFirstItems(3,"apple,banana,orange,pear,pizza,pasta,milk")</code> evaluates to "pear,pizza,pasta,milk". The function should be a functional power of <code>removeFirstItem</code> that takes a list of items and removes the first one.</span></p>
+<table>
+<tbody>
+<tr>
+<th>num&nbsp;(input)</th>
+<th><span>removeFirstItems(num,"apple,banana,orange,pear,pizza,pasta,milk")</span></th>
+</tr>
+<tr>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"><span>apple,banana,orange,pear,pizza,pasta,milk</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;"><span>banana,orange,pear,pizza,pasta,milk</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;"><span>orange,pear,pizza,pasta,milk</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;"><span>pear,pizza,pasta,milk</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">pizza,pasta,milk</td>
+</tr>
+<tr>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">pasta,milk</td>
+</tr>
+</tbody>
+</table>
+<pre>let removeFirstItem = currentItemList =&gt; _____________________________;<br />let removeFirstItems = (num, itemList) =&gt; {
+
+
+};</pre>
+<p>Then define a function <code>getFirstItem</code> that gets the first item in such a list. &nbsp;Finally, define <code>getItemNumber(n, itemList)</code> that gets the nth item in <code>itemList</code>&nbsp;using <code>removeFirstItems</code> and <code>getFirstItem</code>.</p>
+<pre>let getFirstItem = itemList =&gt; ___________________________;
+let getItemNumber = (n, itemList) =&gt; ______________________________________;</pre>
