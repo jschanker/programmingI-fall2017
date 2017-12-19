@@ -1,0 +1,137 @@
+<h2>Recursion with Conditional Steps</h2>
+<p>Sometimes the change in value from one row to the next depends on a certain condition:</p>
+<p><strong>Example (Sum of the positive numbers in array (Suppose numList = [-1,-3,8,-4,2,7])</strong>:</p>
+<table style="border: 1px solid black; border-collapse: collapse;"><caption>2-column table for sum</caption>
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;" scope="col"><span style="color: #0000ff;">index</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;" scope="col"><span style="color: #333333;">acc (sum of positives so far)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>0</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>0 (-1 not positive)</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">0 (-3 not positive)</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8 (8 is positive: 0 + 8 = 8)</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8 (-4 is not positive)</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">10 (2 is positive: 8 + 2 = 10)</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">17 (7 is positive: 10 + 7 = 17)</td>
+</tr>
+</tbody>
+</table>
+<p>Note how the initial value depends on whether the 0th number is positive; if it is we use the number in that position whereas if it's not, we start with 0. &nbsp;To get from one row to the next, we always add 1 to the index to go to the next number. &nbsp;However, what we do to get from one row to the next for the accumulator depends on the number at that position; if it's positive, we add it to the current sum whereas if it's not, we leave the current sum as is.&nbsp; In such cases, we may need to include additional <code>else (if)</code> statements in our code. &nbsp;The below code illustrates this and reflects the questions we must ask and the decisions we make when determining the next row's output. &nbsp;Note that the code assumes an array containing at least one number.</p>
+<pre>let sumOfPositives = numList =&gt; {<br />  let makeTable = (index, sumOfPositives) =&gt; {<br />    if(index === numList.length - 1) return sumOfPositives;<br />    else if(numList[index+1] &gt; 0)    return makeTable(index+1, sumOfPositives + numList[index+1]);<br />    else                             return makeTable(index+1, sumOfPositives); <br />  };<br /><br />  if(numList[0] &gt; 0) return makeTable(0, numList[0]);<br />  else               return makeTable(0, 0);<br />}</pre>
+<p><strong>Exercise 10.1 (Product of positives)</strong>: Modify the code above to instead produce the product of the positives in the array (for the above array, the answer would be 112).&nbsp; Call this function <code>productOfPositives</code></p>
+<pre>let productOfPositives = numList =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.2 (Count of positives): </strong>Modify the code above to instead produce the number of the positives in the array (for the above array, the answer would be 3). Call this function <code>countOfPositives</code></p>
+<pre>let countOfPositives = numList =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.3 (Minimum of list)</strong>: Modify the code above to instead produce the minimum of all of the numbers in the array (for the above array, the answer would be -4). &nbsp;This time, do this without using <code>Math.min</code>. Call this function <code>min</code></p>
+<pre>let min = numList =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.4</strong> <strong>(Total number of spaces and tabs in string)</strong>: Define a&nbsp;function <code>totalSpacesAndTabs(s)</code> that returns the total number of spaces and tabs in <code>s</code>. &nbsp;Note to determine whether the value of a variable&nbsp;<code>foo</code> is&nbsp;a tab, use <code>foo === "\t"</code>. Call this function <code>countOfWhitespace</code></p>
+<pre>let countOfWhitespace = s =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.5 (Function to solve Project Euler Problem # 1)</strong>: Define a function <code>multipleSum</code> that returns the sum of the positive integer multiples of 3 and 5 LESS THAN&nbsp;n. &nbsp;For example, <code>multipleSum(10)</code> = 3 + 5 + 6 + 9 = 23. &nbsp;See:&nbsp;<a href="https://projecteuler.net/problem=1">https://projecteuler.net/problem=1</a>&nbsp;and create an account to check your answer for <code>multipleSum(1000)</code>.</p>
+<pre>let multipleSum = stopBeforeNum =&gt; {
+
+};
+</pre>
+<h2>Recursion with multiple stopping conditions</h2>
+<p>Sometimes there are multiple stopping conditions and what to return depends on the condition. &nbsp;For example, consider a function that returns the first positive number in a list should it exist or 0 if there are no positive numbers in the list:</p>
+<pre>let firstPositive = numList =&gt; {
+  let makeTable = (index, num) =&gt; {
+    if(num &gt; 0) return num;
+    else if(index === numList.length-1) return 0; // no positive numbers found
+    else return makeTable(index+1, numList[index+1]);
+  };
+  return makeTable(-1, 0); // dummy row, use num where condition will be false
+};
+</pre>
+<p>Note this is just one way to set up the&nbsp;recursive definition. &nbsp;We start with a so-called dummy row in which we set the index to -1 and set num to be a value that does NOT meet the condition. &nbsp;One reason we don't start at <code>(0, numList[0])</code> is because if <code>numList</code> is empty, mainly if <code>numList.length</code> is 0, we won't try to access an element in the list that doesn't exist. In the case that the list is empty, 0 will be returned immediately since the <code>index</code> of -1 is equal to the list's length -1. Otherwise, our next call to <code>makeTable</code> will be <code>makeTable(0, numList[0])</code> as we want.</p>
+<p>The other reason is that we avoid the repetition of usage of referring to a number in the array by using<code>[]</code> (also used for <code>makeTable(index+1, numList[index+1])</code>). If we instead wanted to later define a function to get the element at a specified index, say <code>itemAt(numList, index)</code>, we'd be making two changes instead of one.</p>
+<p>Another important observation is the <strong>order of the else if/else</strong>. We must check to see whether the number at the specified index is positive <em>first</em>. Otherwise, 0 is returned when the only positive number appears at the last index of the list. Stopping at the <code>length</code> of the list is problematic because then we'd be accessing an index that is out of bounds when no numbers are positive. (I.e., numList[numList.length])</p>
+<p><strong>Exercise 10.6&nbsp;(Positive Integer Solution n): </strong>Define a function <code>polyIntegerSolution(val)</code> by forward recursion that returns the smallest&nbsp;positive integer n &le; 10000 &nbsp;for which n<sup>4</sup> - 3n<sup>3</sup> + 7n - 4277632315517736 = val should it exist or returns -1 otherwise. &nbsp;Test it for an input of 0 (so-called integer root of polynomial n<sup>4</sup> - 3n<sup>3</sup> + 7n - 4277632315517736) and then test for input of 1.</p>
+<pre>let polyIntegerSolution = val =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.7&nbsp;(Sequential Search)</strong>: Define a function <code>indexOf(itemList, needle)</code> by forward recursion that returns the <strong>index</strong>&nbsp;of the first occurrence of <code>needle</code> in <code>itemList</code> if it exists or -1 if it's not present. &nbsp;For example,&nbsp;<code>indexOf(["bar", "code", "foo", "code", "bar", "code", "foo"], "foo")</code> should be 2 while <code>indexOf([42, "code", "foo", "code", "bar", "code", "foo"], "foo")</code> should return -1.</p>
+<pre>let indexOf = (itemList, needle) =&gt; {
+
+};
+</pre>
+<p><strong>Every/exists</strong>: A&nbsp;type of&nbsp;example where there are&nbsp;multiple stopping conditions occurs when you want to determine if there exists an item in a list with a certain property or if every item has a certain property. In the first case, you return <code>true</code> as soon as you find such an item (so-called witness) or <code>false</code> if you reach the end of the list without finding such an item. In the second case, you return <code>false</code> as soon as you find an item for which the condition is <code>not</code> true or false if you reach the end of the list without finding any such items (no counterexamples).</p>
+<p><strong>Example (Exists positive in list)</strong>: Define a function <code>somePositive</code> that returns <code>true</code> when there is at least one number in the list that is positive.</p>
+<pre>let somePositive = numList =&gt; {
+  let makeTable = (index, num) =&gt; {
+    if(num &gt; 0) return true; // found positive
+    else if(index === numList.length - 1) return false; // reached end of list without finding one
+    else return makeTable(index+1, numList[index+1]);
+  };
+  return makeTable(-1, 0); // start with non-positive so it doesn't return true when it shouldn't
+};
+</pre>
+<p><strong>Example (All numbers in list positive)</strong>: Define a function <code>allPositive</code> that returns <code>true</code> when all numbers in the list are positive.</p>
+<pre>let allPositive = numList =&gt; {
+  let makeTable = (index, num) =&gt; {
+    if(!(num &gt; 0)) return false; // found number that's not positive
+    else if(index === numList.length - 1) return true; // reached end of list; all positive
+    else return makeTable(index+1, numList[index+1]);
+  };
+  return makeTable(-1, 1); // start with positive so it doesn't return false when it shouldn't
+};
+</pre>
+<p><strong>Exercise 10.8&nbsp;(Has Opposite): </strong>Define a function <code>hasOpposite(numList, x)</code> by forward recursion that takes a number <code>x</code>&nbsp;and returns <code>true</code> exactly when <code>-x</code> appears in the list <code>numList</code> and <code>false</code> otherwise.</p>
+<pre>let hasOpposite = (numList, x) =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.9&nbsp;(All Items Have Opposite): </strong>Define a function <code>allHaveOppositeInList(numList)</code> by forward recursion that returns <code>true</code> exactly when <strong>all</strong> numbers&nbsp;<code>x</code> appearing in the list <code>numList</code>&nbsp;have an opposite appearing in the list and <code>false</code> otherwise. &nbsp;You may call <code>hasOpposite(numList, x)</code>. Example: <code>hasAllOpposites([1,5,-2,-1,-5,2,0])</code> should be <code>true</code> (0 is its own opposite) while <code>hasAllOpposites([1,-2,-1,-5,2,0])</code> should be <code>false</code> since -5 has no opposite in the list.</p>
+<pre>let allHaveOpposites = numList =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.10&nbsp;(Na<span>&iuml;</span>ve primality testing through trial division): </strong>Define a function <code>isPrime(n)</code> by forward recursion that takes a&nbsp;positive integer&nbsp;input&nbsp;<code>n &gt; 1</code>&nbsp;and returns <code>true</code> exactly when&nbsp;<code>n</code>&nbsp;is prime and <code>false</code> otherwise. &nbsp;An integer <code>n</code> that's greater than 1 is prime exactly when <strong>every</strong>&nbsp;integer from 2 to <code>n-1</code>, inclusive, is <strong><em>not</em></strong> a factor of <code>n</code>.</p>
+<pre>let isPrime = n =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.11&nbsp;(prime in list): </strong>Define a function <code>hasPrime(numList)</code> by forward recursion that returns true exactly when&nbsp;<code>itemList</code>&nbsp;has a prime and <code>false</code> otherwise. &nbsp;You may use <code>isPrime</code> in your definition of <code>hasPrime</code></p>
+<pre>let hasPrime = numList =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 10.12&nbsp;(AND): </strong>Excel has an <code>AND</code> function that takes a variable number of arguments and returns <code>true</code> exactly when ALL of them are <code>true</code> and <code>false</code> otherwise (Examples: =AND(true,true,true,false) would be false while =AND(true, 1 &gt; 0, true, true, 2 &lt; 5) would be true).</p>
+<p>Define a function <code>and(boolList)</code> by forward recursion that returns <code>true</code> exactly when&nbsp;every Boolean in <code>boolList</code>&nbsp;is true and <code>false</code> otherwise.</p>
+<pre>let and = boolList =&gt; {
+
+};</pre>
+<p><strong>Exercise 10.13&nbsp;(OR): </strong>Excel has an <code>OR</code> function that takes a variable number of arguments and returns <code>true</code> exactly when at least one of them is <code>true</code> and <code>false</code> otherwise (Examples: =OR(true,false,false,true,false,false,1 &lt; 0) would be true while =OR(false, 1 &lt; 0, false, false, 2 &gt; 5) would be false).</p>
+<p>Define a function <code>or(boolList)</code> by forward recursion that returns <code>true</code> exactly when&nbsp;some Boolean in <code>boolList</code>&nbsp;is true and <code>false</code> otherwise.</p>
+<pre>let or = boolList =&gt; {
+
+};</pre>
