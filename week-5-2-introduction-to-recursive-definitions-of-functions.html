@@ -1,0 +1,310 @@
+<h2>Backward Recursion</h2>
+<p><span style="font-size: 12pt;">Sometimes the number of times you want to perform an operation will depend on the input. &nbsp;For example, suppose&nbsp;you wanted to define a function <code>sumOfPositiveIntegersFrom1To</code> that takes a positive integer n as an input and outputs the sum of the integers from 1 to n. &nbsp;Forgetting that there's a general formula, and doing this directly, you would have trouble:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;
+  :
+  :
+};
+</pre>
+<p><span style="font-size: 12pt;">You can't handle every integer that's entered, and the number of additions you would need would depend on n; for 3, you would perform 2 additions and for 5, you would use 4 additions. In general, for n, you would use n-1 additions.</span></p>
+<p><span style="font-size: 12pt;">Since we're not able to list every case, we instead describe&nbsp;the pattern that allows us to proceed from one else if statement to the next. &nbsp;We do this by providing a <em>recursive</em> definition, which describes how we can compute the output for a given input&nbsp;by using the outputs from other inputs for this same function.&nbsp;&nbsp;We'll start with a&nbsp;<em>backward</em> recursive definition that can be thought of as looking at a given else if. &nbsp;It's backward in the sense that we look <em>back</em>&nbsp;to the outputs for smaller inputs when determining&nbsp;the output for the current input. &nbsp;To see this process in action, let's continue to define our <code>sumOfPositiveIntegersFrom1To</code> function for the inputs 6, 7, and 8 in that order. &nbsp;We start by looking <em>back</em> at the output from this function for the smaller input 5 and see if we can describe the output for 6 in terms of it.</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return <span style="color: #ff0000;"><strong>1 + 2 + 3 + 4 + 5</strong></span>;<br />  else if(<span style="color: #ff0000;"><strong>n === 6</strong></span>) return _________________;
+  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">The output we want for 6 is <code>1 + 2 + 3 + 4 + 5 + 6</code>. &nbsp;This is 6 more than the output for the previous input of 5 so we can write the function up to this point as follows:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return <span style="color: #ff0000;"><strong>1 + 2 + 3 + 4 + 5</strong></span>;<br />  else if(<span style="color: #ff0000;"><strong>n === 6</strong></span>) return <span style="text-decoration: underline; color: #0000ff;"><strong>sumOfPositiveIntegersFrom1To(5) + 6</strong></span>;
+  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">Now we want to define the function for an n of 7 so we can use the output from this function for an input of&nbsp;6:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(5) + 6</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(<span style="color: #ff0000;"><strong>n === 7</strong></span>) return ___________________________________;<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">This time, we want&nbsp;<code>1 + 2 + 3 + 4 + 5 + 6 + 7</code>, which is 7 more than&nbsp;<span>the previous output for the previous input of 6 so we can write the function up to this point as follows:</span></span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(5) + 6</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(<span style="color: #ff0000;"><strong>n === 7</strong></span>) return <span style="text-decoration: underline;"><span style="color: #0000ff;"><strong>sumOfPositiveIntegersFrom1To(6) + 7</strong></span></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">Now we want to define the function for an n of 8 so we can use the output from this function for an input of 7.</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return sumOfPositiveIntegersFrom1To(5) + 6; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(n === 7) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(6) + 7</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7<br />  else if(<span style="color: #ff0000;"><strong>n === 8</strong></span>) return ___________________________________;<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;"><span>This time, we want&nbsp;</span><code>1 + 2 + 3 + 4 + 5 + 6 + 7 + 8</code><span>, which is 8 more than&nbsp;</span><span>the previous output for the previous input of 7 so we can write the function up to this point as follows:</span></span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;<br />  else if(n === 6) return sumOfPositiveIntegersFrom1To(5) + 6; // 1 + 2 + 3 + 4 + 5 + 6
+  else if(n === 7) return <span style="color: #ff0000;"><strong>sumOfPositiveIntegersFrom1To(6) + 7</strong></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7<br />  else if(<span style="color: #ff0000;"><strong>n === 8</strong></span>) return <span style="text-decoration: underline;"><span style="color: #0000ff;"><strong>sumOfPositiveIntegersFrom1To(7) + 8</strong></span></span>; // 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8<br />  :
+  :
+};</pre>
+<p><span style="font-size: 12pt;">Now that we've computed the outputs from this function in terms of outputs for smaller inputs for a few values of n, we can hopefully see the pattern that in this case, allows us to use a single else statement for all else if statements. &nbsp;Here, we compute&nbsp;the output for an input <em>n</em>&nbsp;&gt; 1 by adding the input <em>n</em> to the output from this function for an input that's one less (<em>n</em>-1). &nbsp;Therefore, we can give a&nbsp;recursive&nbsp;definition for this function as follows:</span></p>
+<pre><span style="font-size: 12pt;">let sumOfPositiveIntegersFrom1To = n =&gt; {<br />  if(n === 1) return 1;<br />  else        return </span><span style="font-size: 12pt;"><strong><span style="color: #003300;">sumOfPositiveIntegersFrom1To</span></strong>(n - 1) <span style="color: #333333;"><strong>+ n</strong></span>;<br />}</span></pre>
+<p><span style="font-size: 12pt;">We can also give a <em>forward</em> recursive definition in which we&nbsp;describe a method for sequentially generating the <em>next</em>&nbsp;input and corresponding output. (E.g., instead of looking at how to determine the output for an input n of 6 by looking at&nbsp;the output for an input of 5, we say given n = 5 and the output 1 + 2 + 3 + 4 + 5, the next input should be n + 1 or 6 and the next&nbsp;output should be 6 more or n+1 more. &nbsp;We'll discuss this in more detail in a later lecture.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 5.2.1 (Factorial)</strong>: For positive integers n, we say that n! (pronounced n factorial) is the product of the integers from 1&nbsp;to n. &nbsp;For example, 4! = 1 * 2 * 3 * 4 = 24. &nbsp;Define a function <code>factorial(n)</code> that takes a positive integer n as an input and returns n! using backward recursion. &nbsp;Be sure to draw the table first as in the previous example.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 5.2.2 (!*n)</strong>: Define a function <code>exclamationPointTimes</code> that takes a positive integer n as an input and outputs that many exclamation points by backward recursion. &nbsp;For example, for an n of 3, the output should be the string "!!!".&nbsp;</span></p>
+<p><span style="font-size: 12pt;">Here is a step-by-step description of a fairly general method you co<span style="color: #000000;">ul</span>d use that will be added to later for more complex problems:</span></p>
+<ol>
+<li><span style="font-size: 12pt;">Draw a two-column table with a header column for your input&nbsp;and one for the output. &nbsp;Here, the input is&nbsp;n and the output is the sum of the integers from 1 to n.</span>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n (input)</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">sum from 1 to n (output)</span></th>
+</tr>
+</tbody>
+</table>
+</li>
+<li><span style="font-size: 12pt;">In the first row, include the starting input (base case) in which no calculations are required and the corresponding output. In this case, you would have 1 for the input and 1 for the output since the sum of the integers from 1 to 1 is just 1, no additions required.</span>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n (input)</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">sum from 1 to n (output)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff6600;">1</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">1</span></strong></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><span style="font-size: 12pt;">Fill in each subsequent row with the "next" input and corresponding output&nbsp;until you discover&nbsp;the pattern for how you update the input and output accordingly.</span>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n (input)</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">sum from 1 to n (output)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>1</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">6</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">10</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">15</td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+<p><span style="font-size: 12pt;"><strong><span>Backward Recursion: </span></strong></span></p>
+<p><span style="font-size: 12pt;"><span>Using step 2, introduce an if statement of the form:&nbsp;</span></span></p>
+<p><span style="font-size: 12pt;"><span><code>if(<span style="color: #0000ff;"><strong><em>input variable</em></strong></span> === <span style="color: #ff6600;"><strong><em>row 1 input</em></strong></span>) return <span style="color: #003300;"><strong><em>output in row 1</em></strong></span>;</code></span></span></p>
+<pre><span style="font-size: 12pt;">let sumOfPositiveIntegersFrom1To = <span style="color: #0000ff;"><strong>n</strong></span> =&gt; {
+  if(<strong><span style="color: #0000ff;">n</span></strong> === <strong><span style="color: #ff6600;">1</span></strong>) return <span style="color: #003300;"><strong>1</strong></span>;
+  ...
+};
+</span></pre>
+<p><span style="font-size: 12pt;">Using&nbsp;step 3, determine the&nbsp;operation you apply to an input value in any row beyond the first one to get the input in the previous row. &nbsp;Call this operation or function&nbsp;<strong><span style="color: #0000ff;"><code>backwardInputOp</code></span></strong></span><span style="font-size: 12pt;">&nbsp;since it's used to go "backwards" through the input column of the table. &nbsp;Here, this operation is subtraction by 1 (5 ↠ 4 ↠ 3 ↠ 2 ↠ 1).&nbsp;</span></p>
+<p><span style="font-size: 12pt;">Then using step 3, determine the operation you apply to an input in a row and an output from the&nbsp;<em>previous</em> row to get the output in the same row as the input. &nbsp;Call this operation or function&nbsp;<strong><span style="color: #333333;"><code>forwardOutputOp</code></span></strong> since it's used to go "forwards" through the output column of the table. &nbsp;Here, this operation consists of adding the previous output to the input (1&nbsp;<span>↠ 1 + 2 (3)&nbsp;↠ 3 + 3 (6) ↠ 6 + 4 (10) ↠ 10 + 5 (15)).</span></span></p>
+<p><span style="font-size: 12pt;">Use these operations in&nbsp;your else statement:</span></p>
+<p><span style="font-size: 12pt;"><span>else return <strong><span style="color: #333333;">forwardOutputOp</span></strong>( <strong>input variable</strong>, &nbsp;<span style="color: #003300;">f</span>(<em style="color: #0000ff; font-weight: bold;">backwardInputOp(input variable)</em></span><span>) );</span></span></p>
+<p><span style="font-size: 12pt;">Here, f is the function we're defining, which in this case is&nbsp;<code>sumOfPositiveIntegersFrom1To</code>. The <code>backwardInputOp</code> function is <code>minus1</code> (subtraction by 1). &nbsp;The <code>forwardOutputOp</code> function is <code>add</code> (add the previous output to the input) so we have the following:</span></p>
+<pre><span style="font-size: 12pt;">let <span style="color: #0000ff;"><strong>minus1</strong></span> = n =&gt; n - 1;                       // inputs decrease by 1 going backward
+let <strong><span style="color: #333333;">add</span></strong> = (n, outputFromF) =&gt; outputFromF + n; // outputs increase by n going forward<br />let <strong><span style="color: #003300;">sumOfPositiveIntegersFrom1To</span></strong> = n =&gt; {<br />  if(n === 1) return 1;<br />  else        return <strong><span style="color: #333333;">add</span></strong>(n, <span style="color: #003300;"><strong>sumOfPositiveIntegersFrom1To</strong></span>(<span style="color: #0000ff;"><strong>minus1</strong></span>(n)));<br />}</span></pre>
+<p><span style="font-size: 12pt;">By substituting, we can rewrite the definition as follows:</span></p>
+<pre><span style="font-size: 12pt;">// Substitute n - 1 for minus1(n)<br />let <span style="color: #003300;"><strong>sumOfPositiveIntegersFrom1To</strong></span> = n =&gt; {<br />  if(n === 1) return 1;<br />  else        return </span><span style="font-size: 12pt;"><strong><span style="color: #333333;">add</span></strong>(n, <span style="color: #003300;"><strong>sumOfPositiveIntegersFrom1To</strong></span>(<span style="color: #0000ff;"><strong>n - 1</strong></span>));<br />}<br /><br />// Substituting again: add(n, sumOfPositiveIntegersFrom1To(n-1)) with<br />//                            sumOfPositiveIntegersFrom1To(n-1) + n</span>
+<span style="font-size: 12pt;">let sumOfPositiveIntegersFrom1To = n =&gt; {<br />  if(n === 1) return 1;<br />  else        return </span><span style="font-size: 12pt;"><strong><span style="color: #003300;">sumOfPositiveIntegersFrom1To</span></strong>(n - 1) <span style="color: #333333;"><strong>+ n</strong></span>;<br />}</span></pre>
+<p><span style="font-size: 12pt;">This makes sense as the sum of the positive integers from 1 to n: <code>1 + 2 + 3 + ... + n - 1 + n</code> can be expressed as the sum of the positive integers from 1 to n - 1 and n: (1 + 2 + 3 + ... + n-1) + n. &nbsp;A function definition which includes a call to the function being defined is called a <strong>recursive function</strong>.</span></p>
+<p><span style="font-size: 12pt;"><span style="color: #ff0000;"><strong>IMPORTANT NOTE</strong></span>: When using backward recursion like this, you're using the output from the row <em>before</em> the row with the input (e.g., When the input n = 4, you're using the output from row 3, mainly 6 (1 + 2 + 3). &nbsp;This tells you that you need to add n = 4 instead of n+1.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 5.2.3 (Sum of squares)</strong><span>: For positive integers n, define a function </span><code>sumOfSquares(n)</code><span> that takes a positive integer n as an input and returns the sum of the squares of the integers from 1 to n using backward recursion. &nbsp;For example <code>sumOfSquares(4)</code> should produce 30 (1<sup>2</sup> + 2<sup>2</sup> + 3<sup>2</sup> + 4<sup>2</sup>). Be sure to draw the table first as in the previous example.</span></span></p>
+<p><span style="font-size: 12pt;"><span><strong>Exercise 5.2.4 (Positive/Negative)</strong>: Define a function <code>alt(n)</code> that takes a positive integer n as an input and returns 1 if n is odd&nbsp;and -1 if n is even&nbsp;using backward recursion. &nbsp;Be sure to draw the table first as in the previous example.</span></span></p>
+<p><span style="font-size: 12pt;"><span><strong>Exercise 5.2.5 (Partial Sum of Alternating Harmonic Series)</strong>: Define a function <code>altHarmonic(n)</code> that takes a positive integer n as an input and returns the sum:&nbsp;</span></span></p>
+<p><span style="font-size: 12pt;"><span>1 - 1/2 + 1/3 - 1/4 + 1/5 - ... +/- 1/n</span></span></p>
+<p><span style="font-size: 12pt;"><span>using backward recursion (use alt in your implementation). &nbsp;Be sure to draw the table first as in the previous example.</span></span></p>
+<p><span style="font-size: 12pt;"><span><strong>Exercise 5.2.6 (Function&nbsp;Definition&nbsp;From Table)</strong>: For each of&nbsp;the following tables showing the inputs and the corresponding outputs, define a recursive function that matches.</span></span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">f(n)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>4</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">6</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">10</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">12</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">g(n)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>4</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">16</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">32</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">64</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">h(n)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>2</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>10</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">7</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">16</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">32</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">-2</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">j(n)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>2</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>18</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">14</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">8</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">6</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">16</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">-10</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">32</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">-42</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exercise 5.2.7 (Binary Log)</strong>: The binary log, denoted lg, of a power of two is the exponent that you raise 2 to to get that number. &nbsp;For example, lg 8 = 3 since 2<sup>3</sup> = 8 and lg 1024 = 10 since 2<sup>10</sup> = 1024. &nbsp;Define a function <code>lg</code> that takes a positive integer that's a power of 2 as an input and returns the binary log of that number using backward recursion. Note: Here, you're only considering the inputs 1, 2, 4, 8, 16, 32, etc. (2<sup>0</sup> = 1)</p>
+<p><span style="font-size: 12pt;"><strong>Exercise 5.2.8 (Construct table from function definitions)</strong>:<strong>&nbsp;</strong>Given the following recursive function definitions, determine the outputs for the given inputs:</span></p>
+<pre>let mysteryA = n =&gt; {
+  if(n === 1) return 1;
+  else return 4 - mysteryA(n-1);
+};
+// What is mysteryA(1), mysteryA(2), mysteryA(3), mysteryA(4), and mysteryA(5)?  
+// What do you think the values of mysteryA(1000) and mysteryA(1001) are?
+</pre>
+<p>&nbsp;</p>
+<pre>let mysteryB = n =&gt; {
+  if(n === 1) return 1;
+  else return 2*mysteryB(n-1) + 1;
+};
+// What is mysteryB(1), mysteryB(2), mysteryB(3), mysteryB(4), mysteryB(5), mysteryB(6), and mysteryB(7)?  
+// What do you think the value of mysteryB(100) is? 
+</pre>
+<p>&nbsp;</p>
+<pre>let mysteryC = n =&gt; {
+  if(n === 1) return 0;
+  else return mysteryC(Math.trunc(n/2)) + 1;
+};
+// What is mysteryC(1), mysteryC(2), mysteryC(4), mysteryC(8), mysteryC(16), and mysteryC(32)?  
+// What do you think the value of mysteryC(1024) is?  What about mysteryC(2**100)? 
+</pre>
+<p>&nbsp;</p>
+<pre>let mysteryD = n =&gt; {
+  if(n === 1) return 0;
+  else return 2*mysteryD(Math.trunc(n/2)) + n;
+};
+// What is mysteryD(1), mysteryD(2), mysteryD(4), mysteryD(8), mysteryD(16), and mysteryD(32)?  
+// Bonus: What do you think the value of mysteryD(1024) is?  What about mysteryD(2**100)? 
+</pre>
+<h3></h3>
