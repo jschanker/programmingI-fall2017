@@ -1,0 +1,143 @@
+<h2>Strings</h2>
+<h3>Characters and Strings</h3>
+<ul>
+<li><span style="font-size: 12pt;">A <strong>character</strong>&nbsp;is a single letter, number, symbol, unit of space, etc.</span></li>
+<li><span style="font-size: 12pt;">A <strong>string</strong> is a series of 0 or more characters. &nbsp;A string of length 0 is called the empty string.</span></li>
+<li><span style="font-size: 12pt;">A <strong>string literal</strong> is a particular string.</span>
+<ul>
+<li><span style="font-size: 12pt;">Example: "Hey Hey Hey!" is a string literal that's 12 characters in length.</span></li>
+</ul>
+</li>
+<li><span style="font-size: 12pt;">As with numbers, strings can be assigned to variables. &nbsp;They can also be the inputs to or the outputs from&nbsp;a function.</span>
+<pre>let greeting = "Hey";
+let double = s =&gt; s + s;
+console.log(double(greeting)); // outputs HeyHey
+</pre>
+</li>
+</ul>
+<h3>Length of strings/Accessing Individual Characters/Properties &amp; Methods</h3>
+<ul>
+<li><span style="font-size: 12pt;">If s is a string, you can get its length by using <code>s.length</code>. Here, <code>length</code> refers to a <strong>property</strong> of the string s. &nbsp;A property is like a variable but it's connected&nbsp;to a specific object, which in this case is the string s:</span>
+<pre>console.log("Hey Hey Hey!".length); // prints 12, the length of the string literal, "Hey Hey Hey!"</pre>
+</li>
+<li><span style="font-size: 12pt;">Individual characters of a string can be accessed using the <code>charAt</code> <strong>method</strong> of strings. In JavaScript, a&nbsp;method is a property of an object that happens to be a function. The function takes an implicit parameter as one of its inputs, which in this case is the string itself. &nbsp;Methods define what an object can do. &nbsp;Just as with general functions that make sense for some types of inputs and not for others, methods are specific to certain types of objects.</span>
+<pre>charAt = (s, index) =&gt; s.charAt(index);
+console.log("JavaScript is awesome!".charAt(2));
+console.log(charAt("JavaScript is awesome!", 2)); // same as above
+console.log(3.14.charAt(2)); // TypeError: 3.14.charAt is not a function 
+                             // (charAt is not a method of numbers) 
+console.log(charAt(3.14, 2)); // TypeError: s.charAt is not a function 
+                              // (charAt takes a string and number as inputs) 
+</pre>
+</li>
+<li><span style="font-size: 12pt;">The <code>charAt</code> method takes a nonnegative integer as an explicit input and the string as an implicit one, and returns&nbsp;the character at that position. &nbsp;The positions (or indices as they're called) start with 0 so the first letter is at index 0, the second letter is at index 1, the third letter at index 2, etc.</span>
+<pre>let getFifthChar = phrase =&gt; phrase.charAt(4);
+console.log(getFifthChar("HEY <strong>K</strong>IND WORLD!")); // prints K
+//                        0123<strong>4</strong>
+console.log(getFifthChar("STAY KIND WORLD!")); // prints space
+//                        0123<strong>4</strong>
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Note that the <code>charAt</code> method must be called on a string and take a nonnegative integer that's less than the length of the string as an input. It returns a character as an output.</span></li>
+</ul>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.1 (First character)</strong>: Excel uses the presence of a leading equal sign (=) to determine if the text in a cell should be interpreted as a formula or not. To emulate this in your spreadsheet application, you will need a way of determining the first character. Define a function <code>getFirstChar</code> that returns the first character of the inputted string.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.2 (Last character)</strong>: Excel has a RIGHT function that takes a string as an input and returns the last character. Define a function <code>lastChar</code> to do this. Hint: You'll want to use the <code>charAt</code> method with the <code>length</code> property (and some math operation). Consider how you can calculate the position of the last character if you're given the string's length. (Remember that indices start at 0.)</span></p>
+<pre>let lastChar = s =&gt; _________________;
+console.log(lastChar("Molloy!")); // logs '!'
+console.log(lastChar("Pizza"));   // logs 'a'
+console.log(lastChar("ABCD "));   // logs ' ' (space)
+</pre>
+<h3><strong>Concatenation</strong></h3>
+<p><span style="font-size: 12pt;">You can join together multiple strings (includes single letters) by using the '+' operator.</span></p>
+<pre>let makeGreeting = name =&gt; "Hey there, " + name + "!";
+console.log(makeGreeting("Alice")); // logs Hey there, Alice!
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.3</strong>: Implement the function <code>middleTwo</code> which takes a string with an even number of characters as an input and returns its middle two characters by somehow combining the string's <code>length</code> property with the <code>charAt</code> method, <code>+</code> (string concatenation), and some math operation. <strong>Hint</strong>: Given the length of the string, how can you calculate the positions of the middle 2 characters?</span></p>
+<pre>let middleTwo = s =&gt; _________________;<br />console.log(middleTwo("Molloy"));       // logs ll
+console.log(middleTwo("Text2Codes"));   // logs 2C
+console.log(middleTwo("SCRABBLE"));     // logs AB
+</pre>
+<h3>Get substring of string from start to end position</h3>
+<p><span style="font-size: 12pt;">If s is a string, <code>s.substring(i, j)</code> is the substring&nbsp;of characters of s starting at index&nbsp;i and ending at index&nbsp;j-1 (before j). If j&nbsp;is omitted, the substring&nbsp;is from&nbsp;i to the end.</span></p>
+<pre>console.log("Hey <strong>Hey He</strong>y!".substring(4, 10)); // logs "Hey He"
+//           0123<strong>456789<br /></strong>console.log("Moll<strong>oy123!</strong>!!".substring(4,10));  // logs "oy123!"<br />//           0123<strong>456789<br /></strong>console.log("Moll<strong>oy123!!!</strong>".substring(4,10));  // logs "oy123!!!"<br />//           0123<strong>4</strong></pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.4</strong>: Implement a&nbsp;function <code>removeFirstChars</code> that takes a string s and a nonnegative integer numChars as inputs and returns the string with that many characters removed from the beginning. Do this using the <code>substring</code> method.</span></p>
+<pre>let removeFirstChars = (s, numChars) =&gt; ___________________________;
+console.log(removeFirstChars("Molloy123!", 6));   // logs 123!
+console.log(removeFirstChars("Molloy123!", 4));   // logs oy123!
+console.log(removeFirstChars("Molloy123!", 10));  // logs "" (empty string)
+console.log(removeFirstChars("Molloy123!", 0));   // logs "Molloy123!"</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.5</strong>: Excel has a LEFT function that takes a string s and a nonnegative integer numChars as inputs and returns that many characters of s starting from the beginning of the string. Using the <code>substring</code> method (and a math operation), implement the function <code>firstChars(s, numChars)</code> that does exactly that.</span></p>
+<pre>let firstChars = (s, numChars) =&gt; ___________________________;
+console.log(firstChars("Molloy123!", 6));   // logs Molloy
+console.log(firstChars("Molloy123!", 10));  // logs Molloy123!
+console.log(firstChars("Molloy123!", 0));   // logs "" (empty string)
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.6</strong>: Excel has a MID function that takes a string s, a nonnegative integer startPos and a nonnegative integer numChars as inputs and returns that many characters of s starting from position startPos of the string. Using the <code>substring</code> method (and math operations), implement the function <code>substrStartAtOne(s, startPos, numChars)</code> that does exactly that. <strong>NOTE</strong>: The only difference between this function and JavaScript's built-in <code>substr</code> method of strings is that MID takes 1 to be the first character (instead of 0), 2 to be the second (instead of 1), etc. Then rewrite <code>firstChars</code> from before so as to use this function.</span></p>
+<pre>let substrStartAtOne = (s, startPos, numChars) =&gt; ___________________________;
+console.log(substrStartAtOne("Molloy123!", 5, 4));   // logs oy12
+console.log(substrStartAtOne("Molloy123!", 2, 7));   // logs olloy12
+console.log(substrStartAtOne("Molloy123!", 1, 10));  // logs Molloy123!
+console.log(substrStartAtOne("Molloy123!", 7, 0));   // logs "" (empty string)
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.7</strong>: Excel has a RIGHT function that takes a string s and a nonnegative integer numChars as inputs and returns that many characters of s starting from the *end* of the string and counting backward. Using the <code>substring</code> method, the <code>length</code> property (and math operations), implement the function <code>lastChars(s, numChars)</code> that does exactly that.</span></p>
+<pre>let lastChars = (s, numChars) =&gt; ___________________________;
+console.log(lastChars("Molloy123!", 1));   // logs !
+console.log(lastChars("Molloy123!", 6));   // logs oy123!
+console.log(lastChars("Molloy123!", 10));  // logs Molloy123!
+console.log(lastChars("Molloy123!", 0));   // logs "" (empty string)
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.8</strong>: Implement a&nbsp;function <code>removeLastChars</code> that takes a string s and a nonnegative integer numChars as inputs and returns the string with that many characters removed from the end. Do this using the <code>substring</code> method.</span></p>
+<pre>let removeLastChars = (s, numChars) =&gt; ___________________________;
+console.log(removeLastChars("Molloy123!", 6));   // logs Moll
+console.log(removeLastChars("Molloy123!", 4));   // logs Molloy
+console.log(removeLastChars("Molloy123!", 10));  // logs "" (empty string)
+console.log(removeLastChars("Molloy123!", 0));   // logs "Molloy123!"</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.9</strong>: Implement a&nbsp;function <code>removeFirstAndLastChars</code> that takes a string s and a nonnegative integer numChars as inputs and returns the string with that many characters removed from *BOTH* the beginning and the end. Do this using by only using the <code>removeFirstChars and removeLastChars</code>&nbsp;functions.</span></p>
+<pre>let removeFirstAndLastChars = (s, numChars) =&gt; ___________________________;
+console.log(removeFirstAndLastChars("Molloy123!", 2));  // logs lloy12
+console.log(removeFirstAndLastChars("Molloy123!", 4));  // logs oy
+console.log(removeFirstAndLastChars("Molloy123!", 5));  // logs "" (empty string)
+console.log(removeFirstAndLastChars("Molloy123!", 0));  // logs "Molloy123!"</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.10</strong>: Implement a&nbsp;function <code>removeEnds</code>&nbsp;that takes a string s with at least two characters and returns the string with its first and last characters&nbsp;removed from the beginning. Do this using the <code>removeFirstAndLastChars</code>&nbsp;function.</span></p>
+<pre>let removeEnds = s =&gt; ___________________________;
+console.log(removeEnds("Molloy123!"));      // logs olloy123
+console.log(removeEnds("Where are you?"));  // logs here are you</pre>
+<p><strong>Complete these exercises on the repl.it Classroom (Exercises 3.1-3.10)</strong></p>
+<h3><span>Find Start Position of Substring in String</span></h3>
+<p><span style="font-size: 12pt;">If s is a string, <code>s.indexOf(str, [startPos=0]) </code>finds the index of the&nbsp;first occurrence of str starting at position&nbsp;startPos&nbsp;(optional parameter) or starting at the beginning of the string if&nbsp;startPos&nbsp;is&nbsp;not given. &nbsp;-1 is returned if the string isn&rsquo;t located at or after position&nbsp;startPos.</span></p>
+<pre>let getFifthChar = phrase =&gt; phrase.charAt(4);
+console.log(<span>"H<strong><span style="color: #ff0000;">e</span>y</strong> Hey Hey!".indexOf("ey")</span>); // prints 1
+//           0<strong><span style="color: #ff0000;">1</span>2<br /></strong>console.log(<span>"H<span style="color: #000000;">e</span><strong><span style="color: #0000ff;">y</span></strong> H<strong><span style="color: #ff0000;">e</span></strong>y Hey!".indexOf("ey",2)</span>); // prints 5 (starts looking at index 2)<br />//           0<span style="color: #000000;">1</span><span style="color: #0000ff;"><strong>2</strong><span style="color: #000000;">34<strong><span style="color: #ff0000;">5</span>6<br /></strong></span></span>console.log("Hey Hey H<strong><span style="color: #0000ff;">e</span><span style="color: #000000;">y</span></strong>!".indexOf("ey",9)); // prints 9 (find ey at starting index)
+//           0123456789<br />console.log("Hey Hey He<strong><span style="color: #0000ff;">y</span></strong>!".indexOf("ey",10)); // prints -1 (doesn't find ey starting at index 10)<br />//           0123456789</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.11</strong>: Using the <code>substring</code>&nbsp;and <code>indexOf</code> methods, implement the function <code>beforeSubstring(s, sub)</code> that returns all characters of s appearing before the first occurrence of the string sub.</span></p>
+<pre>let beforeSubstring = (s, sub) =&gt; ___________________________;
+console.log(beforeSubstring("Molloy College", " Col"));  // logs Molloy
+console.log(beforeSubstring("Mississippi", "ssi"));      // logs Mi
+console.log(beforeSubstring("New School", "New"));       // logs "" (empty string)</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.12</strong>: Using the <code>substring</code>&nbsp;and <code>indexOf</code> methods (and length and a math operation), implement the function <code>afterSubstring(s, sub)</code> that returns all characters of s appearing after&nbsp;the first occurrence of the string sub.</span></p>
+<pre>let afterSubstring = (s, sub) =&gt; ___________________________;
+console.log(afterSubstring("Molloy College", " Col"));  // logs lege
+console.log(afterSubstring("Mississippi", "ssi"));      // logs ssippi
+console.log(afterSubstring("New School", "New"));       // logs " School"<br />console.log(afterSubstring("New School", "School"));    // logs "" (empty string) </pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.13 (Between Substrings)</strong>: Using the <code>beforeSubstring</code>&nbsp;and&nbsp;<code>afterSubstring</code> functions, implement the function <code>betweenSubstrings(s, afterSub, beforeSub)</code> that returns all characters of s appearing in between&nbsp;the strings afterSub&nbsp;and beforeSub.</span></p>
+<pre>let betweenSubstrings = (s, afterSub, beforeSub) =&gt; ___________________________;
+console.log(betweenSubstrings("Molloy College", "ol", " Col"));    // logs loy
+console.log(betweenSubstrings("Mississippi", "ssi", "ssi"));       // logs "" (empty string)
+console.log(betweenSubstrings("New School", "New", "oo"));         // logs " Sch" </pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.14 (Replace)</strong>: Using the <code>beforeSubstring</code>&nbsp;and&nbsp;<code>after<span>Substring</span></code> functions and string concatenation, implement the function <code>replace(s, oldText, replaceText)</code> that returns&nbsp;s with its first occurrence of oldText replaced by replaceText.</span></p>
+<pre>let replace = (s, oldText, replaceText) =&gt; ___________________________;
+console.log(replace("Mississippi", "ss", "!$$!"));  // logs Mi!$$!ssippi
+console.log(replace("Molloy College", "e", "a"));   // logs Molloy Collage</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.15 (Reverse Last/First)</strong>: Using the <code>beforeSubstring</code>&nbsp;and&nbsp;<code>after<span>Substring</span></code> functions and string concatenation, implement the function <code>reverseLastFirst(name)</code> that returns&nbsp;a name in the form "last name, first name" (with the space after the comma) in the form "first name last name"</span></p>
+<pre>let reverseLastFirst = name =&gt; ___________________________;
+console.log(reverseLastFirst("Doe, Jane", 6));        // logs Jane Doe
+console.log(reverseLastFirst("Lioness, Molloy", 10)); // logs Molloy Lioness</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.16 (Initials)</strong>: Implement the function <code>initials(name)</code> that returns the initials of a&nbsp;name&nbsp;in the form "first name last name" with periods.</span></p>
+<pre>let initials = name =&gt; ___________________________;
+console.log(initials("Molloy Lioness"));   // logs M.L.
+console.log(initials("Jane Doe"));         // logs J.D.</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 3.17 (3rd item)</strong>: Using previously defined&nbsp;functions, implement the function <code>thirdItem(itemList)</code> that returns the third item in a string itemList containing at least four items separated by commas.</span></p>
+<pre>let thirdItem = itemList =&gt; ___________________________;
+console.log(thirdItem("apple,banana,orange,pear,pizza,pasta,milk"));  // logs orange</pre>
+<p><span style="font-size: 12pt;"><strong>Complete these exercises on the repl.it Classroom (Exercises 3.11-3.17)</strong></span></p>
