@@ -1,0 +1,782 @@
+<h2>Boolean-Valued Functions</h2>
+<h3>Boolean Variables and Functions</h3>
+<ul>
+<li><span style="font-size: 12pt;">A Boolean literal is either <code>true</code> or <code>false</code>. Compare this to a number literal such as 3.14 or a string literal such as "Hey".</span></li>
+<li><span style="font-size: 12pt;">You can assign Booleans to variables just as you can numbers or strings. Boolean variables (or flags) often have names starting with is, are, am, etc.</span>
+<pre>let isTuesday = false;
+let amTired = true;
+let areResultCellsReadonly = true;
+</pre>
+</li>
+<li><span style="font-size: 12pt;">Functions can accept Booleans (or numbers, strings, etc.) as inputs. A function that <em>returns</em> a Boolean as an output is a Boolean-valued function.</span></li>
+</ul>
+<h3>Boolean Operators</h3>
+<p><span style="font-size: 12pt;">Just as there are operators on numbers and strings (e.g., +, *, etc.), there are operators on Booleans as well. (Think logic and truth tables from high school.). In JavaScript (and Java, C#, C++, Ruby, etc.) you can use <code>&amp;&amp;</code> for logical and, <code>||</code> for logical (inclusive) or, and <code>!</code> for logical not.</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">!p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p &amp;&amp; q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p || q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">Sometimes, you want to directly specify the&nbsp;outputs&nbsp;for the inputs you're given and using a <em>single</em> logical&nbsp;operator from&nbsp;<code>&amp;&amp;</code>, <code>||</code>, and <code>!</code>&nbsp;won't produce the outputs you want. &nbsp;However, by using a combination of&nbsp;<span>and's, or's and not's, you can get the desired output. &nbsp;</span></span><span style="font-size: 12pt;">If you've taken propositional logic before, you may have learned for example that&nbsp; ~(~p &and; ~q) is logically equivalent to p &or; q (<span>&and; is for and, ~ for not, and&nbsp;&or; for inclusive or), meaning that for <em>any&nbsp;</em>possible pair of truth values for&nbsp;p and q (TT, TF, FT, and FF),&nbsp;~(~p &and; ~q) and&nbsp;p &or; q will match (either both true or both false). &nbsp;This means that you don't need to use <code>||</code> at all; you can replace every occurrence of&nbsp; <code>p || q</code> with <code>!(!p &amp;&amp; !q)</code>.</span> Here's a general procedure you can use to define a logical operator in terms of and's, or's and not's:</span></p>
+<ol>
+<li><span style="font-size: 12pt;">Draw a truth table with the inputs and the outputs you want them to produce.</span></li>
+<li><span style="font-size: 12pt;">Identify all of the rows with true outputs, starting with the first.</span></li>
+<li><span style="font-size: 12pt;">For each such row, proceed from left to right through the letters. If it's T, write the letter whereas if it's false, write <code>!</code> and then the letter. Use <code>&amp;&amp;</code> between each letter or its negation as you proceed through the columns.</span></li>
+<li><span style="font-size: 12pt;">When you've finished the previous step for a given row, add an <code>||</code> at the end and repeat the previous step for the next row with a true output (provided you're not already at the last such row).</span></li>
+</ol>
+<p><span style="font-size: 12pt;"><strong>Example</strong> (Given conditions p and q): Note, here there's a shorter way to write your answer if you consider taking ! of the one false row.</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p (input 1)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q (input 2)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">Desired output of <code>mysteryOperator</code></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>true</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">true</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">true</span></strong></td>
+</tr>
+</tbody>
+</table>
+<pre>                              /\<br />                              || OR THE THREE BOOLEAN EXPRESSIONS
+                              ||  
+</pre>
+<table>
+<tbody>
+<tr>
+<td style="vertical-align: top;">
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p &amp;&amp;&nbsp;q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>true</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>true</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>true</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p &amp;&amp; !q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+</td>
+<td>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">!p &amp;&amp; !q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;"><strong>false</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;"><strong>false</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;"><strong>true</strong></span></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<pre>//                     row 1     row 2      row 4<br />let mysteryOperator = <span style="color: #ff0000;"><strong>p &amp;&amp; q</strong></span> || <strong><span style="color: #003300;">p &amp;&amp; !q</span></strong> || <span style="color: #0000ff;"><strong>!p &amp;&amp; !q</strong></span>;
+</pre>
+<p><span style="font-size: 12pt;"><strong>Order of Operations</strong>: Note that <code>!</code> has precedence over <code>&amp;&amp;</code>, which has precedence over <code>||</code>, but even though it's <em>not</em> necessary for this example, you could use parentheses for clarity as follows:</span></p>
+<pre>//                      row 1       row 2        row 4<br />let mysteryOperator = (<span style="color: #ff0000;"><strong>p &amp;&amp; q)</strong></span> || (<strong><span style="color: #003300;">p &amp;&amp; !q)</span></strong> || (<span style="color: #0000ff;"><strong>!p &amp;&amp; !q)</strong></span>;
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.1 (NOR)</strong>: The logical NOR function, denoted&nbsp;&darr;,&nbsp;is a&nbsp;logical&nbsp;operator defined on two Booleans p and q as follows:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p&nbsp;<span>&darr;</span> q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><span>Implement a function </span><code>nor</code><span> that takes two Booleans as inputs and returns their logical nor as an output.</span></span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.2 (XOR)</strong>: Excel 2013 introduced an XOR function that returns the exclusive or of two Booleans, denoted by &oplus;. &nbsp;JavaScript does not have a built-in logical exclusive or operator (^ is for bits) so you'll want to implement a function to take the exclusive or of two Booleans. &nbsp;The exclusive or operator of two Booleans p and q is defined as follows (inclusive or is in the right column for comparison):</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p &oplus; q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p || q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>false</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>true</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">Implement a function <code>xor</code> that takes two Booleans as inputs and returns their exclusive or as an output.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.3 (Biconditional or NXOR)</strong>:<span>The logical Biconditional or NXOR function, denoted&nbsp;&harr;,&nbsp; or ⊙ is a&nbsp;logical&nbsp;operator defined on two Booleans p and q as follows:</span></span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p&nbsp;<span>&harr;</span> q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">As shown in the above table, true is produced exactly when the values match. &nbsp;Implement a function <code>nxor</code> that takes two Booleans as inputs and returns their logical biconditional&nbsp;as an output.</span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.4 (NAND)</strong>:&nbsp;</span><span style="font-size: 12pt;">The logical NAND function, denoted&nbsp;&uarr;,&nbsp;is a&nbsp;logical&nbsp;operator defined on two Booleans p and q as follows:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p&nbsp;<span>&uarr;</span>&nbsp;q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><span>Implement a function </span><code>nand</code><span>&nbsp;that takes two Booleans as inputs and returns their logical nand as an output.</span></span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.5 (Conditional)</strong>:&nbsp;</span><span style="font-size: 12pt;">The conditional operator, denoted&nbsp;&rarr;,&nbsp;is a&nbsp;logical&nbsp;operator defined on two Booleans p and q as follows:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p&nbsp;<span>&rarr;</span>&nbsp;q</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><span>Implement a function </span><code>cond</code><span>&nbsp;that takes two Booleans as inputs and returns their conditional as an output.</span></span></p>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.6 (mysteryOperationB)</strong>:&nbsp;Define</span><span style="font-size: 12pt;">&nbsp;a&nbsp;logical&nbsp;operator on two Booleans p and q as follows:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">Output from mysteryOperationB</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><span>Implement a function </span><code>mysteryOperationB</code><span>&nbsp;that takes two Booleans as inputs and returns the&nbsp;corresponding outputs shown in the table above.</span></span></p>
+<h3>More than 2 letters</h3>
+<p><span style="font-size: 12pt;"><span>Whenever you add a condition, you double the number of possibilities. 3 Conditions have 8 Possibilities; 4 Conditions have 16 possibilities, and 5 Conditions have 32 possibilities, How many do you think 10 has? 20?</span></span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">New letter (p)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">r</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px; border-bottom: 1px solid red;" rowspan="4">
+<p><strong><span style="color: #0000ff;">true</span></strong></p>
+<p><strong><span style="color: #0000ff;">(4 possibilities)</span></strong></p>
+</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px; border-bottom: 1px solid red;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px; border-bottom: 1px solid red;">false</td>
+</tr>
+</tbody>
+</table>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px; border-top: 1px solid red;" rowspan="4">
+<p><strong><span style="color: #0000ff;">false</span></strong></p>
+<p><strong><span style="color: #0000ff;">(4 possibilities)</span></strong></p>
+</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px; border-top: 1px solid red;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px; border-top: 1px solid red;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><span>To Easily Draw Truth Table: alternate &frac12; true in the first column with &frac12; false, in the second column alternate &frac14; true with&nbsp;&frac14; false,&nbsp;&frac14; true, and then&nbsp;&frac14; false; in the third column alternate between&nbsp;⅛ true and&nbsp;⅛ false; in the fourth column, alternate&nbsp;1/16 True and 1/16 false, etc.</span></span></p>
+<p><span style="font-size: 12pt;"><span><strong>Example (Exactly Two True)</strong>: Define a function <code>exactlyTwo</code> that takes 3 Booleans as inputs and returns true exactly when <em>exactly&nbsp;</em>two of the conditions are true.</span></span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">r</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">Output from exactlyTwo</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">true</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">true</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+<pre>let exactlyTwo = (p, q, r) =&gt;  <span style="color: #ff0000;"><strong>p &amp;&amp;  q &amp;&amp; !r</strong></span> ||
+                               <strong><span style="color: #0000ff;">p &amp;&amp; !q &amp;&amp;  r</span></strong> ||<br />                              <strong><span style="color: #003300;">!p &amp;&amp;  q &amp;&amp;  r</span></strong>;
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.7</strong>: Implement the function <code>exactlyOne</code>&nbsp;that takes 3 Booleans as inputs: p, q, and r&nbsp;and returns true exactly when <em>exactly one</em> of the conditions of p, q, and r is true. &nbsp;</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><strong>p</strong></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><strong>q</strong></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><strong>r</strong></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><strong>Output from exactlyOne</strong></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"></td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.8</strong>: Implement the function <code>mux</code> that takes 3 Booleans as inputs: p, q, and s and returns the value of p if s is true and q if s is false. &nbsp;A digital multiplexer (or mux for short) is used in logic circuits that allow your computers to carry out instructions.</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">s</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">Output from mux</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>true</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>true</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>true</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>false</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>true</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>true</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>false</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>true</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>true</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>false</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>false</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>true</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>true</span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>false</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>true</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>false</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong>false</strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;"><strong>Complete Exercises 4.1 - 4.8 on the repl.it Classroom</strong></span></p>
+<h3>De Morgan's Laws</h3>
+<p><span style="font-size: 12pt;">Just as there are laws expressing numerical equivalences such as the distributive property (i.e., x * (y + z) is equivalent to x*y + x*z), there are laws expressing equivalences of Boolean expressions. De Morgan&rsquo;s Laws are very important in programming!</span></p>
+<pre>// The following Boolean expressions are logically equivalent:
+<strong>     !(p &amp;&amp; q);
+     !p || !q;</strong>
+// i.e., not (p and q) is logically equivalent to not p or not q;
+// if it's not the case that both p and q are true, then at least one of p or q must be false
+// The following Boolean expressions are logically equivalent:
+<strong>     !(p || q);
+     !p &amp;&amp; !q;</strong>
+// i.e., not (p or q) is logically equivalent to not p and not q;
+// if neither p nor q is true, then BOTH p and q must be false
+</pre>
+<p><span style="font-size: 12pt;">If we take the opposite truth values of the first example, we would get the following</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p (input 1)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q (input 2)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">OPPOSITE of Desired output of <code>mysteryOperator</code></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff0000;"><strong>true</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #ff0000;">false</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">true</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #003300;">false</span></strong></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">false</span></strong></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><strong><span style="color: #0000ff;">false</span></strong></td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">To produce this output, we would look only at the third row and get the following:</span></p>
+<pre>p &amp;&amp; !q;
+</pre>
+<p><span style="font-size: 12pt;">Since it's the opposite of what we want, we can write our original solution in the must more compact form as follows:</span></p>
+<pre>!(p &amp;&amp; !q);
+// By De Morgan's Laws, we could use the following:
+!p || !!q;
+// Since !!q is logically equivalent to q (opposite of the opposite truth value of q is the truth value of q),
+// we could write this as follows:
+<strong>!p || q;
+</strong></pre>
+<h3>Shortening Boolean Expressions</h3>
+<p><span style="font-size: 12pt;"><span>You can potentially shorten your&nbsp;solutions by defining operators in terms of previously defined ones. &nbsp;For example, from propositional logic, we know that p&nbsp;&harr; q is logically equivalent to p &rarr; q &and;&nbsp;q &rarr; p so had we defined <code>cond(p, q)</code> first, we could define <code>nxor(p, q)</code> as follows:</span></span></p>
+<pre>let and = (p, q)  =&gt; p &amp;&amp; q;<br />let nxor = (p, q) =&gt; and(cond(p, q), cond(q, p));
+</pre>
+<p><span style="font-size: 12pt;"><span>Can you think of an even shorter way (the hint is in the name of the function)? &nbsp;More generally, just as you would simplify algebraic expressions using rules of algebra, by using rules of logic,&nbsp;you could shorten logic expressions. &nbsp;Consider the solution to the first example:</span></span></p>
+<pre><span style="color: #ff0000;"><strong>p &amp;&amp; q</strong></span> || <strong><span style="color: #003300;">p &amp;&amp; !q</span></strong> || <span style="color: #0000ff;"><strong>!p &amp;&amp; !q</strong></span>;<br />// (<span style="color: #ff0000;"><strong>p &amp;&amp; q</strong></span> || <strong><span style="color: #003300;">p &amp;&amp; !q</span></strong>) is logically equivalent to p:<br />// Either q or not q must be true so if p is true, then either (p and q) or (p and not q) will be <br />// true as well.<br />// In the other direction, if (p and q) or (p and not q) is true, then in both cases p must be <br />// true. So by substitution, the above expression is logically equivalent to:<br /><span style="color: #ff0000;"><strong>p </strong></span>|| (<span style="color: #0000ff;"><strong>!p &amp;&amp; !q</strong></span>);<br />// "Distributing" the p in, we get the following logically equivalent expression:<br />(<span style="color: #ff0000;"><strong>p</strong></span> || <strong><span style="color: #0000ff;">!p</span></strong>) &amp;&amp; (<span style="color: #ff0000;"><strong>p</strong></span> || <span style="color: #0000ff;"><strong>!q</strong></span>);<br />// p or not p is always true so we get the following logically equivalent expression:<br /><span style="color: #003300;">true</span> &amp;&amp; (<span style="color: #ff0000;"><strong>p</strong></span> || <span style="color: #0000ff;"><strong>!q</strong></span>);<br />// true behaves as the identity for and just as 1 behaves as the identity for multiplication;<br />// that is 1 * x = x * 1 = x (you get back what you started with) so the above is logically<br />// equivalent to the following:<br /><span style="color: #ff0000;"><strong>p</strong></span> || <span style="color: #0000ff;"><strong>!q</strong></span>; // This agrees with the answer in the previous section</pre>
+<p><span style="font-size: 12pt;"><span>In digital circuit design, you would use&nbsp;use Karnaugh maps to shorten long series of ands, ors and nots.</span></span></p>
+<h3>Comparison Operators</h3>
+<p><span style="font-size: 12pt;"><span>A Boolean can result from a comparison operator. &nbsp;Here are some of JavaScript's comparison operators:</span></span></p>
+<p><span><span style="font-size: 12pt;"><code>===</code> :&nbsp;Think "really identically" equal; one = is for assignment; <code>==</code> also checks for "equality" but not in the way you might expect. &nbsp;This is due to interesting&nbsp;conversions in JavaScript that are made when comparing between different types such as numbers and strings using <code>==</code>. &nbsp;For example, 0 is considered equal to the empty string so&nbsp;<code>0 == ""</code> evaluates to true, but no such conversions are made when using <code>===</code> so <code>0 === ""</code> evaluates to false.</span></span></p>
+<pre>console.log(0 === 1); // logs false
+</pre>
+<p><span style="font-size: 12pt;"><code>!==</code>: Not equal</span></p>
+<pre>console.log(0 !== 1); // logs true
+console.log(2 !== 2); // logs false
+</pre>
+<p><span style="font-size: 12pt;"><code>&lt;</code>, <code>&gt;</code>: Less than, greater than</span></p>
+<pre>console.log(2 &gt; 2); // logs false
+console.log(1 &lt; 2); // logs true
+</pre>
+<p><span style="font-size: 12pt;"><code>&lt;=</code>, <code>&gt;=</code>: Less than or equal to, greater than or equal to</span></p>
+<pre>console.log(2 &gt;= 2); // 2 &ge; 2: logs true
+console.log(5 &lt;= 2); // 5 &le; 2: logs false
+</pre>
+<p><span style="font-size: 12pt;">Here are some examples of functions that take numbers or strings as inputs and return Booleans as outputs:</span></p>
+<pre>let isItTuesday = day =&gt; day === "Tuesday"; // returns true exactly when day is Tuesday
+let isPositive = num =&gt; num &gt; 0; // returns true exactly when num is positive
+// Note: num &gt; 0 || === 0 would NOT work since === 0 alone (without the num) is incomplete;
+// Need statement that is either true or false on both sides of a binary logic operator
+let is nonNegative = num =&gt; num &gt; 0 || num === 0; // Could also use num &gt;= 0;
+</pre>
+<p><span style="font-size: 12pt;">Here are some examples where the functions above are called:</span></p>
+<pre>console.log(isItTuesday("Wednesday")); // logs false
+console.log(isItTuesday("Tuesday")); // logs true
+console.log(isPositive(0)); // logs false
+console.log(isPositive(-1.2345)); // logs false
+console.log(isPositive(3.14159)); // logs true
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.9</strong>: Implement the function <code>isNonZero</code> that returns <code>true</code> exactly when the input to it is not equal to 0.</span></p>
+<pre>let isNonZero = num =&gt; __________;
+console.log(isNonZero(0)); // logs false
+console.log(isNonZero(-4.2)); // logs true
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.10</strong>: Implement the function <code>canVote</code> that returns <code>true</code> exactly when a person of <code>age</code> years can vote in the US (i.e., when <code>age</code> is at least 18)</span></p>
+<pre>let canVote = age =&gt; __________;
+console.log(canVote(16)); // logs false
+console.log(canVote(20)); // logs true
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.11</strong>: Implement the function <code>isEven</code> that returns <code>true</code> exactly when the input to it is even.</span></p>
+<pre>let isEven = num =&gt; __________;
+console.log(isEven(18)); // logs true
+console.log(isEven(5)); // logs false
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.12</strong>: Implement the function <code>isMolloyColor</code> that takes a color as a string using only lowercase letters and returns <code>true</code> exactly when the input to it is a Molloy color (i.e., cerise or white).</span></p>
+<pre>let isMolloyColor = color =&gt; __________;
+console.log(isMolloyColor("cerise")); // logs true
+console.log(isMolloyColor("white")); // logs true
+console.log(isMolloyColor("blue")); // logs false
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.13</strong>: Implement the function <code>isOneDivisibleByOther</code> that returns <code>true</code> exactly when one of the inputs to it is divisible by the other one.</span></p>
+<pre>let isOneDivisibleByOther = (numA, numB) =&gt; __________;
+console.log(isOneDivisibleByOther(18, 9)); // logs true (18 is divisible by 9)
+console.log(isOneDivisibleByOther(1, 5)); // logs true (5 is divisible by 1)
+console.log(isOneDivisibleByOther(35, 8)); // logs false (35 is not divisible by 8 and 8 is not divisible by 35)
+</pre>
+<p><span style="font-size: 12pt;"><strong>Exercise 4.14 (Adapted from Java Concepts by Cay Horstmann)</strong>: Implement the function <code>exactlyOneZero</code> that returns <code>true</code> exactly when EXACTLY one of the inputs to it is is equal to 0 (and false otherwise).</span></p>
+<pre>let exactlyOneZero = (numA, numB) =&gt; __________;
+console.log(exactlyOneZero(0, 0)); // logs false (both are zero)
+console.log(exactlyOneZero(0, 42)); // logs true 
+console.log(exactlyOneZero(18, 0)); // logs true
+console.log(exactlyOneZero(35, 8)); // logs false (neither is zero)
+</pre>
+<p><span style="font-size: 12pt;"><strong>Note</strong>: Here the conditions <code>numA === 0</code> and <code>numB === 0</code> serve as the letters p and q as follows so you can use the same technique you did for previous exercises where you replace p with <code>numA === 0</code> and q with <code>numB === 0</code>:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">p (numA === 0)&nbsp;</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">q (numB === 0)</th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;">Output from exactlyOneZero</th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">true</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">false</td>
+</tr>
+</tbody>
+</table>
