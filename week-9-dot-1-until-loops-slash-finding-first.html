@@ -1,0 +1,51 @@
+<h3>Until Loops/Finding First</h3>
+<p><span style="font-size: 12pt;">Sometimes the number of times to repeat an operation is given by a certain condition. For example, consider the forward recursive solution to the population doubling example from before:</span></p>
+<pre>// POPULATION EXAMPLE USING FORWARD RECURSION
+let <span style="color: #003300;"><strong>popAfterYears</strong></span> = (<span style="color: #003300;"><strong>n</strong></span>, startPop) =&gt; {
+  let double = x =&gt; 2*x;
+  let makeTable = (currentYear, currentPop) =&gt; {
+    if(<strong><span style="color: #ff0000;">currentYear === n</span></strong>) return <span style="color: #0000ff;"><strong>currentPop</strong></span>;
+    else                  return makeTable(currentYear+1, double(currentPop));<br />  }<br />  return makeTable(0, startPop);
+};
+</pre>
+<p><span style="font-size: 12pt;">If we instead wanted to return the <strong>year</strong> at which the population first is equal to or surpasses targetPop, we'd change the input <code>n</code> to <code>targetPop</code> and the condition of the <code>if</code> statement accordingly and then return the <code>currentYear</code> instead of the <code>currentPop</code> as follows:</span></p>
+<pre>// POPULATION EXAMPLE USING FORWARD RECURSION
+let <span style="color: #003300;"><strong>popAtLeast</strong></span> = (<strong><span style="color: #003300;">targetPop</span></strong>, startPop) =&gt; {
+  let double = x =&gt; 2*x;
+  let makeTable = (currentYear, currentPop) =&gt; {
+    if(<span style="color: #ff0000;"><strong>currentPop &gt;= targetPop</strong></span>) return <strong><span style="color: #0000ff;">currentYear</span></strong>;
+    else                        return makeTable(currentYear+1, double(currentPop));<br />  }<br />  return makeTable(0, startPop);
+};
+</pre>
+<p><span style="font-size: 12pt;">Notice how everything else still stays the same because the table doesn't change. The only difference (besides the name of the function and the input <code>targetPop</code>) is when we want to stop, mainly when the current population is at least&nbsp;<code>targetPop</code>, and what we want to return in that case, mainly the current year number at which that happens.</span></p>
+<p><span style="font-size: 12pt;">Note also that this returns the <strong>first year</strong> for which this is true because we repeatedly try each year number starting from 0 <em>until</em> we find a year for which it's true. The year number has to be the first one for which the population is at least <code>targetPop</code> because otherwise, we would've stopped earlier.</span></p>
+<p><strong>Exercise 9.1.1 (Bank Balance)</strong>: Define a function <code>yearsUntilBalance(targetBalance, startBalance)</code>&nbsp;by forward recursion that returns the number of years it will take to have <code>targetBalance</code> in your bank account if you put in <code>startBalance</code> at a 3% annual interest rate, compounded annually? (Good luck getting that rate now!)</p>
+<pre>let nextYearBalance = currentBalance =&gt; _____________________;
+let yearsUntilBalance = (targetBalance, startBalance) =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 9.1.2 (Excel's NPER (Number of Periods) function)</strong>: Excel has an NPER function that can be used to determine the number of periods required to pay of a loan (number of periods required to get a future value of 0) or reach an investment goal (future value of desired amount). &nbsp;The syntax is <code>=NPER(rate, pmt, pv, [fv=0], [type=0])</code> where rate is the interest rate per pay period, pmt is the payment made (or collected) during each pay period, pv is the present value (or initial investment or loan amount), fv is the future value or target value (e.g., 0 for&nbsp;paying off the loan or investment goal),&nbsp;and type is 0 if the payment is made at the end of the period (after the interest is applied) or 1 if the payment is made at the beginning of the period. The arguments in brackets (fv and type) are optional and default to 0 if they're not supplied. Payments&nbsp;and&nbsp;present value are negative when you put money in and positive when you receive money. Similarly, the future value&nbsp;should be negative if you will have that much debt&nbsp;and positive if the investment is worth that amount at the conclusion of the outputted number of periods. &nbsp;</p>
+<p><span style="font-size: 12pt; color: #ff0000;">Define a function <code>nperToPayOffLoan(pv)</code> by forward&nbsp;recursion that takes the initial loan amount&nbsp;(pv) and returns the number of <span style="text-decoration: underline;">whole</span> periods required to pay off loan (future value of 0)&nbsp;by assuming a period interest rate of 0.25% (0.0025) and that you pay $100 at the end of each period. &nbsp;For this example,&nbsp;you should first<span>&nbsp;define a function </span><code>nextMonthOwed(currentAmountOwed)</code><span> like </span><code>nextYearBalance(currentBalance)</code><span>&nbsp;that returns the amount owed next month&nbsp;given the amount you still owe this month (<code>currentAmountOwed</code>) and&nbsp;use this&nbsp;in your definition of&nbsp;<code>nperToPayOffLoan</code>.</span></span></p>
+<pre>let nextMonthOwed = currentAmountOwed =&gt; ___________________________________;
+let nperToPayOffLoan = pv =&gt; {
+
+};
+</pre>
+<p>Note the answer will be what you get from =NPER(0.0025,-100,<em>pv</em>,0,0) rounded up to the nearest whole number.&nbsp;</p>
+<p><strong>Exercise 9.1.3 (Positive Integer Solution n): </strong>Define a function <code>polyIntegerSolution(val)</code> by forward recursion that returns the smallest&nbsp;positive integer n for which n<sup>4</sup> - 3n<sup>3</sup> + 7n - 4277632315517736 = val should it exist or fails to terminate if it does not. <span style="color: #ff0000;"><strong>BE CAREFUL WHEN TESTING SINCE YOU MAY HAVE TO EXIT OUT OF REPL.IT IF YOU CHOOSE A NUMBER OTHER THAN 0 FOR THE INPUT.</strong></span>&nbsp; Test it for an input of 0 (so-called integer root of polynomial n<sup>4</sup> - 3n<sup>3</sup> + 7n - 4277632315517736).</p>
+<pre>let polyIntegerSolution = val =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 9.1.4 (Binary Log)</strong>: The binary log of a positive integer n, often denoted lg(n) is the exponent that 2 can be raised to get n. &nbsp;For example, lg(8) = 3 since 2<sup>3</sup> = 8 while lg(1024) = 10 since&nbsp;2<sup>10</sup> = 1024. Define a function&nbsp; <code>lg(n)</code> by forward recursion that returns the binary log of n for positive integers <code>n</code> that are powers of two. Again, be sure to test with powers of two to avoid potentially crashing repl.it.</p>
+<pre>let lg = n =&gt; {
+
+};
+</pre>
+<p><strong>Exercise 9.1.5 (First Vowel)</strong>: Define a function <code>firstVowel(word)</code> by forward recursion that takes a word in all lowercase letters and returns the first letter that's an 'a', 'e', 'i', 'o', or 'u'. <strong>Hint: Consider trying each index starting from 0 until you find a vowel.</strong>&nbsp;</p>
+<pre>let firstVowel = word =&gt; {
+
+};
+</pre>
+<p><strong>Question</strong>: Why use forward recursion for each of these function definitions instead of backward recursion?</p>
