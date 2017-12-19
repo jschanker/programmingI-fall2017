@@ -1,0 +1,281 @@
+<h2>Higher-order functions</h2>
+<p>Many of the problems we've studied to this point have solutions that fit&nbsp;a certain pattern. &nbsp;</p>
+<h3>Functional Powers (<a title="Week 6: Repetition and Functional Powers using Backward Recursion" href="https://molloy.instructure.com/courses/8279/pages/week-6-repetition-and-functional-powers-using-backward-recursion" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-6-repetition-and-functional-powers-using-backward-recursion" data-api-returntype="Page">Week 6: Repetition and Functional Powers using Backward Recursion</a>)</h3>
+<p>For example, consider the problems in which we started with an initial value seed and repeatedly applied a function a certain number of times to get our answer. The template for finding the <code>n</code><sup>th</sup> functional power of&nbsp;<code>f</code>&nbsp;evaluated on some starting input <code>seed</code>&nbsp;as introduced&nbsp;in <a title="Week 6: Repetition and Functional Powers using Backward Recursion" href="https://molloy.instructure.com/courses/8279/pages/week-6-repetition-and-functional-powers-using-backward-recursion" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-6-repetition-and-functional-powers-using-backward-recursion" data-api-returntype="Page">Week 6: Repetition and Functional Powers using Backward Recursion</a>&nbsp;was as follows:</p>
+<pre>let functionalPowerOfF = (n, seed) =&gt; {
+  if(n === 0) return seed;
+  else        return f(functionalPowerOfF(n-1, seed));
+};</pre>
+<p>Or by forward recursion as follows:</p>
+<pre>// POPULATION EXAMPLE USING BACKWARD RECURSION
+let functionalPowerOfF = (n, seed) =&gt; {
+  let makeTable = (m, mthFunctionalPowerOfFEvaluatedAtSeed) =&gt; {
+    if(m === n) return mthFunctionalPowerOfFEvaluatedAtSeed;
+    else        return makeTable(m+1, f(mthFunctionalPowerOfFEvaluatedAtSeed));
+  };
+  return makeTable(0, seed)
+};</pre>
+<p>As a concrete instance, we could consider <code>f = double</code> in our population doubling example where <code>seed</code> was our starting population :</p>
+<pre>// POPULATION EXAMPLE USING BACKWARD RECURSION
+let popAfterYears = (years, startPop) =&gt; {
+  let double = currentPop =&gt; 2*currentPop;
+  if(years === 0) return startPop;
+  else        return double(popAfterYears(n-1, startPop));
+};
+console.log(popAfterYears(3, 100)); // popAfterYears(popAfterYears(popAfterYears(100)))
+</pre>
+<p>If we instead wanted to define the <code>n</code><sup>th</sup> functional power of <code>appendExclamationPoint</code>, which adds an exclamation point to the end of its inputted string s, it'd seem that we'd have to define an entirely new function even though the only essential difference between this one and the previous one is the <code>f</code> we take the functional power of:</p>
+<pre>// APPENDING n EXCLAMATION POINTS USING BACKWARD RECURSION
+let appendExclamationPoints = (n, s) =&gt; {
+  let appendExclamationPoint = currentS =&gt; currentS + "!";
+  if(n === 0) return s;
+  else        return appendExclamationPoint(appendExclamationPoints(n-1, s));
+};
+console.log(appendExclamationPoints(3, "hey")); // appendExclamationPoint(appendExclamationPoint(appendExclamationPoint("hey"))))
+</pre>
+<p>This seems quite to violate an important programming principle (DRY - Don't Repeat Yourself). This principle is important to follow since if you made a mistake or some change was required to the implementation (say from backward recursion to forward recursion), you'd have to remember to change it in multiple places instead of one.</p>
+<p>What if we could somehow pass the function that we wanted to take a functional power of as an additional argument as follows:</p>
+<pre>let functionalPowerOf = (f, n, seed) =&gt; {
+  if(n === 0) return seed;
+  else        return f(functionalPowerOf(f, n-1, seed));
+};</pre>
+<p>So that our population doubling and appending exclamation points functions could be implemented so as to avoid the repetition of this common code:</p>
+<pre>let popAfterYears = (years, startPop) =&gt; {
+  let double = currentPop =&gt; 2*currentPop;
+  return functionalPowerOf(double, years, startPop);
+};
+let appendExclamationPoints = (n, s) =&gt; {
+  let appendExclamationPoint = currentS =&gt; currentS + "!";
+  return functionalPowerOf(appendExclamationPoint, n, s);
+};
+</pre>
+<p>In fact, both of these definitions are legal in JavaScript since functions are first-class citizens in the language. This means they can be assigned to variables (as we've done many times, e.g., <code>let popAfterYears =</code> ), but it also means that they can be passed as arguments to functions and returned from functions as well. This allows us to reuse code at a higher level; that is instead of just being able to reuse the code of a single-purpose conventional function, we can reuse a coding pattern that allows us to create infinitely many different functions.</p>
+<p>In the examples above, we defined functions&nbsp;<code>double</code> and <code>appendExclamationPoint</code>, which could only be accessed in the functions <code>popAfterYears</code> and <code>appendExclamationPoints</code>, respectively, and were only referenced once. In cases where we use one-time "throwaway" functions like this, it may be preferable to pass the function body itself without giving these functions a name as follows:</p>
+<pre>let popAfterYears = (years, startPop) =&gt; {
+  return functionalPowerOf(<strong>currentPop =&gt; 2*currentPop</strong>, years, startPop);
+};
+let appendExclamationPoints = (n, s) =&gt; {
+  return functionalPowerOf(<strong>currentS =&gt; currentS + "!"</strong>, n, s);
+};
+</pre>
+<p>Functions without a name such as the ones appearing in bold above, are known as <span style="color: #ff0000;"><strong>anonymous functions</strong></span>.</p>
+<p>Since the bodies of the functional powers now only have one line, we can shorten them as follows:</p>
+<pre>let popAfterYears = (years, startPop) =&gt; functionalPowerOf(currentPop =&gt; 2*currentPop, years, startPop);
+let appendExclamationPoints = (n, s) =&gt; functionalPowerOf(currentS =&gt; currentS + "!", n, s);
+</pre>
+<p><strong>Exercises 14.1 - 14.6</strong>: Complete the Exercises from <a title="Week 6: Repetition and Functional Powers using Backward Recursion" href="https://molloy.instructure.com/courses/8279/pages/week-6-repetition-and-functional-powers-using-backward-recursion" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-6-repetition-and-functional-powers-using-backward-recursion" data-api-returntype="Page">Week 6: Repetition and Functional Powers using Backward Recursion</a> using the higher-order function <code>functionalPowerOf</code>. &nbsp;This time, we'll make some of them slightly more general by adding variables. &nbsp;They're reproduced with these modifications in brief below:</p>
+<p><span><strong>Exercise 14.1 (Bank balance after n years)</strong>: Define </span><code>balanceAfterYears(n, startBalance, rate)</code><span>&nbsp;as a functional power of </span><code>nextYearBalance(currentBalance)</code><span> so that it returns the bank balance the person will have after n years given that he/she has an initial balance of </span><code>startBalance</code><span>, in which the interest rate of <strong><em>rate</em></strong>% is compounded annually.</span></p>
+<p><span><strong>Exercise 14.2 (Tetration)</strong>:&nbsp;Define a function <code>exponentiationTower(n, b)</code>&nbsp;as a functional power of&nbsp;<code>exp(currentVal)</code>&nbsp;with base b that returns an "exponentiation tower" of n b's; e.g.,&nbsp;<code>exponentiationTower(3, 2)</code> should return 2<sup>2<sup>2</sup></sup>.</span></p>
+<p><strong>Exercise 14.3 (Remaining On Loan)</strong>:&nbsp;<span>Define a function </span><code>remainingOnLoan(rate, nper, pmt, pv)</code><span>&nbsp;as a functional power of <code>nextPeriodOwed</code>&nbsp;that takes a number of periods (nper) and the initial loan amount&nbsp;(pv) and returns the amount you still owe (as a positive number) after nper periods has gone by assuming a period interest rate of rate%&nbsp;and that you pay pmt&nbsp;at the end of each period.</span></p>
+<p><span><strong>Exercise 14.4 (Babylonian Method for Approximating Square Root)</strong>: Define a function <code>sqrt(n, x)</code>&nbsp;as a&nbsp;functional power of&nbsp;<code>avg(currentGuess)</code> that returns&nbsp;the average of currentGuess&nbsp;and x/currentGuess, evaluated at&nbsp;an initial value (guess) of (x+1)/2.</span></p>
+<p><span><strong>Exercise 14.5 (Shift Right n places)</strong>:&nbsp;Define a function <code>shiftRight(n, num)</code> that takes an integer num and a nonnegative integer&nbsp;<code>n</code>, and&nbsp;moves the decimal point n places to the left and returns the integer portion,&nbsp;thereby shifting the&nbsp;columns of the number&nbsp;right&nbsp;<code>n</code>&nbsp;places, dropping any digits that move to the right of the&nbsp;decimal point as a functional power of&nbsp;<code>shiftRight1(currentNum)</code> which takes an integer and moves the decimal place one to the left and then returns the integer portion.</span></p>
+<p><strong>Exercise 14.6 (Remove first n items from string)</strong>:&nbsp;<span>Define a function </span><code>removeFirstItems(num, s)</code><span> that takes a nonnegative&nbsp;integer num and a string&nbsp;</span><code>s</code><span> of at least </span><code>num</code><span> items, separated by commas, and removes the first </span><code>num</code><span> items. For example,</span><code>removeFirstItems(3,"apple,banana,orange,pear,pizza,pasta,milk")</code><span> evaluates to "pear,pizza,pasta,milk". &nbsp;The function should be a functional power of </span><code>removeFirstItem</code><span> that takes a list of items and removes the first one.</span></p>
+<h3><span>Repeat Until Loops/Finding First (<a title="Week 9.1 Until Loops/Finding First" href="https://molloy.instructure.com/courses/8279/pages/week-9-dot-1-until-loops-slash-finding-first" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-9-dot-1-until-loops-slash-finding-first" data-api-returntype="Page">Week 9.1 Until Loops/Finding First</a>)</span></h3>
+<p><span>Sometimes the number of times to repeatedly apply a function <code>f</code>&nbsp;is given by some condition <code>condition</code>, and we are looking for the&nbsp;smallest integer n (greater than or equal to 0) for which the <code>n</code><sup>th</sup> functional power of <code>f</code> evaluated at some starting value <code>seed</code>, meets the condition. &nbsp;In such cases, we can repeatedly apply the function <code>f</code> until we meet the condition, counting the number of times we do so. Let's consider the solutions to two such cases that are variations of the previous problems (years until we reach or exceed a target population when the population doubles every year) or a more artificial example of determining the number of exclamation points we need to add before the string is at least 10 characters in length (will be more than 10 if the starting string is more than 10 characters).</span></p>
+<pre>let popAtLeast = (targetPop, startPop) =&gt; {
+  let makeTable = (currentYear, popAtCurrentYear) =&gt; {
+    let double = <strong><span style="color: #0000ff;">currentPop =&gt; 2*currentPop</span></strong>;
+    if(<strong><span style="color: #ff0000;">popAtCurrentYear &gt;= targetPop</span></strong>) return currentYear;
+    else return makeTable(currentYear+1, double(popAtCurrentYear));
+  };
+  return makeTable(0, startPop);
+};
+
+let appendExclamationPointsUntilLengthOf10 = s =&gt; {
+  let makeTable = (n, sWithNExclamationPointsAdded) =&gt; {
+    let appendExclamationPoint = <span style="color: #0000ff;"><strong>currentS =&gt; currentS + "!"</strong></span>;
+    if(<strong><span style="color: #ff0000;">sWithNExclamationPointsAdded.length &gt;= 10</span></strong>) return n;
+    else return makeTable(n+1, appendExclamationPoint(sWithNExclamationPointsAdded));
+  };
+  return makeTable(0, s);
+};
+</pre>
+<p><span>As noted above, the essential differences between these two function definitions is the condition we check to stop and the function f that we repeatedly apply until it's met. &nbsp;As such,&nbsp;the template for this function can be expressed using forward recursion as follows:</span></p>
+<pre>let functionalPowerUntil = (f, conditionFunc, seed) =&gt; {
+  let makeTable = (m, mthFunctionalPowerOfFEvaluatedAtSeed) =&gt; {
+    if(conditionFunc(mthFunctionalPowerOfFEvaluatedAtSeed)) return m;
+    else return makeTable(m+1, f(mthFunctionalPowerOfFEvaluatedAtSeed));
+  };
+  return makeTable(0, seed);
+};
+</pre>
+<p>Note that this function has two parameter variables referencing functions, one for <code>f</code> and one for the condition to stop (<code>conditionFunc</code>), that replaces the number <code>n</code> indicating the number of times to perform the operation. &nbsp;Using&nbsp;<code>functionalPowerUntil</code>, you could express the above functions as follows:</p>
+<pre>let popAtLeast = (targetPop, startPop) =&gt; functionalPowerUntil(<strong><span style="color: #0000ff;">currentPop =&gt; 2*currentPop</span></strong>, <span style="color: #ff0000;"><strong>popAtCurrentYear =&gt; popAtCurrentYear &gt;= targetPop</strong></span>, startPop);
+let appendExclamationPointsUntilLengthOf10  = s =&gt; functionalPowerUntil(<span style="color: #0000ff;"><strong>currentS =&gt; currentS + "!"</strong></span>, <span style="color: #ff0000;"><strong>sWithNExclamationPointsAdded =&gt; sWithNExclamationPointsAdded.length &gt;= 10</strong></span>, s);
+</pre>
+<p>Note that we duplicated the body of the function definition f&nbsp;in <span style="color: #0000ff;"><strong>blue</strong></span> and created a function from the condition in <span style="color: #ff0000;"><strong>red</strong></span>. &nbsp;Although we used the same variable&nbsp;names&nbsp;in doing so, any variable names will suffice. &nbsp;It is important to note however, that the condition <span style="color: #ff0000;"><strong>MUST BE A BOOLEAN <span style="text-decoration: underline;">FUNCTION</span></strong></span>, *not* a Boolean. &nbsp;For example, if we used <code><span style="color: #ff0000;"><strong>sWithNExclamationPointsAdded.length &gt;= 10</strong></span></code> alone, we'd get an error that <code>sWithNExclamationPointsAdded.length</code> is not defined and if we used <code>s.length &gt;= 10</code>, then we'd be assigning <code>conditionFunc</code> to &nbsp;<code>true</code> or <code>false</code>, depending on whether the length of <code>s</code> is at least 10 or not, resulting in an error that <code>conditionFunc</code> is not a function when trying to evaluate <code>conditionFunc(mthFunctionalPowerOfFEvaluatedAtSeed)</code> in the if statement of <code>functionalPowerUntil</code>.</p>
+<p>You can now complete Exercises 9.1, 9.2, and 9.4 using <code>functionalPowerUntil</code>.</p>
+<p><span><strong>Exercise 14.7 (Years until target balance)</strong>: Define a function <code>yearsUntilBalance(targetBalance, startBalance, rate)</code></span> using <code>functionalPowerUntil</code>&nbsp;that returns the number of years it will take to have <code>targetBalance</code> in your bank account if you put in <code>startBalance</code> at a <code>rate</code>% annual interest rate, compounded annually.</p>
+<p><span><strong>Exercise 14.8 (Number of Periods until pay off loan)</strong>: Define a&nbsp;function <code>nperToPayOffLoan(rate, pmt, pv)</code></span><span>&nbsp;using </span><code>functionalPowerUntil</code><span>&nbsp;that returns the number of whole&nbsp;periods&nbsp;it will take to pay off a loan of&nbsp;</span><code>pv</code><span>&nbsp;if you pay&nbsp;</span><code>pmt</code><span>&nbsp;at the end of each pay period, with&nbsp;a </span><code>rate</code><span>% interest rate, compounded at the end of each pay period.</span></p>
+<p><strong>Exercise 14.9&nbsp;(Binary Log)</strong><span>:&nbsp;Define a&nbsp;function <code>lg(n)</code>&nbsp;using <code>functionalPowerUntil</code>&nbsp;that returns the binary log of an <code>n</code> that's a power of two (1, 2, 4, 8, 16, 32, etc.) by determining the number of times you need to <code>double</code> the initial value of 1 in order to get <code>n</code>.</span></p>
+<p><span>Alternatively, we may be looking for the smallest&nbsp;integer&nbsp;greater than or equal to some starting value that meets a certain condition. &nbsp;As before, the strategy is to maintain some counter that&nbsp;counts up by ones, but this time, we don't necessarily start the counter at 0. Also, we don't need to provide a function <code>f</code> or maintain an additional value representing the repeated application of <code>f</code> to an initial seed. Instead, we can repeatedly pass the current count, <code>m</code> directly to the condition function to check if it's met, starting at <code>m = start</code> and augmenting <code>m</code> by 1 as necessary until it is as follows:</span></p>
+<pre>let findSmallest = (conditionFunc, start) =&gt; {
+  let makeTable = currentM =&gt; {
+    if(conditionFunc(currentM)) return currentM;
+    else return makeTable(currentM+1);
+  };
+  return makeTable(start);
+}; 
+</pre>
+<p><strong>Example (years until population that doubles every year reaches or exceeds target)</strong>: Although highly inefficient since we repeatedly recalculate the population starting from the initial population, we could define the aforementioned function <code>popAtLeast(targetPop, startPop)</code> by finding the the smallest <code>y</code> such that <code>popAfterYears(y, startPop) &gt;= targetPop</code> as follows (first by forward recursion; then by using <code>findSmallest</code>):</p>
+<pre>let popAtLeastRecursion = (targetPop, startPop) =&gt; {
+  let makeTable = currentYear =&gt; {
+    if(<span style="color: #ff0000;"><strong>popAfterYears(currentYear, startPop) &gt;= targetPop</strong></span>) return currentYear;
+    else return makeTable(currentYear+1);
+  };
+  return makeTable(0);
+};
+let popAtLeastFindSmallest = (targetPop, startPop) =&gt; findSmallest(currentYear =&gt; <span style="color: #ff0000;"><strong>popAfterYears(currentYear, startPop) &gt;= targetPop</strong></span>, 0);
+</pre>
+<p>This is very inefficient because, if say, after calculating the population after 9 years via <code>popAfterYears(9, startPop)</code>, which will call <code>double</code> 9 times on the input <code>startPop</code>, it's determined that this will <strong>not</strong>&nbsp;be at least <code>targetPop</code>, then rather than doubling this population number to see if it's at least <code>targetPop</code> after 10 years, it will again call <code>popAfterYears</code>, this time with the inputs 10 and <code>startPop</code> so that it winds up calling <code>double</code> an additional 10 times on the input <code>startPop</code>.&nbsp;</p>
+<p><strong>Exercise 14.10 (Inefficient yearsUntilBalance)</strong>: Using <code>balanceAfterYears(n, startBalance, rate)</code> that you defined in Exercise 14.1, redefine the function <code>yearsUntilBalance(targetBalance, startBalance, rate)</code> (inefficiently) using <code>findSmallest</code>.</p>
+<p><strong>Exercise 14.11 (smallest positive nontrivial factor)</strong>: Define a function <code>smallestPositiveNontrivialFactor(num)</code> that for an integer <code>num &gt; 1</code> (or <code>num &lt; -1</code>) returns the smallest integer d &gt; 1 that's a factor of <code>num</code>:</p>
+<p><strong>Exercise 14.12 (first root)</strong>: Define a function <code>smallestPositiveIntegerRoot(a, b, c, d, e)</code> that returns the smallest integer x&nbsp;&gt; 1 such that <code>ax<sup>4</sup> + bx<sup>3</sup> + cx<sup>2</sup> + dx + e = 0</code>. Test it with <code>smallestPositiveIntegerRoot(1, -3, 0, 7, -4277632315517736)</code>.</p>
+<p><strong>Exercise 14.13 (first vowel)</strong><span>:&nbsp;Define a function <code>firstIndexOfVowel(word)</code> by that takes a word in all lowercase letters and returns the <strong>index of the first letter</strong> that's an 'a', 'e', 'i', 'o', or 'u'. &nbsp;Then use it to define&nbsp;<code>firstVowel(word)</code> that takes a word in all lowercase letters and returns the first letter that's an 'a', 'e', 'i', 'o', or 'u'.</span></p>
+<h3><span>Built-in list methods&nbsp;in JavaScript: Finding First Item In List</span></h3>
+<p>Some higher-order functions on lists are built into the JavaScript language. &nbsp;You can find these functions here:&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Iteration_methods">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#Iteration_methods</a>&nbsp;.&nbsp;</p>
+<p>When trying to find the first element in a list that meets a certain condition as described in <a title="Week 9.2 Repeat for every item in Array, find first item in Array" href="https://molloy.instructure.com/courses/8279/pages/week-9-dot-2-repeat-for-every-item-in-array-find-first-item-in-array" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-9-dot-2-repeat-for-every-item-in-array-find-first-item-in-array" data-api-returntype="Page">Week 9.2 Repeat for every item in Array, find first item in Array</a>&nbsp;(should it exist), you can use the Array's find method:&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find</a>&nbsp;and to get the first index of the item meeting the condition (should it exist), you can use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex</a> &nbsp;. You can also use these functions on strings by first converting them to arrays using <code>Array.from</code>.</p>
+<p><strong>Example</strong> (index of first vowel and first vowel using <code>findIndex</code> and <code>find</code>):</p>
+<pre>let isVowel = letter =&gt; letter === 'a' || letter === 'e' || letter === 'i' || letter === 'o' || letter === 'u';
+let firstVowel = word =&gt; Array.from(word).find(isVowel);
+let firstIndexOfVowel = word =&gt; Array.from(word).findIndex(isVowel);
+</pre>
+<p>You can now redo Exercises 9.2.2 - 9.2.4 from <a title="Week 9.2 Repeat for every item in Array, find first item in Array" href="https://molloy.instructure.com/courses/8279/pages/week-9-dot-2-repeat-for-every-item-in-array-find-first-item-in-array" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-9-dot-2-repeat-for-every-item-in-array-find-first-item-in-array" data-api-returntype="Page">Week 9.2 Repeat for every item in Array, find first item in Array</a>&nbsp;using &nbsp;the built-in <code>find</code> method on Arrays.</p>
+<p><strong>Exercise 14.14</strong><span>:&nbsp;</span><span>Define a function&nbsp;</span><code>firstOddInList(numList)</code><span>&nbsp;by that returns the first odd number in </span><code>numList</code><span> using the Array's find method.</span></p>
+<p><span><strong>Exercise 14.15</strong>:&nbsp;Define a function&nbsp;<code>firstValidScoreInList(numList)</code>&nbsp;byusing the Array's find method that returns the first score in&nbsp;<code>numList</code> that represents a valid test score out of 100 points (i.e., that's between 0 and 100, inclusively).</span></p>
+<p><span><strong>Exercise 14.16 (LOOKUP)</strong>: Implement a function&nbsp;<code>lookup(lookupKeyNum, keyNumList, valueList)</code> using the Array's <code>findIndex</code> method that returns <code>valueList[index-1]</code>&nbsp; where <code>index</code> is the first index for which <code>keyNumList[index] &gt; lookupKeyNum</code></span>. <strong>Hint</strong>: Use <code>findIndex</code> to get the corresponding index in <code>valueList</code> that you should use, noting that it returns -1 when the condition isn't met for any item in the array.</p>
+<h3><span>Built-in list methods&nbsp;in JavaScript:&nbsp;Repeat for Every Item In Array</span></h3>
+<p><span>In cases in which we want to repeatedly apply a&nbsp;function <code>f</code> &nbsp;to&nbsp;every item in the list, repeatedly updating an accumulator, as we do when we take a sum of all of the numbers in an Array, we have the following:</span></p>
+<pre>let funcName = itemList =&gt; {<br />   let f = (acc, item) =&gt; _________________________;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === itemList.length-1) return acc;<br />     else return makeTable(index+1, f(acc, itemList[index+1]));<br />   };
+   return makeTable(0, itemList[0]);
+};</pre>
+<p><span>As an example of this type of problem, we can consider the sum of the numbers in the Array <code>numList</code>:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">index</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">acc (accumulator: sumSoFar)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>0</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>numList[0]</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[0] + numList[1]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[0] + numList[1] + numList[2]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>numList[0] + numList[1] + numList[2] +&nbsp;</span>numList[3]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>numList[0] + numList[1] + numList[2] +&nbsp;</span><span>numList[3] +&nbsp;</span>numList[4]</td>
+</tr>
+</tbody>
+</table>
+<p>A solution to this problem could be as follows:</p>
+<pre>let sum = numList =&gt; {<br />   let <span style="color: #ff0000;"><strong>add2 = (acc, num) =&gt; acc + num</strong></span>;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === numList.length-1) return acc;<br />     else return makeTable(index+1, <span style="color: #ff0000;"><strong>add2(acc, numList[index+1])</strong></span>);<br />   };
+   return makeTable(0, numList[0]);
+};</pre>
+<p>Alternatively, we may want to provide an initial accumulator, in which case the setup could be as follows:</p>
+<pre>let funcName = (itemList, initialValue) =&gt; {<br />   let f = (acc, item) =&gt; _________________________;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === itemList.length-1) return acc;<br />     else return makeTable(index+1, f(acc, itemList[index+1]));<br />   };
+   return makeTable(-1, initialValue);
+};</pre>
+<p>And for our specific sum example in which we'd start the sum at 0:</p>
+<pre>let sum = numList =&gt; {<br />   let <span style="color: #ff0000;"><strong>add2 = (acc, num) =&gt; acc + num</strong></span>;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === numList.length-1) return acc;<br />     else return makeTable(index+1, <span style="color: #ff0000;"><strong>add2(acc, numList[index+1])</strong></span>);<br />   };
+   return makeTable(-1, <span style="color: #0000ff;"><strong>0</strong></span>);
+};</pre>
+<p>However, as with&nbsp;<code>find</code>, JavaScript has a built-in Array method for this type of setup called <code>reduce</code>. To apply the function f to every item in an Array <code>itemList</code>, you'd enter <code>itemList.reduce(f)</code> or <code>itemList.reduce(f, initialValue)</code>, depending on whether you want to start the accumulator at the first item in the list and calling <code>f(itemList[0], itemList[1])</code> or if you want to start the accumulator at <code>initialValue</code> and first call <code>f(initialValue, itemList[0])</code>. The two implementations of <code>sum</code> using reduce would be as follows:</p>
+<pre>let sumNoInitialValue = itemList =&gt; itemList.reduce((acc, num) =&gt; acc + num);
+let sumWithInitialValue = itemList =&gt; itemList.reduce((acc, num) =&gt; acc + num, 0);
+</pre>
+<p>Note that the function that is passed actually gets called with 4 arguments in this order, the accumulator, the item in the array, the index, and a reference to the Array itself. However, JavaScript is flexible in the number of arguments that a function can accept so it's possible to pass 4 arguments even when your function is only defined to accept 2. In the sum example above, the index and the Array that are passed are simply ignored.</p>
+<p>You can now re-do Exercises 9.2.5 - 9.2.8 using <code>reduce</code>.</p>
+<p><strong>Exercise 14.17 (Product of numbers in list)</strong>: Define a function <code>productOfNumbersInList(numList)</code> using <code>reduce</code> that returns the product of the numbers in <code>numList</code>.</p>
+<p><strong>Exercise 14.18 (Minimum of numbers in list)</strong>: Define a function <code>minimumOfNumbersInList(numList)</code> using <code>reduce</code> that returns the minimum of the numbers in <code>numList</code>. Note: You can<em>NOT</em> use <code>Math.min</code> here because <code>Math.min</code> can take as many arguments as you give it. This means that the additional two arguments of the index that is passed and the Array itself will <em>not</em> be ignored, resulting in <code>NaN</code> for any Array of more than one number.</p>
+<p><strong>Exercise 14.19 (Count of items in list)</strong>: Define a function <code>countOfItemsInList(itemList)</code> using <code>reduce</code> that returns the count of the items in <code>itemList</code> without using the Array's <code>length</code> property.</p>
+<p><strong>Exercise 14.20 (Reverse a list)</strong>:&nbsp;<span>Define a function&nbsp;</span><code>reverse(itemList)</code><span> using <code>reduce</code> that returns </span><code>itemList</code><span> in reverse. Obviously, do this without using the built-in </span><code>reverse</code><span> method of Arrays. </span><strong>Hint</strong><span>: Start with an empty list and repeatedly call </span><code>concat</code><span> on the list you've built up and a list of one number, mainly the current one. Order is important here. As examples of the usage of </span><code>concat</code><span> (</span><code>[1,2].concat([3])</code><span> is the list&nbsp;</span><code>[1,2,3]</code><span> whereas </span><code>[1,2].concat([3,4,5])</code><span> is the list </span><code>[1,2,3,4,5]</code><span>)</span></p>
+<p>You can also complete <a title="Week 10. Recursion with Conditional Steps/Multiple Stopping Cases" href="https://molloy.instructure.com/courses/8279/pages/week-10-recursion-with-conditional-steps-slash-multiple-stopping-cases" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-10-recursion-with-conditional-steps-slash-multiple-stopping-cases" data-api-returntype="Page">Exercises 10.1 - 10.4</a> using <code>reduce</code>:</p>
+<p><strong>Exercise 14.20 (Product of positives&nbsp;in list):&nbsp;</strong>Using the Array's&nbsp;<code>reduce</code>&nbsp;method, define a function that returns the product of the positives in the array.&nbsp; Call this function <code>productOfPositives</code></p>
+<pre>let productOfPositives = numList =&gt; {
+
+};</pre>
+<p><strong>Exercise 14.21&nbsp;(Count of positives):&nbsp;</strong>Using the Array's&nbsp;<code>reduce</code>&nbsp;method<strong><span>,</span></strong>&nbsp;define a function to return the count of the number of the positives in the array. Call this function <code>countOfPositives</code></p>
+<pre>let countOfPositives = numList =&gt; {
+
+};</pre>
+<p><strong>Exercise 14.22 (Minimum of list):&nbsp;</strong>Using the Array's&nbsp;<code>reduce</code>&nbsp;method<strong><span>,</span></strong>&nbsp;define a function to return the&nbsp;<span>minimum of all of the numbers in the Array</span>. &nbsp;As before, do <strong>NOT</strong>&nbsp;pass <code>Math.min</code>. Call this function <code>min</code></p>
+<pre>let min = numList =&gt; {
+
+};</pre>
+<p>You can also use the Array's&nbsp;<code>reduce</code><span>&nbsp;method</span>&nbsp;on strings by first converting them to arrays using <code>Array.from</code>.</p>
+<p><strong>Exercise 14.23 (Total number of spaces and tabs in string)</strong>:<span>Using the Array's&nbsp;</span><code>reduce</code><span>&nbsp;method</span><strong><span>,</span></strong><span>&nbsp;d</span>efine a&nbsp;function <code>totalSpacesAndTabs(s)</code> that returns the total number of spaces and tabs in <code>s</code>. &nbsp;Note to determine whether the value of a variable&nbsp;<code>foo</code> is&nbsp;a tab, use <code>foo === "\t"</code>. Call this function&nbsp;<code>countOfWhitespace</code></p>
+<h3>Every/Some methods on Arrays</h3>
+<p>There are a number of instances in which we want to know if there exists at least one item&nbsp;in an Array with a certain property without necessarily being concerned with what that item is. Similarly, we may also want to know if all of the items in the list have that property. &nbsp;Since the built-in <code>findIndex</code> method of Arrays returns -1 when it doesn't find an item list in the property using the built-in <code>findIndex</code> method of Arrays, we can implement <code>existsPositiveInList</code> or <code>allPositiveInList</code> as follows:</p>
+<pre>let existsPositiveInList = numList =&gt; itemList.findIndex(x =&gt; x &gt; 0) !== -1
+let allPositiveInList = numList =&gt; itemList.findIndex(x =&gt; !(x &gt; 0)) === -1
+</pre>
+<p>I.e., There exists a positive <code>x</code> in the list when <code>findIndex</code> returns some nonnegative index for which <code>x &gt; 0</code>. On the other hand, if we want to make sure that all numbers are positive in the list, this means that there does <em>not</em> exist a number <code>x &gt; 0</code> that's <em>not</em> positive so <code>findIndex</code> should return -1 when looking for an <code>x</code> that is not greater than 0. Although this works, JavaScript has built-in Array methods for this purpose, <code>some</code> and <code>every</code>, respectively so we could rewrite these functions more naturally as follows:</p>
+<pre>let existsPositiveInList = numList =&gt; itemList.some(x =&gt; x &gt; 0);
+let allPositiveInList = numList =&gt; itemList.every(x =&gt; x &gt; 0);
+</pre>
+<p>As with other higher-order methods on Arrays, we could implement these functions using recursion to see a possibility for what's going on "under the hood"</p>
+<pre>let existsPositiveInList = numList =&gt; {
+  let makeTable = (index, num) =&gt; {
+    if(<strong>num &gt; 0</strong>) return true; // found positive
+    else if(index === numList.length - 1) return false; // reached end of list without finding one
+    else return makeTable(index+1, numList[index+1]);
+  };
+  return makeTable(0, numList[0]); // needs at least one number
+};
+
+let allPositiveInList = numList =&gt; {
+  let makeTable = (index, num) =&gt; {
+    if(!(<strong>num &gt; 0</strong>)) return false; // found number that's not positive
+    else if(index === numList.length - 1) return true; // reached end of list; all positive
+    else return makeTable(index+1, numList[index+1]);
+  };
+  return makeTable(0, numList[0]); // needs at least one number
+};
+</pre>
+<p>Alternatively, we could use this to find if there exists a word whose first letter is a capital "A" in the list or if all words in a list start with a capital "A" and the functions would look almost identical to the corresponding ones above minus the condition we're checking for and some changes to variable names and comments:</p>
+<pre>let existsWordStartingWithAInList = wordList =&gt; {
+  let makeTable = (index, word) =&gt; {
+    if(<strong>word.charAt(0) === 'A'</strong>) return true; // found word starting with 'A'
+    else if(index === wordList.length - 1) return false; // reached end of list without finding one
+    else return makeTable(index+1, wordList[index+1]);
+  };
+  return makeTable(0, wordList[0]); // needs at least one word
+};
+
+let allPositiveInList = wordList =&gt; {
+  let makeTable = (index, num) =&gt; {
+    if(!(<strong>word.charAt(0) === 'A'</strong>)) return false; // found word starting with 'A'
+    else if(index === wordList.length - 1) return true; // reached end of list; all words start with 'A'
+    else return makeTable(index+1, wordList[index+1]);
+  };
+  return makeTable(0, wordList[0]); // needs at least one word
+</pre>
+<p>As before, this allows for the definition of a higher-order function that takes an Array (passed implicitly) and the condition function, passed to <code>some</code> or <code>every</code>.</p>
+<p>You can now redo <a title="Week 10. Recursion with Conditional Steps/Multiple Stopping Cases" href="https://molloy.instructure.com/courses/8279/pages/week-10-recursion-with-conditional-steps-slash-multiple-stopping-cases" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-10-recursion-with-conditional-steps-slash-multiple-stopping-cases" data-api-returntype="Page">Exercises 10.8 - 10.9 and 10.12 - 10.13</a>&nbsp;using <code>some</code> and <code>every</code>:</p>
+<p><strong>Exercise 14.24 (Has Opposite): </strong>Define a function <code>hasOpposite(numList, x)</code> by using the Array's<span>&nbsp;</span><code>some</code><span> </span> method&nbsp;that takes a number <code>x</code>&nbsp;and returns <code>true&nbsp;</code>exactly when <code>-x</code> appears in the list <code>numList</code> and <code>false</code> otherwise.</p>
+<pre>let hasOpposite = (numList, x) =&gt; _______________________________________;
+</pre>
+<p><strong>Exercise 14.25 (All Items Have Opposite): </strong>Define a function <code>allHaveOppositeInList(numList)</code> <span>by using the Array's</span><span>&nbsp;</span><code>every</code><span> </span><span>method</span> that returns <code>true&nbsp;</code>exactly when <strong>all</strong> numbers&nbsp;<code>x</code> appearing in the list <code>numList</code>&nbsp;have an opposite appearing in the list and <code>false</code> otherwise. &nbsp;You may call&nbsp;<code>hasOpposite(numList, x)</code>. Example: <code>hasAllOpposites([1,5,-2,-1,-5,2,0])</code> should be <code>true</code> (0 is its own opposite) while&nbsp;<code>hasAllOpposites([1,-2,-1,-5,2,0])</code> should be <code>false</code> since -5 has no opposite in the list.</p>
+<pre>let allHaveOpposites = numList =&gt; _____________________________;</pre>
+<p><strong>Exercise 14.26 (AND): </strong>Excel has an <code>AND</code> function that takes a variable number of arguments and returns <code>true</code> exactly when ALL of them are <code>true</code> and <code>false</code> otherwise (Examples: =AND(true,true,true,false) would be false while =AND(true, 1 &gt; 0, true, true, 2 &lt; 5) would be true).</p>
+<p>Define a function <code>and(boolList)</code> <span>by using the Array's</span><span>&nbsp;</span><code>every</code><span> </span><span>method</span> that returns <code>true</code> exactly when&nbsp;every Boolean in <code>boolList</code>&nbsp;is true and <code>false&nbsp;</code>otherwise. &nbsp;<strong>IMPORTANT NOTE</strong><span>: Here </span><code>boolList</code><span> is an Array so you'd pass an array as e.g., </span><code><span style="color: #ff0000;"><strong>[</strong></span>true, 1 &gt; 0, true, true, 2 &lt; 5<span style="color: #ff0000;"><strong>]</strong></span></code><span>.</span></p>
+<pre>let and = boolList =&gt; _____________________________________________;</pre>
+<p><strong>Exercise 14.27 (OR): </strong>Excel has an <code>OR</code> function that takes a variable number of arguments and returns <code>true</code> exactly when at least one of them is <code>true</code> and <code>false</code> otherwise (Examples: =OR(true,false,false,true,false,false,1 &lt; 0) would be true while =OR(false, 1 &lt; 0, false, false, 2 &gt; 5) would be false).</p>
+<p>Define a function <code>or(boolList)</code> <span>by using the Array's</span><span>&nbsp;</span><code>some</code><span> </span><span>method</span> that returns <code>true</code> exactly when&nbsp;some Boolean in <code>boolList</code>&nbsp;is true and <code>false&nbsp;</code>otherwise. &nbsp;<strong>IMPORTANT NOTE</strong>: Here <code>boolList</code> is an Array so you'd pass an array as e.g., <code><span style="color: #ff0000;"><strong>[</strong></span>false, 1 &lt; 0, false, false, 2 &gt; 5<span style="color: #ff0000;"><strong>]</strong></span></code>.</p>
+<pre>let or = boolList =&gt; _________________________________________;</pre>
+<p>&nbsp;</p>
