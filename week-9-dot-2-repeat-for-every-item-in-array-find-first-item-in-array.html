@@ -1,0 +1,173 @@
+<h2>Arrays</h2>
+<p>Arrays are lists of items. Arrays can be assigned to variables as well. Here are some examples:</p>
+<pre>let numberList = [1,5,7];
+let fruitList = ["apple", "banana", "cantaloupe", "orange"];
+</pre>
+<p>Arrays can also be passed to functions or returned from functions.</p>
+<pre>let firstItem = arr =&gt; arr[0];
+console.log(firstItem(fruitList)); // logs apple
+let getItems = itemList =&gt; itemList.split(",");
+console.log(getItems("apple,banana,cantaloupe,orange")); // logs <span>[ 'apple', 'banana', 'cantaloupe', 'orange' ]</span> 
+</pre>
+<p>Notice how we use <code>[...]</code> replaced with the index of the item we want to get the item at that index so <code>[0]</code>&nbsp;is used to get the first item, <code>[1]</code>&nbsp;is used to get the second item, <code>[2]</code>&nbsp;is used to get the third item, etc. &nbsp;The <code>split</code> method on strings can be used to create an array from a string by using the inputted character(s) as separators for each item. In the example above, the separator is the , and an array of four items is produced.</p>
+<h2>Tables for Arrays</h2>
+<p>When creating the table to define a recursive procedure, we will start by using the left column for the indices. For the right column, we'll either use the item that appears at that index or a so-called accumulator as will be illustrated below.</p>
+<p><strong>Example (Table for Find the first positive number in Array numList):</strong></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">index</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">num</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>0</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>numList[0]</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[1]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[2]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[3]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[4]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example (Sum all of the numbers in the Array):</strong></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">index</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">acc (accumulator: sumSoFar)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>0</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>numList[0]</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">1</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[0] + numList[1]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">numList[0] + numList[1] + numList[2]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>numList[0] + numList[1] + numList[2] +&nbsp;</span>numList[3]</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span>numList[0] + numList[1] + numList[2] +&nbsp;</span><span>numList[3] +&nbsp;</span>numList[4]</td>
+</tr>
+</tbody>
+</table>
+<h2>Solving Repeat for Every Item In Array, Finding the First In Array Problems by Forward Recursion</h2>
+<p>For finding the first, the setup will look something like this (matching the table):</p>
+<pre>let funcName = (itemList,additional variables) =&gt; {<br />   let condition = item =&gt; _________________________;
+   let makeTable = (index, item) =&gt; {<br />     if(<em>condition</em>(item)) return item;<br />     else return makeTable(index+1, itemList[index+1]);<br />   };
+   return makeTable(0, itemList[0]);
+};</pre>
+<p>So to find the first positive number in the list, we'd have the following (may want to replace <code>itemList</code> with <code>numList</code> and <code>item</code> with <code>num</code>):</p>
+<pre>let firstPositive = (itemList) =&gt; {<br />   let <span style="color: #ff0000;"><strong>isPositive</strong></span> = item =&gt; <strong><span style="color: #ff0000;">item &gt; 0</span></strong>;
+   let makeTable = (index, item) =&gt; {<br />     if(<span style="color: #ff0000;"><strong>isPositive</strong></span>(item)) return item;<br />     else return makeTable(index+1, itemList[index+1]);<br />   };
+   return makeTable(0, itemList[0]);
+};
+
+console.log(firstPositive([-7,0,-3,4,8,-5,10])); // logs 42</pre>
+<p><strong>Exercise 9.2.1 (first Vowel In List)</strong>: Define a function <code>firstVowelInList(letterList)</code>&nbsp;by forward recursion that takes an Array of lowercase letters as an input and returns the first letter in the Array that's an 'a', 'e', 'i', 'o', or 'u'.</p>
+<pre>let firstVowelInList = letterList =&gt; {
+
+};</pre>
+<p>Note: Once you define, <code>firstVowelInList</code>, you can define <code>firstVowel</code> that takes a string as an input as follows (splitting on the empty string splits on every character):</p>
+<pre>let firstVowelInList = letterList =&gt; firstVowelInList(letterList.split(""));
+</pre>
+<p><strong>Exercise 9.2.2 (first odd in List)</strong>: Define a function&nbsp;<code>firstOddInList(numList)</code>&nbsp;by forward recursion that returns the first odd number in <code>numList</code></p>
+<pre>let firstOddInList = numList =&gt; {
+
+};</pre>
+<p><strong>Exercise 9.2.3 (first valid score)</strong>: Define a function&nbsp;<code>firstValidScoreInList(numList)</code>&nbsp;by forward recursion that returns the first score in <code>numList</code> that represents a valid test score out of 100 points (i.e., that's between 0 and 100, inclusively).</p>
+<pre>let firstValidScore = numList =&gt; {
+
+};</pre>
+<p><strong>Exercise 9.2.4 (VLOOKUP)</strong>: Excel has a VLOOKUP (Vertical Lookup) function that takes a "key" to look up and a table and returns the value in the specified column in the same row as the lookup "key". Alternatively, for numeric keys and an approximate match, it can be used to return the value in the row before the first one with a larger key or the value in the last row if the lookup&nbsp;key exceeds every one in the table. For example, you can use the following "grade cutoff" table to get letter grades based on averages using VLOOKUP:</p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">0</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">F</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">60</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">D</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">70</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">C</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">80</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">B</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">90</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">A</td>
+</tr>
+</tbody>
+</table>
+<p>If the above table were called Grades, you could use =VLOOKUP(75,Grades,2) to get C (the 2 indicates the column number to get the value from). &nbsp;The reason this works is because 80 is the first number in the first column that's greater than the input of 75 so it uses the value in the second column in the row before, mainly the C. &nbsp;Note that if you put a grade that's less than 0, you'll get an error (no row before first to get value from).&nbsp;&nbsp;</p>
+<p>Define a function that takes the key to look up and the two columns of the table given as arrays as inputs and returns the appropriate value in the table. &nbsp;Specifically, implement a function&nbsp;<code>lookup(lookupKeyNum, keyNumList, valueList)</code>&nbsp;by forward recursion that returns <code>valueList[index-1]</code>&nbsp; where <code>index</code> is the first index for which <code>keyNumList[index] &gt; lookupKeyNum</code>&nbsp;.</p>
+<pre>let lookup = (lookupKeyNum, keyNumList, valueList) =&gt; {
+
+};</pre>
+<p>For applying an operation to every element in the list, the setup will look something like this (matching the table):</p>
+<pre>let funcName = (itemList,additional variables) =&gt; {<br />   let operation = (acc, item) =&gt; _________________________;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === itemList.length-1) return acc;<br />     else return makeTable(index+1, operation(acc, itemList[index+1]));<br />   };
+   return makeTable(0, itemList[0]);
+};</pre>
+<p>The <code>length</code> property of Arrays refers to the number of elements in the array just as the <code>length</code> property of strings is the number of characters in the string. If we view a string as an array of characters, these notions coincide (e.g., <code>"abc".length</code> is the same as <code>['a', 'b', 'c'],length</code>, mainly 3). We want to stop in the row where&nbsp;we've performed the operation on the last item in the array at index <code>itemList.length-1</code> so we stop&nbsp;at this index.</p>
+<p><strong>Example (Sum all the numbers in a list)</strong>:</p>
+<pre>let sumAllNumbersInArray = itemList =&gt; {<br />   let <span style="color: #ff0000;"><strong>plus</strong></span> = (acc, item) =&gt; <strong><span style="color: #ff0000;">acc + item</span></strong>;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === itemList.length-1) return acc;<br />     else return makeTable(index+1, <span style="color: #ff0000;"><strong>plus</strong></span>(acc, itemList[index+1]));<br />   };
+   return makeTable(0, itemList[0]);
+};
+
+console.log(sumAllNumbersInArray([1,2,3,4,5])); // logs 15
+</pre>
+<p>Alternatively, we may want to start <code>acc</code> with an initial value <code>startValue</code> instead of the 0th item in an array. In that case, we could add a "dummy starting row" with -1 as the input and <code>startValue</code> as the output:</p>
+<pre>let funcName = (itemList,additional variables) =&gt; {<br />   let operation = (acc, item) =&gt; _________________________;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === itemList.length-1) return acc;<br />     else return makeTable(index+1, operation(acc, itemList[index+1]));<br />   };
+   return makeTable(-1, startValue);
+};</pre>
+<p>In the case of the sum example, we could also start the sum at 0 so we'd have the following:</p>
+<pre>let sumAllNumbersInArray2 = itemList =&gt; {<br />   let <span style="color: #ff0000;"><strong>plus</strong></span> = (acc, item) =&gt; <strong><span style="color: #ff0000;">acc + item</span></strong>;
+   let makeTable = (index, acc) =&gt; {<br />     if(index === itemList.length-1) return acc;<br />     else return makeTable(index+1, <span style="color: #ff0000;"><strong>plus</strong></span>(acc, itemList[index+1]));<br />   };
+   return makeTable(-1, 0);
+};
+
+console.log(sumAllNumbersInArray2([1,2,3,4,5])); // logs 15
+</pre>
+<p><strong>Exercise 9.2.5 (Product of numbers in list)</strong>: Define a function&nbsp;<code>productOfNumbersInList(numList)</code>&nbsp;by forward recursion that returns the product of the numbers in <code>numList</code></p>
+<pre>let productOfNumbersInList = numList =&gt; {
+
+};</pre>
+<p><strong>Exercise 9.2.6 (Minimum of numbers in list)</strong>: Define a function&nbsp;<code>minimumOfNumbersInList(numList)</code>&nbsp;by forward recursion that returns the minimum of the numbers in <code>numList</code>. You may use <code>Math.min</code> to get the smaller of the two numbers (e.g., <code>Math.min(5,2)</code> is 2)</p>
+<pre>let minimumOfNumbersInList = numList =&gt; {
+
+};</pre>
+<p><strong>Exercise 9.2.7 (Count of items in list)</strong>: Define a function&nbsp;<code>numberOfItemsInList(itemList)</code>&nbsp;by forward recursion that returns the number of items in <code>itemList</code>. Obviously, do <strong>not</strong> use the <code>length</code> property of <code>itemList</code> to do this.</p>
+<pre>let numberOfItemsInList = itemList =&gt; {
+
+};</pre>
+<p><strong>Exercise 9.2.8 (Reverse a list)</strong>: Define a function&nbsp;<code>reverseList(itemList)</code>&nbsp;by forward recursion that returns <code>itemList</code> in reverse. Obviously, do this without using the built-in <code>reverse</code> method of lists. <strong>Hint</strong>: Start with an empty list and repeatedly call <code>concat</code> on the list you've built up and a list of one number, mainly the current one. Order is important here. As examples of the usage of <code>concat</code> (<code>[1,2].concat([3])</code> is the list <code>[1,2,3]</code> whereas <code>[1,2].concat([3,4,5])</code> is the list <code>[1,2,3,4,5]</code>)</p>
+<pre>let reverseList = itemList =&gt; {
+
+};</pre>
