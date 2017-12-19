@@ -1,0 +1,122 @@
+<h2>Loops and Forward/Tail Recursion</h2>
+<p><span style="font-size: 12pt;">Consider the sum of the positive integers from 1 to n example from&nbsp;<a title="Week 5-2. Introduction to Recursive Definitions of Functions" href="https://molloy.instructure.com/courses/8279/pages/week-5-2-introduction-to-recursive-definitions-of-functions" data-api-endpoint="https://molloy.instructure.com/api/v1/courses/8279/pages/week-5-2-introduction-to-recursive-definitions-of-functions" data-api-returntype="Page">Week 5-2. Introduction to Recursive Definitions of Functions</a>&nbsp;again.</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  if(n === 1) return 1;
+  else if(n === 2) return 1 + 2;
+  else if(n === 3) return 1 + 2 + 3;
+  else if(n === 4) return 1 + 2 + 3 + 4;
+  else if(n === 5) return 1 + 2 + 3 + 4 + 5;
+  :
+  :
+};
+</pre>
+<p><span style="font-size: 12pt;">Using the following table, we identified the pattern:</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">n (input)</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">sum from 1 to n (output)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>1</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3 (previous output + current input)</td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">6&nbsp;<span>(previous output + current input)</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">10&nbsp;<span>(previous output + current input)</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">15&nbsp;<span>(previous output + current input)</span></td>
+</tr>
+</tbody>
+</table>
+<p><span style="font-size: 12pt;">and&nbsp;we made it work with backward recursion as follows:</span></p>
+<pre><span style="font-size: 12pt;">let sumOfPositiveIntegersFrom1To = n =&gt; {<br />  if(n === 1) return 1;<br />  else        return </span><span style="font-size: 12pt;"><strong><span style="color: #003300;">sumOfPositiveIntegersFrom1To</span></strong>(n - 1) <span style="color: #333333;"><strong>+ n</strong></span>;<br />}</span></pre>
+<p><span style="font-size: 12pt;">Instead of proceeding backwards through the input column using the output of the function for smaller inputs,&nbsp;we can move forwards in both columns. &nbsp;In this case, we'll use parameter variables currentN and sumSoFar to store the current n and the sum of the positive integers from 1 to currentN, respectively. We'll stop when currentN reaches n. We'll also use <strong>tail recursion</strong> meaning that the recursive call is the last operation of the function. By contrast, we performed an addition by the input after the recursive call in the previous definition.</span></p>
+<table style="border: 1px solid black; border-collapse: collapse;">
+<tbody>
+<tr>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #0000ff;">currentN</span></th>
+<th style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #333333;">sum from 1 to currentN&nbsp;(sumSoFar)</span></th>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #ff6600;"><strong>1</strong></span></td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;"><span style="color: #003300;"><strong>1</strong></span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">2</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3&nbsp;<span>(previous output + (<span style="color: #ff0000;"><strong>previous</strong></span> input + 1))</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">3</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">6&nbsp;<span>(previous output + (</span><span style="color: #ff0000;"><strong>previous</strong></span><span> input + 1))</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">4</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">10&nbsp;<span>(previous output + (</span><span style="color: #ff0000;"><strong>previous</strong></span><span> input + 1))</span></td>
+</tr>
+<tr>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">5</td>
+<td style="text-align: center; border: 1px solid black; padding: 5px;">15&nbsp;<span>(previous output + (</span><span style="color: #ff0000;"><strong>previous</strong></span><span> input + 1))</span></td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<ol>
+<li><span style="font-size: 12pt;">Inside the function, define a new helper function <code>makeTable</code> with two parameter variables, one for the current input and one for the current output. &nbsp;For this example, we'd have something like the following:</span>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  let makeTable = (currentN, sumSoFar) =&gt; {
+                :
+                :
+  };
+  :
+};</pre>
+</li>
+<li><span style="font-size: 12pt;">Below the definition of the&nbsp;<code>makeTable</code> function but before the end of the definition of the function you're implementing, include a statement of the following form:</span>
+<pre><span>return makeTable(<span style="color: #ff6600;"><strong><em>row 1 input</em></strong></span>,<strong><em>&nbsp;</em></strong></span><span style="color: #003300;"><strong><em>output in row 1</em></strong></span><span>);</span></pre>
+<p><span style="font-size: 12pt;">Here, you'd have the following:</span></p>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  let makeTable = (currentN, sumSoFar) =&gt; {
+                :<br />                :
+  };
+  <strong>return makeTable(<span style="color: #ff6600;">1</span>, <span style="color: #003300;">1</span>);</strong>
+};</pre>
+</li>
+<li><span style="font-size: 12pt;">Inside the helper function, include an if statement for when to stop with the answer. Because sumSoFar will equal the sum of the positive integers from 1 to currentN and we want the sum of the positive integers from 1 to n, we will output sumSoFar when currentN is equal to n.</span>
+<pre>let sumOfPositiveIntegersFrom1To = n =&gt; {
+  let makeTable = (currentN, sumSoFar) =&gt; {
+    if(currentN === n) return sumSoFar;
+    :
+  };
+  return makeTable(1, 1);
+};</pre>
+</li>
+<li><span style="font-size: 12pt;">Using&nbsp;step 3, determine the&nbsp;operation you apply to an input value in any row to get the input in the next row. &nbsp;Call this operation or function&nbsp;<strong><span style="color: #0000ff;"><code>forwardInputOp</code></span></strong>&nbsp;since it's used to go "forwards" through the input column of the table. &nbsp;Here, this operation is addition&nbsp;by 1 (1 ↠ 2&nbsp;↠ 3 ↠ 4&nbsp;↠ 5).&nbsp;</span><br /><br /><span style="font-size: 12pt;"> Then using step 3, determine the operation you apply to an input and output in the <em>same</em>&nbsp;row to get the output in the <em>next</em>&nbsp;row. &nbsp;Call this operation or function&nbsp;<strong><span style="color: #333333;"><code>forwardOutputOp</code></span></strong> since it's used to go "forwards" through the output column of the table. &nbsp;Here, this operation consists of adding the input in the <em>next</em> row, which is 1 more than the input in the current row, to the output&nbsp;(1&nbsp;↠ 1 + (1+1)&nbsp;(3)&nbsp;↠ 3 + (2 + 1)&nbsp;(6) ↠ 6 + (3+1) (10) ↠ 10 + (4 + 1)&nbsp;(15)).</span><br /><br /><span style="font-size: 12pt;"> Finally, add an else statement&nbsp;in which you make a recursive call to <code>makeTable</code> and return the result. &nbsp;Here, you should update your parameter variables in the recursive call as follows:</span><br /><br /> <span style="font-size: 12pt;"><span>else return makeTable(<strong><span style="color: #333333;">forwardInputOp</span></strong>(<strong>currentInput variable</strong>), &nbsp;<em style="color: #0000ff; font-weight: bold;">forwardOutputOp(currentInput variable, currentOutput variable)</em></span><span>) );</span></span>
+<pre>let add1 = m =&gt; m + 1;<br />let sumAndAdd1 = (inputVar, outputVar) =&gt; outputVariable + add1(inputVar); <br /><br />let sumOfPositiveIntegersFrom1To = n =&gt; {
+  let makeTable = (currentN, sumSoFar) =&gt; {
+    if(currentN === n) return sumSoFar;
+    else return makeTable(add1(currentN), sumAndAdd1(currentN, sumSoFar));
+  };
+  return makeTable(1, 1);
+};</pre>
+<br /><span style="font-size: 12pt;">As before, we can substitute to rewrite the definition without the use of <code>add1</code> and <code>sumAndAdd1</code>:</span>
+<pre>let add1 = m =&gt; m + 1;<br />let sumAndAdd1 = (inputVar, outputVar) =&gt; outputVariable + add1(inputVar); <br /><br />let sumOfPositiveIntegersFrom1To = n =&gt; {
+  let makeTable = (currentN, sumSoFar) =&gt; {
+    if(currentN === n) return sumSoFar;
+    else return makeTable(currentN + 1, currentN + sumSoFar + (n + 1));
+  };
+  return makeTable(1, 1);
+};</pre>
+</li>
+</ol>
+<p><span style="font-size: 12pt;">We can imagine that each time we call <code>makeTable</code>, we are filling in one of the rows of our table, We continue to do this until we get to the desired row when currentN = n in which case we return the result of the output in this row.</span></p>
+<p><span style="font-size: 12pt;">Exercises: Complete all of the exercises from&nbsp;<a title="Week 5-2. Introduction to Recursive Definitions of Functions" href="week-5-2-introduction-to-recursive-definitions-of-functions" data-api-endpoint="week-5-2-introduction-to-recursive-definitions-of-functions" data-api-returntype="Page">Week 5-2. Introduction to Recursive Definitions of Functions</a>&nbsp;using <strong>forward recursion</strong>.</span></p>
